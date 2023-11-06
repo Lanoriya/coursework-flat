@@ -1,0 +1,12 @@
+.apartments-header {
+  background-image: none;
+  height: 16vh;
+}
+
+.apartments-header::after {
+  display: none;
+}
+
+.apartments-container {
+  position: fixed;
+}

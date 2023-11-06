@@ -1,0 +1,117 @@
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const port = 3001;
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+
+const Pool = require('pg').Pool;
+const pool = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'FlatDB',
+  password: 'artas',
+  port: 5432,
+});
+
+app.use(cors());
+app.use(express.json());
+
+const secretKey = crypto.randomBytes(32).toString('hex');
+
+function checkAdminToken(req, res, next) {
+  const authToken = req.headers.authorization;
+  if (!authToken) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const token = authToken.split(' ')[1];
+
+  try {
+    const decoded = jwt.verify(token, secretKey);
+
+    if (decoded.role === 'admin') {
+      // Проверьте срок действия токена
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (decoded.exp - currentTime < 900) {
+        // Если срок действия остался менее 15 минут, создайте новый токен и отправьте его
+        const newToken = jwt.sign(
+          { adminId: decoded.adminId, username: decoded.username, role: 'admin' },
+          secretKey,
+          { expiresIn: '1h' }
+        );
+        res.setHeader('Authorization', `Bearer ${newToken}`);
+      }
+
+      // Продолжите выполнение запроса
+      next();
+    } else {
+      res.status(403).json({ error: 'Доступ запрещен' });
+    }
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+}
+
+app.post('/register', async (req, res) => {
+  const { username, password, role } = req.body;
+
+  // Хешируйте пароль перед сохранением его в базе данных
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  try {
+    const user = await pool.query(
+      'INSERT INTO Users (username, password, role) VALUES ($1, $2, $3) RETURNING *',
+      [username, hashedPassword, role]
+    );
+
+    // Создайте JWT токен и отправьте его пользователю, если это необходимо
+    const token = jwt.sign({ username, role }, secretKey);
+
+    res.status(201).json({ message: 'Пользователь зарегистрирован', token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Ошибка регистрации пользователя' });
+  }
+});
+
+app.post('/api/admin/login', async (req, res) => {
+  console.log('Received admin login request');
+  const { username, password } = req.body;
+  try {
+    const admin = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+    if (admin.rows.length === 0) {
+      // Логин не существует
+      return res.status(401).send('Неверный логин');
+    }
+
+    const hashedPassword = admin.rows[0].password;
+    const passwordMatch = await bcrypt.compare(password, hashedPassword);
+
+    if (passwordMatch) {
+      // Верный логин и пароль
+      const token = jwt.sign({ adminId: admin.rows[0].id, username, role: 'admin' }, secretKey, {
+        expiresIn: '1h',
+      });
+      res.cookie('adminToken', token, { httpOnly: true, maxAge: 3600000 });
+      return res.status(200).json({ message: 'Admin login successful', adminId: admin.rows[0].id, token });
+    } else {
+      // Логин верный, но пароль неверный
+      return res.status(401).send('Неверный пароль');
+    }
+  } catch (error) {
+    console.error('Error during admin login:', error);
+    return res.status(500).json({ error: 'Admin login failed' });
+  }
+});
+
+// Маршрут для доступа к административным функциям
+app.get('/api/admin', checkAdminToken, (req, res) => {
+  // Отображение административной панели
+  res.json({ message: 'Добро пожаловать, администратор!' });
+});
+
+app.listen(port, () => {
+  console.log(`Сервер работает на порту ${port}.`);
+});

@@ -1,0 +1,60 @@
+.about-header {
+  position: absolute;
+  display: flex;
+  left: 0;
+  right: 0;
+  margin: 12% auto;
+  width: 90%;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #fff;
+  z-index: 1;
+}
+
+.about-text {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 28px;
+}
+
+.about-title {
+  font-size: 48px;
+  padding: 16px 0px 32px;
+}
+
+.about-text--big {
+  max-width: 80%;
+  margin-bottom: 16px;
+  color: #CCCCCC;
+}
+
+.about-text--left {
+  width: 50%;
+  font-size: 20px;
+}
+
+.about-text-title {
+  font-weight: 500;
+  margin-bottom: 4px;
+  font-size: 24px;
+  position: relative;
+}
+
+.about-text-title::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 30%;
+  width: 8px;
+  height: 8px;
+  background: #9fc9c0;
+  border-radius: 16px;
+}
+
+.about-text-block {
+  margin-bottom: 24px;
+}
+
+.about-text-p {
+  color: #CCCCCC;
+}

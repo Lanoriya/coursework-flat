@@ -1,0 +1,62 @@
+.admin-page {
+  font-family: 'ubuntu';
+  background: #F4F5FA;
+  font-weight: 400;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: fit-content(240px) 1fr;
+  grid-template-rows: 50px auto;
+  grid-gap: 20px;
+}
+
+.admin-header {
+  display: flex;
+  background: #fff;
+  justify-content: center;
+  align-items: center;
+  grid-column-end: 3;
+  grid-column-start: 1;
+  grid-row-end: 2;
+  grid-row-start: 1;
+  width: 100%;
+}
+
+.admin-aside {
+  background: rgb(39, 39, 39);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 120px;
+  grid-column-start: 1;
+  grid-row-end: 3;
+  grid-row-start: 1;
+  padding: 10px 20px;
+  max-height: 100vh;
+  width: 20px;
+}
+
+.admin-header--p {
+  font-weight: 600;
+  font-size: 20px;
+  margin-right: 16px;
+}
+
+.admin-aside-btn {
+  background: none;
+  outline: none;
+  border: none;
+}
+
+.admin-aside-img {
+  width: 20px;
+}
+
+.admin-aside-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.aside-nav-btn {
+  padding: 20px;
+}
