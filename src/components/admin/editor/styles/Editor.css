@@ -1,0 +1,97 @@
+.editor-content {
+  display: flex;
+  gap: 40px;
+}
+
+.item-container {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  gap: 20px;
+  border: 3px solid black;
+  border-radius: 16px;
+  padding: 16px;
+  color: #fff;
+}
+
+.item-container {
+  background-color: rgba(26, 26, 26, 0.35);
+}
+
+.item-container h2 {
+  font-size: 24px;
+}
+
+.add-item {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.add-item input {
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  padding: 8px;
+  margin-top: 8px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.add-item button {
+  margin: 0 auto;
+  padding: 8px;
+  border: none;
+  border-radius: 16px;
+  width: 90%;
+  font-size: 16px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.success-notification {
+  position: fixed;
+  top: 10px;
+  right: -15%; /* Начальное состояние, элемент скрыт за пределами экрана */
+  height: 20px;
+  background-color: #1c1c1c;
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: right 0.5s ease-in-out; /* Анимация для свойства right */
+  z-index: 1000; /* Перекрывает другие элементы */
+}
+
+.success-notification.show {
+  right: 10px; /* Элемент появляется справа при наличии класса .show */
+  transition: right 0.5s ease-in-out; /* Анимация для свойства right */
+}
+
+.timer-bar {
+  height: 5px;
+  width: 100%;
+  background-color: #79251f;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: width 3s linear; /* Анимация для свойства width */
+}
+
+.success-notification.show .timer-bar {
+  width: 0; /* По завершению анимации, уменьшаем ширину полосы */
+}
+
+
+

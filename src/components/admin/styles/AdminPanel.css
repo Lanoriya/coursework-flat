@@ -1,4 +1,5 @@
 .admin-page {
+  position: relative;
   font-family: 'ubuntu';
   background: #F4F5FA;
   font-weight: 400;
@@ -9,9 +10,39 @@
   grid-gap: 20px;
 }
 
+.admin-page::before {
+  content: '';
+  position: absolute;
+  background-image: url(../imgs/bg.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 0;
+}
+
+.admin-page::after {
+  content: '';
+  position: absolute;
+  background: #000;
+  opacity: 0.7;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 0;
+}
+
+.admin-page * {
+  z-index: 1;
+}
+
 .admin-header {
   display: flex;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.4);
   justify-content: center;
   align-items: center;
   grid-column-end: 3;
@@ -22,7 +53,7 @@
 }
 
 .admin-aside {
-  background: rgb(39, 39, 39);
+  background: rgb(16, 16, 16);
   display: flex;
   flex-direction: column;
   align-items: center;

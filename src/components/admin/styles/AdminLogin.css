@@ -1,0 +1,88 @@
+.admin-login {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-bottom: 10%;
+  padding: 24px;
+  background-color: rgba(26, 26, 26, 0.35);
+  border-radius: 16px;
+  z-index: 1;
+}
+
+.admin-container h2,div {
+  color: #fff;
+}
+
+.admin-login::before {
+  content: '';
+  position: absolute;
+  background-image: url(../imgs/bg.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 0;
+}
+
+.admin-login::after {
+  content: '';
+  position: absolute;
+  background: #000;
+  opacity: 0.7;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 0;
+}
+
+.admin-form form {
+  margin-top: 16px;
+}
+
+.admin-form h2 {
+  font-size: 20px;
+}
+
+.admin-form div {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.admin-form input {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  outline: none;
+  padding: 8px;
+  color: #fff;
+  font-size: 16px;
+}
+
+.admin-form button {
+  padding: 4px 32px;
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 16px;
+  margin-top: 48px;
+}
+
+.admin-form button:hover {
+  color: rgba(255, 255, 255, 0.6);
+}

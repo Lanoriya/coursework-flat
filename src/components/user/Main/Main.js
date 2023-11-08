@@ -4,7 +4,6 @@ import React from 'react';
 import Apartments from '../Apartments/Apartments';
 import MainHeader from './MainHeader';
 import MainFooter from './MainFooter';
-import About from '../About/About';
 
 function Main() {
   return (

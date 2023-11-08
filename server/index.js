@@ -112,6 +112,50 @@ app.get('/api/admin', checkAdminToken, (req, res) => {
   res.json({ message: 'Добро пожаловать, администратор!' });
 });
 
+app.post('/api/admin/addApartment', checkAdminToken, async (req, res) => {
+  const {
+    room_count,
+    area,
+    floor,
+    price,
+    apartment_number,
+    building_id,
+    entrance,
+  } = req.body;
+
+  try {
+    // Выполнение запроса к базе данных для добавления квартиры
+    const newApartment = await pool.query(
+      'INSERT INTO apartments (room_count, area, floor, price, apartment_number, building_id, entrance) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      [room_count, area, floor, price, apartment_number, building_id, entrance]
+    );
+
+    res.status(201).json(newApartment.rows[0]);
+  } catch (error) {
+    console.error('Ошибка при добавлении квартиры:', error);
+    res.status(500).json({ error: 'Ошибка при добавлении квартиры' });
+  }
+});
+
+app.post('/api/admin/addBuilding', checkAdminToken, async (req, res) => {
+  const {
+    total_apartments,
+    total_entrances,
+  } = req.body;
+
+  try {
+    const newBuilding = await pool.query(
+      'INSERT INTO buildings (total_apartments, total_entrances) VALUES ($1, $2) RETURNING *',
+      [total_apartments, total_entrances]
+    );
+
+    res.status(201).json(newBuilding.rows[0]);
+  } catch (error) {
+    console.error('Ошибка при добавлении здания:', error);
+    res.status(500).json({ error: 'Ошибка при добавлении здания' });
+  }
+})
+
 app.listen(port, () => {
   console.log(`Сервер работает на порту ${port}.`);
 });
