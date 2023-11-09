@@ -1,0 +1,37 @@
+.apartment-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  overflow: auto;
+  max-height: 92vh;
+}
+
+.apartment-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.apartment-container::-webkit-scrollbar-thumb {
+  border-radius: 16px;
+  background-color: #d1d1d1;
+}
+
+.apartment-name {
+  display: flex;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.apartment-name p{
+  width: 10%;
+}
+
+.apartment-items {
+  display: flex;
+  align-items: center;
+}
+
+.apartment-item-value {
+  margin-top: 10px;
+  width: 10%;
+}

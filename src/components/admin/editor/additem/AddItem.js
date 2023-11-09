@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 function AddItem({ endpoint, fields, successMessage }) {
@@ -13,9 +13,11 @@ function AddItem({ endpoint, fields, successMessage }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem('adminToken');
+
     axios.post(`http://localhost:3001/api/admin/${endpoint}`, formData, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('adminToken')}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {

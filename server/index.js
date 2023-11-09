@@ -108,7 +108,6 @@ app.post('/api/admin/login', async (req, res) => {
 
 // Маршрут для доступа к административным функциям
 app.get('/api/admin', checkAdminToken, (req, res) => {
-  // Отображение административной панели
   res.json({ message: 'Добро пожаловать, администратор!' });
 });
 
@@ -153,6 +152,17 @@ app.post('/api/admin/addBuilding', checkAdminToken, async (req, res) => {
   } catch (error) {
     console.error('Ошибка при добавлении здания:', error);
     res.status(500).json({ error: 'Ошибка при добавлении здания' });
+  }
+})
+
+app.get('/api/apartments', async (req, res) => {
+  try {
+    const apartment = 'SELECT * FROM apartments';
+    const result = await pool.query(apartment)
+
+    return res.status(200).json(result.rows)
+  } catch (error) {
+    console.log('Error during data')
   }
 })
 

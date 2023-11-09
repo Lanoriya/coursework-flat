@@ -1,8 +1,9 @@
-import { Router, Routes, Route, Link, Outlet } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import './styles/AdminPanel.css';
 import burger from './imgs/burger.svg';
 import Orders from './orders/Orders';
 import Editor from './editor/Editor';
+import Review from './review/Review';
 import AdminMain from './admin-main/AdminMain';
 
 function AdminPanel() {
@@ -20,6 +21,7 @@ function AdminPanel() {
           <Link to='' className='aside-nav-btn'>Main</Link>
           <Link to='editor' className='aside-nav-btn'>Editor</Link>
           <Link to='orders' className='aside-nav-btn'>Orders</Link>
+          <Link to='review' className='aside-nav-btn'>Review</Link>
         </nav>
       </aside>
 
@@ -28,6 +30,7 @@ function AdminPanel() {
           <Route path='/' element={<AdminMain />} />
           <Route path='editor' element={<Editor />} />
           <Route path='orders' element={<Orders />} />
+          <Route path='review' element={<Review />} />
         </Routes>
       </main>
     </div>
