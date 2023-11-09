@@ -1,5 +1,6 @@
 import './styles/Editor.css';
 import AddItem from './additem/AddItem';
+import AdminRegistration from '../AdminRegistration';
 
 function Editor() {
   return (

@@ -25,10 +25,15 @@ function AddItem({ endpoint, fields, successMessage }) {
         // Очистить поля формы или выполните другие действия по желанию
         setFormData({});
 
-        // Удалить уведомление после 5 секунд
+        // Удалить уведомление после 3 секунд
         setTimeout(() => {
-          setShowSuccessNotification(false);
-        }, 5000);
+          const successNotification = document.querySelector('.success-notification');
+          successNotification.classList.add('end-notification');
+          successNotification.classList.remove('success-notification');
+          setTimeout(() => {
+            setShowSuccessNotification(false);
+          }, 3000)
+        }, 3000);
       })
       .catch((error) => {
         console.error(`Error adding ${endpoint}`, error);
@@ -57,7 +62,7 @@ function AddItem({ endpoint, fields, successMessage }) {
       </form>
 
       {showSuccessNotification && (
-        <div className={`success-notification ${showSuccessNotification ? 'show' : ''}`}>
+        <div className={`success-notification`}>
           {`${successMessage} успешно добавили`}
           <div className="timer-bar"></div>
         </div>
