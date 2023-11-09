@@ -20,18 +20,25 @@
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 16px;
+  gap: 4px;
 }
 
-.apartment-name p{
+.apartment-name p {
   width: 10%;
+  cursor: pointer;
+  border: 1px solid white;
+  padding: 5px 4px;
 }
 
 .apartment-items {
   display: flex;
   align-items: center;
+  gap: 4px;
 }
 
 .apartment-item-value {
   margin-top: 10px;
   width: 10%;
+  padding: 5px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }

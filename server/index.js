@@ -155,16 +155,49 @@ app.post('/api/admin/addBuilding', checkAdminToken, async (req, res) => {
   }
 })
 
-app.get('/api/apartments', async (req, res) => {
+app.get('/api/admin/apartments', checkAdminToken, async (req, res) => {
+  const { sortField, sortOrder } = req.query;
   try {
-    const apartment = 'SELECT * FROM apartments';
+    const apartment = `SELECT * FROM apartments ORDER BY ${sortField} ${sortOrder}`;
     const result = await pool.query(apartment)
 
     return res.status(200).json(result.rows)
   } catch (error) {
-    console.log('Error during data')
+    res.status(500).json({ error: 'Error updating apartments' });
   }
 })
+
+app.put('/api/admin/apartments', checkAdminToken, async (req, res) => {
+  const updatedApartments = req.body; // Получите обновленные данные квартир из тела запроса
+
+  try {
+    // Цикл по массиву обновленных квартир и выполнение SQL-запросов для обновления каждой из них
+    for (const apartment of updatedApartments) {
+      const query = `
+        UPDATE apartments
+        SET room_count = $1, area = $2, floor = $3, price = $4, apartment_number = $5, building_id = $6, entrance = $7
+        WHERE apartment_id = $8
+      `;
+      // Предполагается, что у квартир есть уникальный идентификатор (id) в базе данных
+
+      await pool.query(query, [
+        apartment.room_count,
+        apartment.area,
+        apartment.floor,
+        apartment.price,
+        apartment.apartment_number,
+        apartment.building_id,
+        apartment.entrance,
+        apartment.apartment_id, // Уникальный идентификатор квартиры
+      ]);
+    }
+
+    res.status(200).json({ message: 'Данные о квартирах успешно обновлены' });
+  } catch (error) {
+    console.error('Ошибка при обновлении данных о квартирах:', error);
+    res.status(500).json({ error: 'Ошибка при обновлении данных о квартирах' });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Сервер работает на порту ${port}.`);
