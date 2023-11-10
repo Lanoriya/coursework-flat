@@ -60,7 +60,7 @@ function AddItem({ endpoint, fields, successMessage }) {
             </div>
           ))}
         </div>
-        <button type="submit">Добавить {successMessage}</button>
+        <button className='admin-btn' type="submit">Добавить {successMessage}</button>
       </form>
 
       {showSuccessNotification && (

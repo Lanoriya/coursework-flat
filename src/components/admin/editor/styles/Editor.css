@@ -9,7 +9,6 @@
   width: 20%;
   gap: 20px;
   border: 3px solid black;
-  border-radius: 16px;
   padding: 16px;
   color: #fff;
 }
@@ -41,7 +40,7 @@
   color: #fff;
 }
 
-.add-item button {
+.admin-btn {
   margin: 0 auto;
   padding: 8px;
   border: none;

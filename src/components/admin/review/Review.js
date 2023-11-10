@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './styles/Review.css';
 
 function Review() {
@@ -7,11 +7,8 @@ function Review() {
   const [sortField, setSortField] = useState("apartment_number");
   const [sortOrder, setSortOrder] = useState("asc");
 
-  useEffect(() => {
-    fetchApartments();
-  }, [sortField, sortOrder]);
-
-  const fetchApartments = () => {
+  // Define fetchApartments using useCallback
+  const fetchApartments = useCallback(() => {
     const token = localStorage.getItem('adminToken');
     axios.get(`http://localhost:3001/api/admin/apartments`, {
       headers: {
@@ -24,7 +21,11 @@ function Review() {
     }).then((response) => {
       setApartments(response.data);
     });
-  };
+  }, [sortField, sortOrder]);
+
+  useEffect(() => {
+    fetchApartments();
+  }, [fetchApartments]);
 
   const handleSort = (field) => {
     if (field === sortField) {
@@ -36,16 +37,9 @@ function Review() {
   };
 
   const handleChange = (event, apartmentId, field) => {
-    // Создаем копию массива apartments
     const updatedApartments = [...apartments];
-
-    // Находим индекс квартиры, которую мы хотим обновить
     const updatedApartmentIndex = updatedApartments.findIndex((apart) => apart.apartment_id === apartmentId);
-
-    // Обновляем значение в поле field для этой квартиры
     updatedApartments[updatedApartmentIndex][field] = event.target.value;
-
-    // Обновляем состояние
     setApartments(updatedApartments);
   };
 
@@ -66,6 +60,7 @@ function Review() {
       });
   };
 
+
   return (
     <div className='review-content'>
       <div className='apartment-container'>
@@ -77,9 +72,9 @@ function Review() {
           <p onClick={() => handleSort("price")}>Цена</p>
           <p onClick={() => handleSort("building_id")}>Номер здания</p>
           <p onClick={() => handleSort("entrance")}>Подъезд</p>
-          <button onClick={handleSave}>Сохранить</button>
+          <button className='admin-btn review-btn' onClick={handleSave}>Сохранить</button>
         </div>
-        {apartments.map((apart, index) => (
+        {apartments.map((apart) => (
           <div key={apart.apartment_id} className='apartment-items'>
             <div className='apartment-item-value'>
               <input

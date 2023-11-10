@@ -23,6 +23,15 @@
   gap: 4px;
 }
 
+.review-btn {
+  position: fixed;
+  right: 10%;
+  width: 10%;
+  margin: 0;
+  margin-left: 16px;
+  border-radius: 0;
+}
+
 .apartment-name p {
   width: 10%;
   cursor: pointer;
@@ -41,4 +50,16 @@
   width: 10%;
   padding: 5px 4px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.apartment-item-value input {
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  padding: 0px 8px 4px;
+  margin-top: 8px;
+  width: 100%;
+  color: #fff;
+  background: none;
 }
