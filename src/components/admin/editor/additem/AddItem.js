@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function AddItem({ endpoint, fields, successMessage }) {
@@ -22,25 +22,40 @@ function AddItem({ endpoint, fields, successMessage }) {
     })
       .then((response) => {
         console.log(`${successMessage} added successfully`, response.data);
-        setShowSuccessNotification(true);
 
+        setShowSuccessNotification(true);
         // Очистить поля формы или выполните другие действия по желанию
         setFormData({});
 
-        // Удалить уведомление после 3 секунд
         setTimeout(() => {
           const successNotification = document.querySelector('.success-notification');
           successNotification.classList.add('end-notification');
           successNotification.classList.remove('success-notification');
+
           setTimeout(() => {
             setShowSuccessNotification(false);
-          }, 3000)
+          }, 3000);
         }, 3000);
       })
+
       .catch((error) => {
         console.error(`Error adding ${endpoint}`, error);
       });
   };
+
+  useEffect(() => {
+    const progress = document.getElementById('progress');
+
+    if (progress) {
+      let interval = setInterval(() => {
+        progress.value -= 0.01;
+        if (progress.value <= 0) {
+          clearInterval(interval);
+        }
+      }, 30);
+      return () => clearInterval(interval);
+    }
+  });
 
   return (
     <div className='item-container'>
@@ -66,7 +81,7 @@ function AddItem({ endpoint, fields, successMessage }) {
       {showSuccessNotification && (
         <div className={`success-notification`}>
           {`${successMessage} успешно добавили`}
-          <div className="timer-bar"></div>
+          <progress id='progress' value='1'></progress>
         </div>
       )}
     </div>

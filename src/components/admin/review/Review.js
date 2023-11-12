@@ -6,6 +6,7 @@ function Review() {
   const [apartments, setApartments] = useState([]);
   const [sortField, setSortField] = useState("apartment_number");
   const [sortOrder, setSortOrder] = useState("asc");
+  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
 
   // Define fetchApartments using useCallback
   const fetchApartments = useCallback(() => {
@@ -53,6 +54,23 @@ function Review() {
       })
       .then((response) => {
         console.log(response);
+
+        setShowSuccessNotification(true);
+
+        setTimeout(() => {
+          const successNotification = document.querySelector('.success-notification');
+          try {
+            successNotification.classList.add('end-notification');
+            successNotification.classList.remove('success-notification');
+            setTimeout(() => {
+              setShowSuccessNotification(false);
+            }, 500);
+
+          } catch (error) {
+            return;
+          }
+        }, 3000);
+
         fetchApartments();
       })
       .catch((error) => {
@@ -60,6 +78,19 @@ function Review() {
       });
   };
 
+  useEffect(() => {
+    const progress = document.getElementById('progress');
+
+    if (progress) {
+      let interval = setInterval(() => {
+        progress.value -= 0.01;
+        if (progress.value <= 0) {
+          clearInterval(interval);
+        }
+      }, 30);
+      return () => clearInterval(interval);
+    }
+  });
 
   return (
     <div className='review-content'>
@@ -128,6 +159,12 @@ function Review() {
           </div>
         ))}
       </div>
+      {showSuccessNotification && (
+        <div className={`success-notification`}>
+          {`Сохранено успешно`}
+          <progress id='progress' value='1'></progress>
+        </div>
+      )}
     </div>
   );
 }

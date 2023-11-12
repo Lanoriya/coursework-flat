@@ -59,6 +59,8 @@
 
 .success-notification, .end-notification {
   position: fixed;
+  display: flex;
+  flex-direction: column;
   top: 10px;
   right: 0px; /* Начальное состояние, элемент скрыт за пределами экрана */
   height: 20px;
@@ -71,6 +73,14 @@
   justify-content: space-between;
   z-index: 1000;
 }
+
+
+#progress::-webkit-progress-bar {background-color: black; width: 100%;}
+#progress {background-color: black; width: 100%;}
+
+#progress::-webkit-progress-value {background-color: rgba(255, 255, 255, 0.05) !important;}
+#progress::-moz-progress-bar {background-color: rgba(255, 255, 255, 0.05) !important;}
+#progress {color: rgba(255, 255, 255, 0.05);}
 
 .success-notification {
   animation: success-animation 0.5s ease-in-out forwards;
