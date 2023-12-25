@@ -14,6 +14,11 @@ function AddItem({ endpoint, fields, successMessage }) {
     e.preventDefault();
 
     const token = localStorage.getItem('adminToken');
+    const addButton = document.querySelector('.admin-btn');
+
+    if (addButton) {
+      addButton.disabled = true;
+    }
 
     axios.post(`http://localhost:3001/api/admin/${endpoint}`, formData, {
       headers: {
@@ -29,17 +34,27 @@ function AddItem({ endpoint, fields, successMessage }) {
 
         setTimeout(() => {
           const successNotification = document.querySelector('.success-notification');
-          successNotification.classList.add('end-notification');
-          successNotification.classList.remove('success-notification');
-
-          setTimeout(() => {
-            setShowSuccessNotification(false);
-          }, 3000);
+          if (successNotification) {
+            successNotification.classList.add('end-notification');
+            successNotification.classList.remove('success-notification');
+  
+            // Re-enable the button after the notification disappears
+            if (addButton) {
+              addButton.disabled = false;
+            }
+  
+            setTimeout(() => {
+              setShowSuccessNotification(false);
+            }, 500);
+          }
         }, 3000);
       })
 
       .catch((error) => {
         console.error(`Error adding ${endpoint}`, error);
+        if (addButton) {
+          addButton.disabled = false;
+        }
       });
   };
 

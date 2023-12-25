@@ -1,7 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Ubuntu:wght@300;400;500;700&display=swap');
+@font-face {
+	font-family: 'Mikar';
+	src: url('./components/fonts/Mikar.ttf');
+}
 
 * {
-  font-family: 'roboto';
+	font-family: 'Mikar', 'sans-serif';
+	letter-spacing: 2px;
+}
+
+.span-nofont {
+	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
 html, body, div, span, applet, object, iframe,

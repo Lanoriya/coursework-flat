@@ -21,6 +21,7 @@
   font-weight: 600;
   margin-bottom: 16px;
   gap: 4px;
+  z-index: 2;
 }
 
 .review-btn {

@@ -1,0 +1,29 @@
+.about-solo {
+  margin: 320px auto;
+  background: #44b2b42d;
+}
+
+.flat-photo {
+  display: flex;
+  position: relative;
+  padding: 64px 0px;
+}
+
+.about-solo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 48%;
+  padding-bottom: 128px;
+}
+
+.about-solo-text h2 {
+  font-size: 60px;
+}
+
+.about-solo-img img {
+  position: absolute;
+  top: -120px;
+  right: 0;
+  width: 700px;
+}

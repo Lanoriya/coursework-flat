@@ -46,6 +46,13 @@ function Review() {
 
   const handleSave = () => {
     const token = localStorage.getItem('adminToken');
+  
+    // Disable the button to prevent multiple clicks
+    const saveButton = document.querySelector('.review-btn');
+    if (saveButton) {
+      saveButton.disabled = true;
+    }
+  
     axios
       .put('http://localhost:3001/api/admin/apartments', apartments, {
         headers: {
@@ -54,9 +61,9 @@ function Review() {
       })
       .then((response) => {
         console.log(response);
-
+  
         setShowSuccessNotification(true);
-
+  
         setTimeout(() => {
           const successNotification = document.querySelector('.success-notification');
           try {
@@ -65,16 +72,27 @@ function Review() {
             setTimeout(() => {
               setShowSuccessNotification(false);
             }, 500);
-
+  
           } catch (error) {
             return;
+          } finally {
+            if (saveButton) {
+              setTimeout(() => {
+                saveButton.disabled = false;
+              }, 500);
+            }
           }
         }, 3000);
-
+  
         fetchApartments();
       })
       .catch((error) => {
         console.log(error);
+  
+        // Re-enable the button in case of an error
+        if (saveButton) {
+          saveButton.disabled = false;
+        }
       });
   };
 
