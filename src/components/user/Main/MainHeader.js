@@ -1,6 +1,5 @@
 import { useLocation, Link, Routes, Route } from 'react-router-dom';
 import Logo from '../Main/imgs/logo-white.png';
-import '../Main/Main.css';
 import About from '../AboutHeader/About-header';
 
 function MainHeader() {

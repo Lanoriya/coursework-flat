@@ -1,0 +1,14 @@
+.location-block h2 {
+  font-size: 36px;
+  margin-bottom: 36px;
+}
+
+.location-text-block {
+  display: flex;
+}
+
+.location-text {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}

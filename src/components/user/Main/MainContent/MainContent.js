@@ -1,7 +1,9 @@
 import '../MainContent/MainContent.css';
 import '../Infrastructure/Infrastructure.css';
 import '../AboutFlat/AboutFlat.css';
-import '../AboutSolo/AboutSolo.css'
+import '../AboutSolo/AboutSolo.css';
+import '../Location/Location.css';
+import '../Location/map.css'
 import { Routes, Route, Outlet } from 'react-router-dom';
 import React from 'react';
 import Slider from "react-slick";
@@ -280,6 +282,60 @@ function MainContent() {
           </div>
           <div className='about-solo-img'>
             <img src={require('../AboutSolo/flat.png')} />
+          </div>
+        </div>
+      </div>
+      <div className='container container-location'>
+        <div className='location-block'>
+          <h2>Расположение</h2>
+          <div className='location-text-block'>
+            <div className='location-text'>
+              <div className='location-item'>
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="#44b3b4" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M39.232 18.0038C39.232 9.59501 32.4777 2.70251 24.0692 2.70251C15.5223 2.70251 8.76782 9.5953 8.76782 18.0038C8.76782 26.4124 23.5178 45.2974 24.0692 45.2974C24.62 45.2974 39.232 26.4124 39.232 18.0038ZM23.9998 25.2561C28.267 25.2561 31.7264 21.7967 31.7264 17.5295C31.7264 13.2623 28.267 9.8031 23.9998 9.8031C19.7326 9.8031 16.2733 13.2623 16.2733 17.5295C16.2733 21.7967 19.7326 25.2561 23.9998 25.2561Z" fill="#F99D27" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M8.76782 18.0038C8.76782 9.5953 15.5223 2.70251 24.0692 2.70251C16.3027 4.84365 5.42966 16.3602 24.0692 45.2974C23.5178 45.2974 8.76782 26.4124 8.76782 18.0038Z" fill="#008CC8" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+              <div className='location-item'>Южнее пересечения улицы Федюнинского и Мельникайте</div>
+            </div>
+            <div className='location-text'>
+              <div className='location-item'>
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="#44b3b4" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.5 44.5L21.5 34L23.8214 31.5L28 27H21.5L16 33L13 43.5L17.5 44.5Z" fill="#F99D27" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <circle cx="24" cy="5.98609" r="4.81056" fill="#FFD764" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></circle>
+                  <path d="M21.1875 35.2361L16.9952 46.2409C16.8185 46.7047 16.3283 46.9688 15.8438 46.8611L12.6612 46.1539C12.0992 46.029 11.7584 45.4565 11.9166 44.9029L15 34.1111L21.1875 27.3611H28.5L31.3125 36.9236L37.8602 42.9676C38.2776 43.3529 38.2907 44.0079 37.889 44.4095L35.9006 46.398C35.5329 46.7657 34.9446 46.7902 34.5476 46.4542L27.9375 40.8611L23.7991 32.4236L21.1875 35.2361Z" fill="#008CC8"></path>
+                  <path d="M28.5 27.3611L31.3125 36.9236L37.8602 42.9676C38.2776 43.3529 38.2907 44.0079 37.889 44.4095L35.9006 46.398C35.5329 46.7657 34.9446 46.7902 34.5476 46.4542L27.9375 40.8611L23.7991 32.4236M28.5 27.3611L23.7991 32.4236M28.5 27.3611H21.1875L15 34.1111L11.9166 44.9029C11.7584 45.4565 12.0992 46.029 12.6612 46.1539L15.8438 46.8611C16.3283 46.9688 16.8185 46.7047 16.9952 46.2409L21.1875 35.2361L23.7991 32.4236" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M16.9952 46.2409L21.1875 35.2361L23.7991 32.4236L28.5 27.3611H21.1875L15 34.1111L11.9166 44.9029C11.7584 45.4565 12.0992 46.029 12.6612 46.1539L15.8438 46.8611C16.3283 46.9688 16.8185 46.7047 16.9952 46.2409Z" fill="#008CC8" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M36.9375 17.7986L27.375 12.1736H21.1875L13.875 20.0486L12.2502 19.9009L10.4386 24.5083L15.5625 25.1111L21.1875 19.4861V27.3611H28.5V18.9236L33.5625 22.2986L35.8125 25.9548L40.2133 23.9861L36.9375 17.7986Z" fill="#E6500F" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M38.903 29.1308L41.1593 27.8415C41.6279 27.5737 41.7995 26.9824 41.547 26.5053L40.2132 23.9861L35.8125 25.9548L37.5552 28.7867C37.838 29.2463 38.4344 29.3985 38.903 29.1308Z" fill="#FFD764"></path>
+                  <path d="M7.41983 20.1999L6.44818 22.7909C6.22023 23.3988 6.62291 24.0594 7.26766 24.1352L10.4386 24.5083L12.2501 19.9009L8.44669 19.5551C7.99828 19.5143 7.57793 19.7783 7.41983 20.1999Z" fill="#FFD764"></path>
+                  <path d="M15.5625 25.1111L10.4386 24.5083M13.875 20.0486L12.2501 19.9009M10.4386 24.5083L7.26766 24.1352C6.62291 24.0594 6.22023 23.3988 6.44818 22.7909L7.41983 20.1999C7.57793 19.7783 7.99828 19.5143 8.44669 19.5551L12.2501 19.9009M10.4386 24.5083L12.2501 19.9009M35.8125 25.9548L37.5552 28.7867C37.838 29.2463 38.4344 29.3985 38.903 29.1308L41.1593 27.8415C41.6279 27.5737 41.7995 26.9824 41.547 26.5053L40.2132 23.9861L35.8125 25.9548Z" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+              <div className='location-item'>10 минут на автомобиле до улицы Республики</div>
+            </div>
+            <div className='location-text'>
+              <div className='location-item'>
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="#44b3b4" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="8.28577" y="8.28564" width="31.4286" height="12.5714" fill="#81D3EB"></rect>
+                  <rect x="2" y="32.3809" width="44" height="4.19048" rx="2" fill="white" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></rect>
+                  <path d="M34.4762 37.5714C34.4762 37.0191 34.9239 36.5714 35.4762 36.5714H42.9048C43.4571 36.5714 43.9048 37.0191 43.9048 37.5714V39.8095C43.9048 40.9141 43.0093 41.8095 41.9048 41.8095H36.4762C35.3716 41.8095 34.4762 40.9141 34.4762 39.8095V37.5714Z" fill="#234B9B" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M4.09521 37.5714C4.09521 37.0191 4.54293 36.5714 5.09521 36.5714H12.5238C13.0761 36.5714 13.5238 37.0191 13.5238 37.5714V39.8095C13.5238 40.9141 12.6284 41.8095 11.5238 41.8095H6.09522C4.99065 41.8095 4.09521 40.9141 4.09521 39.8095V37.5714Z" fill="#234B9B" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M2 24.7142C2 20.8482 5.13401 17.7142 9 17.7142H39C42.866 17.7142 46 20.8482 46 24.7142V28.3809C46 30.59 44.2091 32.3809 42 32.3809H6C3.79086 32.3809 2 30.59 2 28.3809V24.7142Z" fill="#F59B23" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12.1904 6.19043C8.87672 6.19043 6.19043 8.87672 6.19043 12.1904V16.7142C6.19043 17.2665 6.63814 17.7142 7.19043 17.7142H10.3234C9.77567 17.7089 9.33327 17.2633 9.33327 16.7143V13.3333C9.33327 11.1242 11.1241 9.33333 13.3333 9.33333H34.6666C36.8757 9.33333 38.6666 11.1242 38.6666 13.3333V16.7143C38.6666 17.2633 38.2242 17.7089 37.6765 17.7142H40.8095C41.3618 17.7142 41.8095 17.2665 41.8095 16.7142V12.1904C41.8095 8.87672 39.1232 6.19043 35.8095 6.19043H12.1904Z" fill="#F59B23"></path>
+                  <path d="M10.3234 17.7142V18.3142C10.6536 18.3142 10.9218 18.0474 10.9234 17.7171C10.925 17.3869 10.6594 17.1175 10.3292 17.1143L10.3234 17.7142ZM37.6765 17.7142L37.6707 17.1143C37.3405 17.1175 37.0749 17.3869 37.0765 17.7171C37.0781 18.0474 37.3462 18.3142 37.6765 18.3142V17.7142ZM6.79043 12.1904C6.79043 9.20809 9.20809 6.79043 12.1904 6.79043V5.59043C8.54535 5.59043 5.59043 8.54535 5.59043 12.1904H6.79043ZM6.79043 16.7142V12.1904H5.59043V16.7142H6.79043ZM7.19043 17.1142C6.96952 17.1142 6.79043 16.9352 6.79043 16.7142H5.59043C5.59043 17.5979 6.30677 18.3142 7.19043 18.3142V17.1142ZM10.3234 17.1142H7.19043V18.3142H10.3234V17.1142ZM10.3292 17.1143C10.1102 17.1121 9.93327 16.9338 9.93327 16.7143H8.73327C8.73327 17.5927 9.44109 18.3057 10.3176 18.3142L10.3292 17.1143ZM9.93327 16.7143V13.3333H8.73327V16.7143H9.93327ZM9.93327 13.3333C9.93327 11.4556 11.4555 9.93333 13.3333 9.93333V8.73333C10.7928 8.73333 8.73327 10.7928 8.73327 13.3333H9.93327ZM13.3333 9.93333H34.6666V8.73333H13.3333V9.93333ZM34.6666 9.93333C36.5444 9.93333 38.0666 11.4556 38.0666 13.3333H39.2666C39.2666 10.7928 37.2071 8.73333 34.6666 8.73333V9.93333ZM38.0666 13.3333V16.7143H39.2666V13.3333H38.0666ZM38.0666 16.7143C38.0666 16.9338 37.8896 17.1121 37.6707 17.1143L37.6823 18.3142C38.5588 18.3057 39.2666 17.5927 39.2666 16.7143H38.0666ZM40.8095 17.1142H37.6765V18.3142H40.8095V17.1142ZM41.2095 16.7142C41.2095 16.9352 41.0304 17.1142 40.8095 17.1142V18.3142C41.6931 18.3142 42.4095 17.5979 42.4095 16.7142H41.2095ZM41.2095 12.1904V16.7142H42.4095V12.1904H41.2095ZM35.8095 6.79043C38.7918 6.79043 41.2095 9.20809 41.2095 12.1904H42.4095C42.4095 8.54535 39.4546 5.59043 35.8095 5.59043V6.79043ZM12.1904 6.79043H35.8095V5.59043H12.1904V6.79043Z" fill="#2B2E32"></path>
+                  <circle cx="38.1429" cy="25.5713" r="3.66667" fill="white" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></circle>
+                  <circle cx="9.8571" cy="25.5713" r="3.66667" fill="white" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></circle>
+                  <rect x="18.762" y="27.1428" width="10.4762" height="5.2381" rx="1" fill="#DD6E25" stroke="#2B2E32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></rect>
+                </svg>
+              </div>
+              <div className='location-item'>3 минуты до Окружной дороги</div>
+            </div>
+          </div>
+        </div>
+        <div className='location-map'>
+          <div id="map">
+            <div style={{ position: 'relative', overflow:'hidden'}}><a href="https://yandex.ru/maps/55/tyumen/?utm_medium=mapframe&utm_source=maps" style={{color: '#eee', fontSize: '12px', position: 'absolute', top: '0px'}}>Тюмень</a><a href="https://yandex.ru/maps/55/tyumen/?ll=65.540896%2C57.108443&utm_medium=mapframe&utm_source=maps&z=15" style={{color: '#eee', fontSize: '12px', position: 'absolute', top: '14px'}}>Яндекс Карты</a><iframe src="https://yandex.ru/map-widget/v1/?ll=65.540896%2C57.108443&z=15" width="860" height="600" frameborder="1" allowfullscreen="true" style={{position: 'relative', marginLeft: 'auto', marginRight: 'auto'}}></iframe></div>
           </div>
         </div>
       </div>

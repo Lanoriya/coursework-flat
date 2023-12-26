@@ -33,11 +33,16 @@
   border-radius: 0;
 }
 
+.review-btn:hover {
+  cursor: pointer;
+}
+
 .apartment-name p {
   width: 10%;
   cursor: pointer;
   border: 1px solid white;
-  padding: 5px 4px;
+  padding: 5px 6px;
+  color: #fff;
 }
 
 .apartment-items {
