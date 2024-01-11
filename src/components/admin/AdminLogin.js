@@ -29,7 +29,7 @@ function AdminLogin() {
         const data = await response.json();
 
         // Сохраните токен в localStorage или куки
-        localStorage.setItem('adminToken', data.token);
+        document.cookie = `adminToken=${data.token}; path=/; max-age=3600; samesite=strict`;
 
         // Перенаправьте администратора на страницу админа
         window.location.reload()

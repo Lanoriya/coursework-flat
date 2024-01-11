@@ -13,7 +13,7 @@ function AddItem({ endpoint, fields, successMessage }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('adminToken');
+    const token = document.cookie.split('; ').find(row => row.startsWith('adminToken=')).split('=')[1];
     const addButton = document.querySelector('.admin-btn');
 
     if (addButton) {

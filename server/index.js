@@ -15,7 +15,18 @@ const pool = new Pool({
   port: 5432,
 });
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // Укажите домен вашего клиента
+  credentials: true,
+}));
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000'); // Укажите домен вашего клиента
+  res.header('Vary', 'Origin');
+  next();
+});
+
 app.use(express.json());
 
 const secretKey = crypto.randomBytes(32).toString('hex');
@@ -92,9 +103,9 @@ app.post('/api/admin/login', async (req, res) => {
     if (passwordMatch) {
       // Верный логин и пароль
       const token = jwt.sign({ adminId: admin.rows[0].id, username, role: 'admin' }, secretKey, {
-        expiresIn: '1h',
+        expiresIn: '12h',
       });
-      res.cookie('adminToken', token, { httpOnly: true, maxAge: 3600000 });
+      res.cookie('adminToken', token, { httpOnly: true, maxAge: 3600000, sameSite: 'None', secure: true, path: '/' });
       return res.status(200).json({ message: 'Admin login successful', adminId: admin.rows[0].id, token });
     } else {
       // Логин верный, но пароль неверный

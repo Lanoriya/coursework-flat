@@ -8,7 +8,7 @@ function MainHeader() {
 
   return (
     <header className={`main-header ${isApartmentsPage ? 'apartments-header' : ''}`}>
-      <div className={`header-container ${isApartmentsPage ? 'apartments-container' : ''}`}>
+      <div className={`header-container ${isApartmentsPage ? 'apartments-header' : ''}`}>
         <div className='container header-block'>
           <nav className='main-header-nav'>
             <ul className='header-ul'>

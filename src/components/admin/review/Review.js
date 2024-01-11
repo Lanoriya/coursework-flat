@@ -10,17 +10,20 @@ function Review() {
 
   // Define fetchApartments using useCallback
   const fetchApartments = useCallback(() => {
-    const token = localStorage.getItem('adminToken');
+    const tokenCookie = document.cookie.split('; ').find(row => row.startsWith('adminToken='));
+    const token = tokenCookie ? tokenCookie.split('=')[1] : null;
+    
+    console.log('Token:', token);
     axios.get(`http://localhost:3001/api/admin/apartments`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      params: {
-        sortField,
-        sortOrder,
-      },
+      withCredentials: true,
     }).then((response) => {
+      console.log('Apartments Response:', response.data);
       setApartments(response.data);
+    }).catch(error => {
+      console.error('Error fetching apartments:', error); // Добавим вывод в консоль для отладки
     });
   }, [sortField, sortOrder]);
 
@@ -45,8 +48,7 @@ function Review() {
   };
 
   const handleSave = () => {
-    const token = localStorage.getItem('adminToken');
-  
+    const token = document.cookie.split('; ').find(row => row.startsWith('adminToken=')).split('=')[1];
     // Disable the button to prevent multiple clicks
     const saveButton = document.querySelector('.review-btn');
     if (saveButton) {

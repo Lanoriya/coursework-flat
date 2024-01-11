@@ -1,6 +1,45 @@
 .main-footer {
+  position: relative;
   background-color: #323232;
   color: #fff;
   width: 100%;
+}
+
+.main-footer::before {
+  content: "";
+  position: absolute;
+  right: 5vw;
+  bottom: 0;
+  background-image: url(../imgs/bg-without.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 1;
   height: 250px;
+  width: 250px;
+}
+
+.footer-container {
+  padding: 64px 0px;
+  justify-content: space-between;
+  display: flex;
+}
+
+.footer-text-container {
+  max-width: 90%;
+}
+
+.footer-text {
+  color: #fff;
+  font-size: 12px;
+  margin-bottom: 24px;
+}
+
+.footer-text--a {
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.footer-text--a:hover {
+  color: #44b3b4;
 }

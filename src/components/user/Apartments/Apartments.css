@@ -1,6 +1,7 @@
 .apartments-header {
+  top: 0;
   background-image: none;
-  height: 16vh;
+  height: auto;
 }
 
 .apartments-header::after {
@@ -8,5 +9,24 @@
 }
 
 .apartments-container {
-  position: fixed;
+  display: flex;
+  margin-top: 120px;
+}
+
+.apartments-main h1 {
+  font-size: 56px;
+}
+
+.apartments-filter {
+  padding: 32px;
+  font-weight: 100;
+  background: #32323271;
+  border-radius: 8px;
+  color: #000;
+  font: serif;
+}
+
+.apartments-filter h4 {
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 28px;
 }

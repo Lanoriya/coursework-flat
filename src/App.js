@@ -10,7 +10,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const adminToken = localStorage.getItem('adminToken');
+    const adminToken = document.cookie.split('; ').find(row => row.startsWith('adminToken='));
     if (adminToken) {
       setIsAuthenticated(!!adminToken);
     }
