@@ -46,22 +46,22 @@ function MainContent() {
         <div className='slider-box'>
           <Slider {...settings}>
             <div>
-              <img src={require('../imgs/about/1.jpg')} />
+              <img className='slider-img' src={require('../imgs/about/1.jpg')} alt='photo1'/>
             </div>
             <div>
-              <img src={require('../imgs/about/2.jpg')} />
+              <img className='slider-img' src={require('../imgs/about/2.jpg')} alt='photo2'/>
             </div>
             <div>
-              <img src={require('../imgs/about/3.jpg')} />
+              <img className='slider-img' src={require('../imgs/about/3.jpg')} alt='photo3'/>
             </div>
             <div>
-              <img src={require('../imgs/about/4.jpg')} />
+              <img className='slider-img' src={require('../imgs/about/4.jpg')} alt='photo4'/>
             </div>
             <div>
-              <img src={require('../imgs/about/5.jpg')} />
+              <img className='slider-img' src={require('../imgs/about/5.jpg')} alt='photo5'/>
             </div>
             <div>
-              <img src={require('../imgs/about/6.jpg')} />
+              <img className='slider-img' src={require('../imgs/about/6.jpg')} alt='photo6'/>
             </div>
           </Slider>
         </div>
@@ -82,13 +82,13 @@ function MainContent() {
               <div className='about-item--carousel'>
                 <Slider {...settings}>
                   <div>
-                    <img src={require('../MainContent/MainImgs/1.jpg')} />
+                    <img src={require('../MainContent/MainImgs/1.jpg')} alt='Mainphoto1'/>
                   </div>
                   <div>
-                    <img src={require('../MainContent/MainImgs/2.jpg')} />
+                    <img src={require('../MainContent/MainImgs/2.jpg')} alt='Mainphoto2'/>
                   </div>
                   <div>
-                    <img src={require('../MainContent/MainImgs/3.jpg')} />
+                    <img src={require('../MainContent/MainImgs/3.jpg')} alt='Mainphoto3'/>
                   </div>
                 </Slider>
               </div>
@@ -99,13 +99,13 @@ function MainContent() {
               <div className='about-item--carousel'>
                 <Slider {...settings} style={{ marginLeft: 0 }}>
                   <div>
-                    <img src={require('../MainContent/MainImgs/4.jpg')} />
+                    <img src={require('../MainContent/MainImgs/4.jpg')} alt='Mainphoto4'/>
                   </div>
                   <div>
-                    <img src={require('../MainContent/MainImgs/5.jpg')} />
+                    <img src={require('../MainContent/MainImgs/5.jpg')} alt='Mainphoto5'/>
                   </div>
                   <div>
-                    <img src={require('../MainContent/MainImgs/6.jpg')} />
+                    <img src={require('../MainContent/MainImgs/6.jpg')} alt='Mainphoto6'/>
                   </div>
                 </Slider>
               </div>
@@ -186,13 +186,13 @@ function MainContent() {
           </ul>
         </div>
         <div className='infrastructure-img'>
-          <img src={require('../Infrastructure/infrastructure.png')} />
+          <img src={require('../Infrastructure/infrastructure.png')} alt='infraPhoto'/>
         </div>
       </div>
       <div className='container about-flat-container'>
         <div className='about-item about-flat'>
           <div className='about-item--img'>
-            <img src={require('../AboutFlat/houses.jpg')} />
+            <img src={require('../AboutFlat/houses.jpg')} alt='houses'/>
           </div>
           <div className='about-item--text'>
             <div className='about-textBlock'>
@@ -253,12 +253,12 @@ function MainContent() {
             </div>
           </div>
           <div className='about-item--img'>
-            <img src={require('../AboutFlat/terra.jpg')} />
+            <img src={require('../AboutFlat/terra.jpg')} alt='terra'/>
           </div>
         </div>
         <div className='about-item about-flat' style={{alignItems: 'flex-start'}}>
           <div className='about-item--img'>
-            <img src={require('../AboutFlat/childs.jpg')} />
+            <img src={require('../AboutFlat/childs.jpg')} alt='childs'/>
           </div>
           <div className='about-item--text'>
             <div className='about-textBlock' style={{margin: '0'}}>
@@ -281,7 +281,7 @@ function MainContent() {
             <p>Установлена горизонтальная разводка отопления. Нет стояков около окон. В каждой квартире балкон или лоджия не менее 3 м<span className='span-nofont'>²</span>. Квартиры сдаются с предчистовой отделкой.</p>
           </div>
           <div className='about-solo-img'>
-            <img src={require('../AboutSolo/flat.png')} />
+            <img src={require('../AboutSolo/flat.png')} alt='flat'/>
           </div>
         </div>
       </div>
@@ -335,7 +335,7 @@ function MainContent() {
         </div>
         <div className='location-map'>
           <div id="map">
-            <div style={{ position: 'relative', overflow:'hidden'}}><a href="https://yandex.ru/maps/55/tyumen/?utm_medium=mapframe&utm_source=maps" style={{color: '#eee', fontSize: '12px', position: 'absolute', top: '0px'}}>Тюмень</a><a href="https://yandex.ru/maps/55/tyumen/?ll=65.540896%2C57.108443&utm_medium=mapframe&utm_source=maps&z=15" style={{color: '#eee', fontSize: '12px', position: 'absolute', top: '14px'}}>Яндекс Карты</a><iframe src="https://yandex.ru/map-widget/v1/?ll=65.540896%2C57.108443&z=15" width="860" height="600" frameBorder="1" style={{position: 'relative', marginLeft: 'auto', marginRight: 'auto'}}></iframe></div>
+            <div style={{ position: 'relative', overflow:'hidden'}}><a href="https://yandex.ru/maps/55/tyumen/?utm_medium=mapframe&utm_source=maps" style={{color: '#eee', fontSize: '12px', position: 'absolute', top: '0px'}}>Тюмень</a><a href="https://yandex.ru/maps/55/tyumen/?ll=65.540896%2C57.108443&utm_medium=mapframe&utm_source=maps&z=15" style={{color: '#eee', fontSize: '12px', position: 'absolute', top: '14px'}}>Яндекс Карты</a><iframe title="map" src="https://yandex.ru/map-widget/v1/?ll=65.540896%2C57.108443&z=15" width="860" height="600" frameBorder="1" style={{position: 'relative', marginLeft: 'auto', marginRight: 'auto'}}></iframe></div>
           </div>
         </div>
       </div>

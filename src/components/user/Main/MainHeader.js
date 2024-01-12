@@ -15,8 +15,8 @@ function MainHeader() {
               <Link to='/' className='header-ul-li'><img className='header-logo' src={Logo} alt='header-logo' /></Link>
               <li className='header-ul-li'><a href='/'>О проекте</a></li>
               <Link to='/apartments' className='header-ul-li'>Поиск квартир</Link>
-              <li className='header-ul-li'><a href='/'>Контакты</a></li>
               <li className='header-ul-li'><a href='/'>Расположение</a></li>
+              <li className='header-ul-li'><a href='/'>Контакты</a></li>
             </ul>
           </nav>
           <div className='header-callback'>

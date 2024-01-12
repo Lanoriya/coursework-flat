@@ -25,7 +25,7 @@ function Apartments() {
         <div className='filter-reset'>
           <a href='/apartments'>Сбросить параметры
             <svg width="8" height="8" viewBox="0 0 8 8" fill="000" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M3.99996 5.22229L1.37727 7.84498C1.12213
+              <path fillRule="evenodd" clipRule="evenodd" d="M3.99996 5.22229L1.37727 7.84498C1.12213
                 8.10013 0.641687 8.03336 0.304183 7.69586C-0.0333213 7.35836 -0.100086 6.87792
                 0.15506 6.62277L2.77775 4.00008L0.155017 1.37735C-0.100129 1.1222 -0.0333644
                 0.641762 0.30414 0.304258C0.641644 -0.0332461 1.12208 -0.100011 1.37723

@@ -28,7 +28,6 @@
 
 .main-container img {
   border-radius: 10px;
-  box-shadow: 0 0 0 1.5px #323232;
 }
 
 .header-container {
@@ -177,7 +176,6 @@
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
-  box-shadow: 0 0 0 1.5px #323232;
 }
 
 .slick-prev:before, .slick-next:before {
@@ -188,10 +186,15 @@
   outline: none ;
 }
 
+.slick-list {
+  border-radius: 10px;
+}
+
 .slick-slide img{
   margin-left: auto;
   margin-right: auto;
-  width: 100%;
+  height: 100%;
+  width: 99.9%;
 }
 
 .about-items {
