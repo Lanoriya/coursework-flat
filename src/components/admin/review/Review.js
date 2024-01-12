@@ -11,6 +11,7 @@ function Review() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [apartmentToDelete, setApartmentToDelete] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isAnimationActive, setIsAnimationActive] = useState(false);
 
   // Define fetchApartments using useCallback
   const fetchApartments = useCallback(() => {
@@ -62,10 +63,10 @@ function Review() {
   const handleDeleteConfirm = () => {
     if (apartmentToDelete && !isAnimating) {
       const token = Cookies.get('adminToken');
-  
-      // Установим состояние isAnimating в true перед началом анимации
+    
       setIsAnimating(true);
-  
+      setIsAnimationActive(true); // Устанавливаем состояние активности анимации в true
+    
       axios
         .delete(`http://localhost:3001/api/admin/apartments/${apartmentToDelete}`, {
           headers: {
@@ -84,16 +85,16 @@ function Review() {
               successNotification.classList.remove('success-notification');
               setTimeout(() => {
                 setShowSuccessNotification(false);
-                
-                // Устанавливаем состояние isAnimating в false после завершения анимации
                 setIsAnimating(false);
+                setIsAnimationActive(false); // Устанавливаем состояние активности анимации в false
               }, 500);
             }
           }, 3000);
         })
         .catch((error) => {
           console.log(error);
-          // Обработка ошибок при удалении
+          setIsAnimating(false);
+          setIsAnimationActive(false); // Обработка ошибок при удалении
         })
         .finally(() => {
           setApartmentToDelete(null);
@@ -115,6 +116,8 @@ function Review() {
       saveButton.disabled = true;
     }
   
+    setIsAnimationActive(true);
+
     axios
       .put('http://localhost:3001/api/admin/apartments', apartments, {
         headers: {
@@ -138,6 +141,7 @@ function Review() {
               if (saveButton) {
                 saveButton.disabled = false;
               }
+              setIsAnimationActive(false);
             }, 500);
           }
         }, 3000);
@@ -252,6 +256,7 @@ function Review() {
           <progress id='progress' value='1'></progress>
         </div>
       )}
+      {isAnimationActive && <div className="overlay"></div>}
     </div>
   );
 }

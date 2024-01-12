@@ -1,3 +1,21 @@
+.admin-main {
+  position: relative;
+}
+
+.admin-main.active-overlay {
+  pointer-events: none; /* Блокируем события ввода на элементах внутри */
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000; /* Передний план, чтобы перекрыть другие элементы */
+  pointer-events: all; /* Позволяет элементу принимать события ввода */
+}
+
 .apartment-container {
   display: flex;
   flex-direction: column;
