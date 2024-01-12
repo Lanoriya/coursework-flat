@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect, useCallback } from 'react';
+import Cookies from 'js-cookie';
 import './styles/Review.css';
 
 function Review() {
@@ -7,16 +8,21 @@ function Review() {
   const [sortField, setSortField] = useState("apartment_number");
   const [sortOrder, setSortOrder] = useState("asc");
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [apartmentToDelete, setApartmentToDelete] = useState(null);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Define fetchApartments using useCallback
   const fetchApartments = useCallback(() => {
-    const tokenCookie = document.cookie.split('; ').find(row => row.startsWith('adminToken='));
-    const token = tokenCookie ? tokenCookie.split('=')[1] : null;
+    const token = Cookies.get('adminToken');
     
-    console.log('Token:', token);
     axios.get(`http://localhost:3001/api/admin/apartments`, {
       headers: {
         Authorization: `Bearer ${token}`,
+      },
+      params: {
+        sortField,
+        sortOrder,
       },
       withCredentials: true,
     }).then((response) => {
@@ -38,6 +44,7 @@ function Review() {
       setSortField(field);
       setSortOrder("asc");
     }
+    fetchApartments();
   };
 
   const handleChange = (event, apartmentId, field) => {
@@ -47,10 +54,63 @@ function Review() {
     setApartments(updatedApartments);
   };
 
+  const handleDeleteBlock = (apartmentId) => {
+    setApartmentToDelete(apartmentId);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (apartmentToDelete && !isAnimating) {
+      const token = Cookies.get('adminToken');
+  
+      // Установим состояние isAnimating в true перед началом анимации
+      setIsAnimating(true);
+  
+      axios
+        .delete(`http://localhost:3001/api/admin/apartments/${apartmentToDelete}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        })
+        .then((response) => {
+          console.log(response);
+          fetchApartments();
+          setShowSuccessNotification(true);
+          setTimeout(() => {
+            const successNotification = document.querySelector('.success-notification');
+            if (successNotification) {
+              successNotification.classList.add('end-notification');
+              successNotification.classList.remove('success-notification');
+              setTimeout(() => {
+                setShowSuccessNotification(false);
+                
+                // Устанавливаем состояние isAnimating в false после завершения анимации
+                setIsAnimating(false);
+              }, 500);
+            }
+          }, 3000);
+        })
+        .catch((error) => {
+          console.log(error);
+          // Обработка ошибок при удалении
+        })
+        .finally(() => {
+          setApartmentToDelete(null);
+          setShowDeleteModal(false);
+        });
+    }
+  };
+
+  const handleDeleteButtonClick = (apartmentId) => {
+    handleDeleteBlock(apartmentId);
+  };
+
   const handleSave = () => {
-    const token = document.cookie.split('; ').find(row => row.startsWith('adminToken=')).split('=')[1];
-    // Disable the button to prevent multiple clicks
+    const token = Cookies.get('adminToken');
     const saveButton = document.querySelector('.review-btn');
+  
+    // Disable the button to prevent multiple clicks
     if (saveButton) {
       saveButton.disabled = true;
     }
@@ -60,6 +120,7 @@ function Review() {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        withCredentials: true,
       })
       .then((response) => {
         console.log(response);
@@ -68,21 +129,16 @@ function Review() {
   
         setTimeout(() => {
           const successNotification = document.querySelector('.success-notification');
-          try {
+  
+          if (successNotification) {
             successNotification.classList.add('end-notification');
             successNotification.classList.remove('success-notification');
             setTimeout(() => {
               setShowSuccessNotification(false);
-            }, 500);
-  
-          } catch (error) {
-            return;
-          } finally {
-            if (saveButton) {
-              setTimeout(() => {
+              if (saveButton) {
                 saveButton.disabled = false;
-              }, 500);
-            }
+              }
+            }, 500);
           }
         }, 3000);
   
@@ -90,7 +146,6 @@ function Review() {
       })
       .catch((error) => {
         console.log(error);
-  
         // Re-enable the button in case of an error
         if (saveButton) {
           saveButton.disabled = false;
@@ -175,9 +230,21 @@ function Review() {
                 value={apart.entrance}
                 onChange={(event) => handleChange(event, apart.apartment_id, "entrance")}
               />
+              <div className='delete-btn-overlay' onClick={() => handleDeleteButtonClick(apart.apartment_id)}></div>
             </div>
           </div>
         ))}
+        {showDeleteModal && (
+          <div className='delete-modal'>
+            <div className='delete-container'>
+              <h3>Вы уверены, что хотите удалить эту квартиру?</h3>
+              <div className='delete-buttons'>
+                <button disabled={isAnimating} onClick={handleDeleteConfirm}>Да</button>
+                <button onClick={() => setShowDeleteModal(false)}>Нет</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       {showSuccessNotification && (
         <div className={`success-notification`}>

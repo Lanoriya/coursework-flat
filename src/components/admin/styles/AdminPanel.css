@@ -61,9 +61,8 @@
   grid-column-start: 1;
   grid-row-end: 3;
   grid-row-start: 1;
-  padding: 10px 20px;
+  padding: 10px 0px;
   max-height: 100vh;
-  width: 20px;
 }
 
 .admin-header--p {
@@ -89,5 +88,15 @@
 }
 
 .aside-nav-btn {
-  padding: 20px;
+  padding: 20px 12px;
+  font-size: 14px;
+  text-align: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.485);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.aside-nav-btn:hover {
+  color: #44b3b4;
 }

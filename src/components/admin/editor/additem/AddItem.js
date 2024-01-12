@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 function AddItem({ endpoint, fields, successMessage }) {
   const [formData, setFormData] = useState({});
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -13,17 +15,26 @@ function AddItem({ endpoint, fields, successMessage }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const token = document.cookie.split('; ').find(row => row.startsWith('adminToken=')).split('=')[1];
+    // Если анимация идет, не отправлять запрос
+    if (isAnimating) {
+      return;
+    }
+
+    const token = Cookies.get('adminToken');
     const addButton = document.querySelector('.admin-btn');
 
     if (addButton) {
       addButton.disabled = true;
     }
 
+    // Устанавливаем состояние isAnimating в true перед началом анимации
+    setIsAnimating(true);
+
     axios.post(`http://localhost:3001/api/admin/${endpoint}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     })
       .then((response) => {
         console.log(`${successMessage} added successfully`, response.data);
@@ -45,16 +56,19 @@ function AddItem({ endpoint, fields, successMessage }) {
   
             setTimeout(() => {
               setShowSuccessNotification(false);
+              // Устанавливаем состояние isAnimating в false после завершения анимации
+              setIsAnimating(false);
             }, 500);
           }
         }, 3000);
       })
-
       .catch((error) => {
         console.error(`Error adding ${endpoint}`, error);
         if (addButton) {
           addButton.disabled = false;
         }
+        // Устанавливаем состояние isAnimating в false при ошибке
+        setIsAnimating(false);
       });
   };
 

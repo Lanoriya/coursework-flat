@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3001;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 const crypto = require('crypto');
 
 const Pool = require('pg').Pool;
@@ -14,6 +16,8 @@ const pool = new Pool({
   password: 'artas',
   port: 5432,
 });
+
+dotenv.config();
 
 app.use(cors({
   origin: 'http://localhost:3000', // Укажите домен вашего клиента
@@ -27,20 +31,20 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(cookieParser());
 app.use(express.json());
 
-const secretKey = crypto.randomBytes(32).toString('hex');
+const secretKey = process.env.SECRET_KEY || 'default-secret-key';
 
 function checkAdminToken(req, res, next) {
-  const authToken = req.headers.authorization;
+  const authToken = req.cookies.adminToken; // Получаем токен из куки
+
   if (!authToken) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const token = authToken.split(' ')[1];
-
   try {
-    const decoded = jwt.verify(token, secretKey);
+    const decoded = jwt.verify(authToken, secretKey);
 
     if (decoded.role === 'admin') {
       // Проверьте срок действия токена
@@ -52,7 +56,7 @@ function checkAdminToken(req, res, next) {
           secretKey,
           { expiresIn: '1h' }
         );
-        res.setHeader('Authorization', `Bearer ${newToken}`);
+        res.cookie('adminToken', newToken, { httpOnly: true, maxAge: 3600000, sameSite: 'None', secure: true, path: '/' });
       }
 
       // Продолжите выполнение запроса
@@ -167,20 +171,23 @@ app.post('/api/admin/addBuilding', checkAdminToken, async (req, res) => {
 })
 
 app.get('/api/admin/apartments', checkAdminToken, async (req, res) => {
-  const { sortField, sortOrder } = req.query;
   try {
-    const apartment = `SELECT * FROM apartments ORDER BY ${sortField} ${sortOrder}`;
-    const result = await pool.query(apartment)
+    const { sortField, sortOrder } = req.query;
+    const defaultSortField = 'apartment_id';
+    const query = `SELECT * FROM apartments ORDER BY ${sortField || defaultSortField} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}`;
+    console.log('SQL Query:', query);
 
-    return res.status(200).json(result.rows)
+    const result = await pool.query(query);
+
+    return res.status(200).json(result.rows);
   } catch (error) {
+    console.error('Error fetching apartments:', error);
     res.status(500).json({ error: 'Error updating apartments' });
   }
-})
+});
 
 app.put('/api/admin/apartments', checkAdminToken, async (req, res) => {
   const updatedApartments = req.body; // Получите обновленные данные квартир из тела запроса
-
   try {
     // Цикл по массиву обновленных квартир и выполнение SQL-запросов для обновления каждой из них
     for (const apartment of updatedApartments) {
@@ -207,6 +214,29 @@ app.put('/api/admin/apartments', checkAdminToken, async (req, res) => {
   } catch (error) {
     console.error('Ошибка при обновлении данных о квартирах:', error);
     res.status(500).json({ error: 'Ошибка при обновлении данных о квартирах' });
+  }
+});
+
+app.delete('/api/admin/apartments/:id', checkAdminToken, async (req, res) => {
+  const apartmentId = req.params.id;
+
+  try {
+    // Проверяем, существует ли квартира с указанным id
+    const checkQuery = 'SELECT * FROM apartments WHERE apartment_id = $1';
+    const checkResult = await pool.query(checkQuery, [apartmentId]);
+
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Квартира не найдена' });
+    }
+
+    // Выполняем запрос к базе данных для удаления квартиры
+    const deleteQuery = 'DELETE FROM apartments WHERE apartment_id = $1';
+    await pool.query(deleteQuery, [apartmentId]);
+
+    res.status(204).send();
+  } catch (error) {
+    console.error('Ошибка при удалении квартиры:', error);
+    res.status(500).json({ error: 'Ошибка при удалении квартиры' });
   }
 });
 
