@@ -252,7 +252,25 @@ app.get('/api/apartments', async (req, res) => {
     return res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error fetching apartments:', error);
-    res.status(500).json({ error: 'Error retrieving apartments' });
+    res.statСus(500).json({ error: 'Error retrieving apartments' });
+  }
+});
+
+app.get('/api/image/:image_id', async (req, res) => {
+  const imageId = req.params.image_id;
+
+  try {
+    const result = await pool.query('SELECT image_url FROM apartment_images WHERE image_id = $1', [imageId]);
+
+    if (result.rows.length > 0) {
+      const imageUrl = result.rows[0].image_url;
+      res.redirect(imageUrl); // Перенаправляем запрос на URL изображения
+    } else {
+      res.status(404).json({ error: 'Image not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching image:', error);
+    res.status(500).json({ error: 'Error retrieving image' });
   }
 });
 

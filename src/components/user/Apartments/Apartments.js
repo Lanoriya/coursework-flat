@@ -68,8 +68,8 @@ function Apartments() {
               <th className='apartments-main-th'>Площадь</th>
               <th className='apartments-main-th'>Этаж</th>
               <th className='apartments-main-th'>Цена</th>
-              <th className='apartments-main-th'>ID здания</th>
               <th className='apartments-main-th'>Подъезд</th>
+              <th className='apartments-main-th'>Планировка</th>
             </tr>
           </thead>
           <tbody className='apartments-main-tbody'>
@@ -77,11 +77,13 @@ function Apartments() {
               <tr key={apart.apartment_id} className='apartment-user-container'>
                 <td className='apartments-main-td'>{apart.apartment_number}</td>
                 <td className='apartments-main-td'>{apart.room_count}</td>
-                <td className='apartments-main-td'>{apart.area}</td>
+                <td className='apartments-main-td'>{apart.area}м²</td>
                 <td className='apartments-main-td'>{apart.floor}</td>
                 <td className='apartments-main-td'>{apart.price}</td>
-                <td className='apartments-main-td'>{apart.building_id}</td>
                 <td className='apartments-main-td'>{apart.entrance}</td>
+                <td className='apartments-main-td'>
+                  <img className='apartments-main-img' src={`http://localhost:3001/api/image/${apart.image_id}`} alt={`Apartment ${apart.apartment_number}`}/>
+                </td>
               </tr>
             ))}
           </tbody>
