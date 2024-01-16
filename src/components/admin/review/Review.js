@@ -182,6 +182,7 @@ function Review() {
           <p onClick={() => handleSort("price")}>Цена</p>
           <p onClick={() => handleSort("building_id")}>Номер здания</p>
           <p onClick={() => handleSort("entrance")}>Подъезд</p>
+          <p onClick={() => handleSort("image_id")}>Номер фотографии</p>
           <button className='admin-btn review-btn' onClick={handleSave}>Сохранить</button>
         </div>
         {apartments.map((apart) => (
@@ -234,7 +235,14 @@ function Review() {
                 value={apart.entrance}
                 onChange={(event) => handleChange(event, apart.apartment_id, "entrance")}
               />
-              <div className='delete-btn-overlay' onClick={() => handleDeleteButtonClick(apart.apartment_id)}></div>
+            </div>
+            <div className='apartment-item-value'>
+              <input
+                type='text'
+                value={apart.image_id}
+                onChange={(event) => handleChange(event, apart.apartment_id, "image_id")}
+              />
+              <div className='delete-btn-overlay' onClick={() => handleDeleteButtonClick(apart.image_id)}></div>
             </div>
           </div>
         ))}

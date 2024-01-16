@@ -16,7 +16,7 @@
 .apartments-main {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 80%;
 }
 
 .apartments-main h1 {
@@ -32,16 +32,21 @@
 
 .apartment-user-container {
   width: 30%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.145);
 }
 
 .apartments-filter {
   padding: 32px;
   margin-right: 16px;
   font-weight: 100;
+  height: 340px;
   background: #32323271;
   border-radius: 8px;
   color: #000;
-  font: serif;
+}
+
+.filter-reset {
+  white-space:nowrap;
 }
 
 .apartments-filter h4 {
@@ -53,18 +58,28 @@
   color: #000;
 }
 
+.apartments-main-thead {
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
 .apartments-main-tbody {
-  
+  font-size: 20px;
 }
 
 .apartments-main-td {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-weight: bold;
+  vertical-align: middle;
 }
 
 .apartments-main-th {
   text-align: left;
   width: 10%;
+}
+
+.apartments-main-td {
+  padding: 8px 0px;
 }
 
 .apartments-main-img {

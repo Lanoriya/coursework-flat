@@ -135,13 +135,14 @@ app.post('/api/admin/addApartment', checkAdminToken, async (req, res) => {
     apartment_number,
     building_id,
     entrance,
+    image_id,
   } = req.body;
 
   try {
     // Выполнение запроса к базе данных для добавления квартиры
     const newApartment = await pool.query(
-      'INSERT INTO apartments (room_count, area, floor, price, apartment_number, building_id, entrance) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-      [room_count, area, floor, price, apartment_number, building_id, entrance]
+      'INSERT INTO apartments (room_count, area, floor, price, apartment_number, building_id, entrance, image_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+      [room_count, area, floor, price, apartment_number, building_id, entrance, image_id]
     );
 
     res.status(201).json(newApartment.rows[0]);

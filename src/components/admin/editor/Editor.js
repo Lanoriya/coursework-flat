@@ -14,6 +14,7 @@ function Editor() {
           { name: 'apartment_number', label: 'Номер квартиры' },
           { name: 'building_id', label: 'Номер здания' },
           { name: 'entrance', label: '№ подъезда' },
+          { name: 'image_id', label: 'Номер фотографии' },
         ]}
         successMessage="Квартиру"
       />
