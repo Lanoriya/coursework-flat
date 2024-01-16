@@ -240,6 +240,22 @@ app.delete('/api/admin/apartments/:id', checkAdminToken, async (req, res) => {
   }
 });
 
+app.get('/api/apartments', async (req, res) => {
+  try {
+    const { sortField, sortOrder } = req.query;
+    const defaultSortField = 'apartment_id';
+    const query = `SELECT * FROM apartments ORDER BY ${sortField || defaultSortField} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}`;
+    console.log('SQL Query:', query);
+
+    const result = await pool.query(query);
+
+    return res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error fetching apartments:', error);
+    res.status(500).json({ error: 'Error retrieving apartments' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Сервер работает на порту ${port}.`);
 });

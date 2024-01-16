@@ -1,8 +1,28 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 import './Apartments.css';
 
-
 function Apartments() {
-  return(
+  const [apartments, setApartments] = useState([]);
+
+  const fetchApartments = useCallback(() => {
+    axios.get(`http://localhost:3001/api/apartments`, {
+      withCredentials: true,
+    })
+      .then((response) => {
+        console.log('Apartments Response:', response.data);
+        setApartments(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching apartments:', error);
+      });
+  }, []); // Пустой массив зависимостей, так как нет зависимостей
+
+  useEffect(() => {
+    fetchApartments();
+  }, [fetchApartments]);
+
+  return (
     <div className='container apartments-container'>
       <aside className='apartments-filter'>
         <div className='filter-flat'>
@@ -40,6 +60,32 @@ function Apartments() {
       </aside>
       <div className='apartments-main'>
         <h1>Квартиры</h1>
+        <table className='apartments-main-table'>
+          <thead className='apartments-main-thead'>
+            <tr className='apartments-main-tr'>
+              <th className='apartments-main-th'>Номер квартиры</th>
+              <th className='apartments-main-th'>Количество комнат</th>
+              <th className='apartments-main-th'>Площадь</th>
+              <th className='apartments-main-th'>Этаж</th>
+              <th className='apartments-main-th'>Цена</th>
+              <th className='apartments-main-th'>ID здания</th>
+              <th className='apartments-main-th'>Подъезд</th>
+            </tr>
+          </thead>
+          <tbody className='apartments-main-tbody'>
+            {apartments.map((apart) => (
+              <tr key={apart.apartment_id} className='apartment-user-container'>
+                <td className='apartments-main-td'>{apart.apartment_number}</td>
+                <td className='apartments-main-td'>{apart.room_count}</td>
+                <td className='apartments-main-td'>{apart.area}</td>
+                <td className='apartments-main-td'>{apart.floor}</td>
+                <td className='apartments-main-td'>{apart.price}</td>
+                <td className='apartments-main-td'>{apart.building_id}</td>
+                <td className='apartments-main-td'>{apart.entrance}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   )
