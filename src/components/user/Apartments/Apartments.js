@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Apartments.css';
 
 function Apartments() {
   const [apartments, setApartments] = useState([]);
+  const navigate = useNavigate();
 
   const fetchApartments = useCallback(() => {
     axios.get(`http://localhost:3001/api/apartments`, {
@@ -21,6 +23,10 @@ function Apartments() {
   useEffect(() => {
     fetchApartments();
   }, [fetchApartments]);
+
+  const handleApartmentClick = (apartmentId) => {
+    navigate(`/apartments/flat/${apartmentId}`);
+  };
 
   return (
     <div className='container apartments-container'>
@@ -73,14 +79,22 @@ function Apartments() {
           </thead>
           <tbody className='apartments-main-tbody'>
             {apartments.map((apart) => (
-              <tr key={apart.apartment_id} className='apartment-user-container'>
+              <tr
+                key={apart.apartment_id}
+                className='apartment-user-container'
+                onClick={() => handleApartmentClick(apart.apartment_id)}
+              >
                 <td className='apartments-main-td'>{apart.apartment_number}</td>
                 <td className='apartments-main-td'>{apart.room_count}</td>
                 <td className='apartments-main-td'>{apart.area}м²</td>
                 <td className='apartments-main-td'>{apart.floor}</td>
                 <td className='apartments-main-td'>{apart.price}</td>
                 <td className='apartments-main-td'>
-                  <img className='apartments-main-img' src={`http://localhost:3001/api/image/${apart.image_id}`} alt={`Apartment ${apart.apartment_number}`}/>
+                  <img
+                    className='apartments-main-img'
+                    src={`http://localhost:3001/api/image/${apart.image_id}`}
+                    alt={`Apartment ${apart.apartment_number}`}
+                  />
                 </td>
               </tr>
             ))}
