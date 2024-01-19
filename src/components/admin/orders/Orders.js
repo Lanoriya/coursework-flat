@@ -29,16 +29,6 @@ function Orders() {
     fetchOrders();
   }, [fetchOrders]);
 
-  const handleSort = (field) => {
-    if (field === sortField) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortField(field);
-      setSortOrder("asc");
-    }
-    fetchOrders();
-  };
-
   const handleChange = (event, orderId, field) => {
     const updatedOrders = [...orders];
     const updatedOrderIndex = updatedOrders.findIndex((order) => order.order_id === orderId);
@@ -112,10 +102,10 @@ function Orders() {
   return (
     <div className='orders-container'>
       <div className='apartment-name orders-name'>
-        <p onClick={() => handleSort("name")} className='orders-p'>Имя</p>
-        <p onClick={() => handleSort("number")} className='orders-p'>Номер</p>
-        <p onClick={() => handleSort("status")} className='orders-p'>Статус</p>
-        <p onClick={() => handleSort("about")} className='orders-p'>Комментарий</p>
+        <p className='orders-p'>Имя</p>
+        <p className='orders-p'>Номер</p>
+        <p className='orders-p'>Статус</p>
+        <p className='orders-p'>Комментарий</p>
         <button className='admin-btn review-btn' onClick={handleSave}>Сохранить</button>
       </div>
       <div className='orders-items'>
@@ -136,11 +126,14 @@ function Orders() {
               />
             </div>
             <div className='orders-item-value apartment-item-value'>
-              <input
-                type='text'
+              <select
                 value={order.status}
                 onChange={(event) => handleChange(event, order.order_id, "status")}
-              />
+              >
+                <option value="Не просмотрено">Не просмотрено</option>
+                <option value="Выполнено">Выполнено</option>
+                <option value="На выполнении">На выполнении</option>
+              </select>
             </div>
             <div className='orders-item-value apartment-item-value'>
               <input
