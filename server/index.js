@@ -275,6 +275,44 @@ app.get('/api/image/:image_id', async (req, res) => {
   }
 });
 
+app.get('/api/admin/orders', checkAdminToken, async (req, res) => {
+  try {
+    // Здесь вы можете выполнять SQL-запрос для получения заказов из базы данных
+    const result = await pool.query('SELECT * FROM orders');
+
+    return res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ error: 'Error retrieving orders' });
+  }
+});
+
+app.put('/api/admin/orders', checkAdminToken, async (req, res) => {
+  const updatedOrders = req.body; // Получите обновленные данные квартир из тела запроса
+  try {
+    for (const order of updatedOrders) {
+      const query = `
+        UPDATE orders
+        SET name = $1, number = $2, status = $3, about = $4
+        WHERE order_id = $5
+      `;
+
+      await pool.query(query, [
+        order.name,
+        order.number,
+        order.status,
+        order.about,
+        order.order_id,
+      ]);
+    }
+
+    res.status(200).json({ message: 'Данные о квартирах успешно обновлены' });
+  } catch (error) {
+    console.error('Ошибка при обновлении данных о квартирах:', error);
+    res.status(500).json({ error: 'Ошибка при обновлении данных о квартирах' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Сервер работает на порту ${port}.`);
 });

@@ -1,0 +1,37 @@
+.orders-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  overflow: auto;
+  max-height: 92vh;
+}
+
+.orders-name {
+  display: flex;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  gap: 4px;
+  z-index: 2;
+}
+
+.orders-ul {
+  color: #fff;
+}
+
+.orders-li {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.orders-p {
+  color: #fff;
+  max-width: 100%;
+  word-break:break-all;
+  font-size: 14px;
+}
+
+.orders-p:nth-child(3), .orders-item-value:nth-child(3) {
+  width: 15%;
+}

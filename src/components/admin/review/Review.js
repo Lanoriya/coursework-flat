@@ -15,12 +15,7 @@ function Review() {
 
   // Define fetchApartments using useCallback
   const fetchApartments = useCallback(() => {
-    const token = Cookies.get('adminToken');
-    
     axios.get(`http://localhost:3001/api/admin/apartments`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       params: {
         sortField,
         sortOrder,
@@ -242,7 +237,7 @@ function Review() {
                 value={apart.image_id}
                 onChange={(event) => handleChange(event, apart.apartment_id, "image_id")}
               />
-              <div className='delete-btn-overlay' onClick={() => handleDeleteButtonClick(apart.image_id)}></div>
+              <div className='delete-btn-overlay' onClick={() => handleDeleteButtonClick(apart.apartment_id)}></div>
             </div>
           </div>
         ))}
