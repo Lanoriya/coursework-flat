@@ -4,7 +4,7 @@ import About from '../AboutHeader/About-header';
 
 function MainHeader() {
   const location = useLocation();
-  const isApartmentsPage = location.pathname === '/apartments';
+  const isApartmentsPage = location.pathname === '/apartments' || '/apartments/flat';
 
   return (
     <header className={`main-header ${isApartmentsPage ? 'apartments-header' : ''}`}>

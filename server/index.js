@@ -257,6 +257,26 @@ app.get('/api/apartments', async (req, res) => {
   }
 });
 
+app.get('/api/apartments/:id', async (req, res) => {
+  const apartmentId = req.params.id;
+
+  try {
+    // Здесь выполните запрос к базе данных для получения данных о квартире по ID
+    const query = 'SELECT * FROM apartments WHERE apartment_id = $1';
+    const result = await pool.query(query, [apartmentId]);
+
+    if (result.rows.length > 0) {
+      const apartmentData = result.rows[0];
+      res.status(200).json(apartmentData);
+    } else {
+      res.status(404).json({ error: 'Квартира не найдена' });
+    }
+  } catch (error) {
+    console.error('Ошибка при получении данных о квартире:', error);
+    res.status(500).json({ error: 'Ошибка при получении данных о квартире' });
+  }
+});
+
 app.get('/api/image/:image_id', async (req, res) => {
   const imageId = req.params.image_id;
 

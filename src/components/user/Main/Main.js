@@ -6,6 +6,7 @@ import MainContent from './MainContent/MainContent';
 import '../Apartments/Apartments.css'
 import '../Main/Footer/Footer.css';
 import Apartments from '../Apartments/Apartments';
+import ApartmentPage from '../ApartmentPage/ApartmentPage'
 
 function Main() {
 
@@ -14,7 +15,8 @@ function Main() {
       <MainHeader />
 
       <Routes>
-        <Route path="/apartments" element={<Apartments/>} />
+        <Route path="/apartments" element={<Apartments />} />
+        <Route path="/apartments/flat/:id" element={<ApartmentPage />} />
         <Route path="*" element={<MainContent />} />
       </Routes>
 
