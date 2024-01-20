@@ -333,6 +333,20 @@ app.put('/api/admin/orders', checkAdminToken, async (req, res) => {
   }
 });
 
+app.post('/submitOrder', async (req, res) => {
+  const { name, phone } = req.body;
+  try {
+   const result = await pool.query('INSERT INTO orders (name, number) VALUES ($1, $2) RETURNING *', [
+      name,
+      phone,
+    ]);
+    res.status(200).json({ message: 'Данные успешно получены и обработаны' });
+  } catch (error) {
+    console.error('Ошибка при обработке данных:', error);
+    res.status(500).json({ error: 'Ошибка при обработке данных' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Сервер работает на порту ${port}.`);
 });

@@ -287,7 +287,7 @@ function MainContent() {
       </div>
       <div className='container container-location'>
         <div className='location-block'>
-          <h2>Расположение</h2>
+          <h2 name='Расположение'>Расположение</h2>
           <div className='location-text-block'>
             <div className='location-text'>
               <div className='location-item'>

@@ -1,10 +1,26 @@
+import React, { useState } from 'react';
 import { useLocation, Link, Routes, Route } from 'react-router-dom';
 import Logo from '../Main/imgs/logo-white.png';
 import About from '../AboutHeader/About-header';
+import Popup from '../Popup/Popup';
 
 function MainHeader() {
+  const [isPopupOpen, setPopupOpen] = useState(false);
+
+  const openPopup = () => {
+    setPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setPopupOpen(false);
+  };
+
+  const submitForm = (data) => {
+    console.log('Отправка данных:', data);
+  };
+
   const location = useLocation();
-  const isApartmentsPage = location.pathname === '/apartments' || '/apartments/flat';
+  const isApartmentsPage = /^\/apartments/.test(location.pathname);
 
   return (
     <header className={`main-header ${isApartmentsPage ? 'apartments-header' : ''}`}>
@@ -21,10 +37,11 @@ function MainHeader() {
           </nav>
           <div className='header-callback'>
             <a href='tel:79504925990' className='callback-tel'>+79504925990</a>
-            <a href='/' className='callback-tel-pop'>Заказать звонок</a>
+            <a href='#' className='callback-tel-pop' onClick={openPopup}>Заказать звонок</a>
           </div>
         </div>
       </div>
+      {isPopupOpen && <Popup onClose={closePopup} onSubmit={submitForm} />}
       <Routes>
         <Route path="/" element={<About />} />
       </Routes>

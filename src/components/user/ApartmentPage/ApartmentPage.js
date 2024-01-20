@@ -1,11 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './ApartmentPage.css';
+import Popup from '../Popup/Popup';
 import axios from 'axios';
 
 function ApartmentPage() {
   const { id } = useParams();
   const [apartment, setApartment] = useState(null);
+  const [isPopupOpen, setPopupOpen] = useState(false);
+
+  const openPopup = () => {
+    setPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setPopupOpen(false);
+  };
+
+  const submitForm = (data) => {
+    console.log('Отправка данных:', data);
+  };
 
   useEffect(() => {
     // Получение данных о квартире по её id
@@ -36,10 +50,11 @@ function ApartmentPage() {
             <p>Площадь: {apartment.area}м²</p>
             <p>Этаж: {apartment.floor}</p>
             <p>Цена: {apartment.price}</p>
-            <a href="/" className="callback-tel-pop">Оставить заявку</a>
+            <a href="#" className="callback-tel-pop" onClick={openPopup}>Оставить заявку</a>
           </div>
         </div>
       </div>
+      {isPopupOpen && <Popup onClose={closePopup} onSubmit={submitForm} />}
     </div>
   );
 }
