@@ -14,14 +14,28 @@
 .popup-content {
   display: flex;
   flex-direction: column;
+  position: relative;
   background-color: #fff;
-  padding: 20px;
+  padding: 40px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.popup-content h2 {
+.popup-content h1 {
   font-size: 40px;
+  margin-bottom: 24px;
+}
+
+.popup-content h3 {
+  font-size: 20px;
+  font-weight: normal;
+  margin-bottom: 24px;
+}
+
+.popup-content p {
+  font-size: 18px;
+  margin-bottom: 16px;
+  max-width: 100%;
 }
 
 .popup-content form {
@@ -29,10 +43,19 @@
   flex-direction: column;
 }
 
+.popup-content form input {
+  margin-bottom: 16px;
+}
+
+.popup-content .callback-tel-pop {
+  margin-top: 40px;
+  width: 50%;
+}
+
 .close-btn {
   position: absolute;
-  top: 10px;
   right: 10px;
-  font-size: 20px;
+  top: 0px;
+  font-size: 36px;
   cursor: pointer;
 }

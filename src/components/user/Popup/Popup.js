@@ -4,10 +4,16 @@ import './Popup.css'
 const Popup = ({ onClose, onSubmit }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [isAgreed, setIsAgreed] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async () => {
     // Валидация данных
+    if (!isAgreed) {
+      setError('Необходимо согласиться с политикой конфиденциальности');
+      return;
+    }
+
     if (!name || !phone) {
       setError('Пожалуйста, заполните все поля');
       return;
@@ -42,19 +48,20 @@ const Popup = ({ onClose, onSubmit }) => {
         <span className="close-btn" onClick={onClose}>
           &times;
         </span>
-        <h2>Заявка на квартиру</h2>
-        <p>Менеджер перезвонит вам и ответит на вопросы</p>
+        <h1>Заявка на квартиру</h1>
+        <h3>Менеджер перезвонит вам и ответит на вопросы</h3>
         <form>
-          <label>
-            Ваше имя:
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-          </label>
-          <label>
-            Номер телефона:
-            <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
-          </label>
+          <p>Ваше имя:</p>
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+          <p>Номер телефона:</p>
+          <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
           {error && <p className="error-message">{error}</p>}
-          <button type="button" onClick={handleSubmit}>
+          <p>
+          <input type="checkbox" checked={isAgreed} onChange={() => setIsAgreed(!isAgreed)} />
+          {' '}
+          Согласен с <a href="/">политикой конфиденциальности</a>
+          </p>
+          <button className='callback-tel-pop' type="button" onClick={handleSubmit}>
             Отправить заявку
           </button>
         </form>
