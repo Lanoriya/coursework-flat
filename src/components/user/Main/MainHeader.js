@@ -6,6 +6,10 @@ import Popup from '../Main/Popup/Popup';
 
 function MainHeader() {
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const location = useLocation();
+  const isApartmentsPage = /^\/apartments/.test(location.pathname);
+  const isPolicyPage = location.pathname === '/policy';
+  const isPageValid = isApartmentsPage || isPolicyPage;
 
   const openPopup = () => {
     setPopupOpen(true);
@@ -37,18 +41,13 @@ function MainHeader() {
     }
   };
 
-  const location = useLocation();
-  const isApartmentsPage = /^\/apartments/.test(location.pathname);
-  const isPolicyPage = location.pathname === '/policy';
-  const isPageValid = isApartmentsPage || isPolicyPage;
-
   return (
     <header className={`main-header ${isPageValid ? 'apartments-header' : ''}`}>
       <div className={`header-container ${isPageValid ? 'apartments-header' : ''}`}>
         <div className='container header-block'>
           <nav className='main-header-nav'>
             <ul className='header-ul'>
-              <Link to='/' className='header-ul-li'><img className='header-logo' src={Logo} alt='header-logo' /></Link>
+              <Link to='/' className='header-ul-li' onClick={() => {window.scrollTo({top: 0, behavior: 'smooth'})}}><img className='header-logo' src={Logo} alt='header-logo' /></Link>
               <li className='header-ul-li' onClick={(e) => handleLocationClick(e, 'about')}><Link to='/'>О проекте</Link></li>
               <Link to='/apartments' className='header-ul-li'>Поиск квартир</Link>
               <li className='header-ul-li' onClick={(e) => handleLocationClick(e, 'location')}><Link to='/'>Расположение</Link></li>
