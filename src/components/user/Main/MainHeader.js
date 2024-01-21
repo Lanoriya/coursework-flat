@@ -48,11 +48,11 @@ function MainHeader() {
         <div className='container header-block'>
           <nav className='main-header-nav'>
             <ul className='header-ul'>
-              <Link to='/' className='header-ul-li' onClick={() => {location.reload()}}><img className='header-logo' src={Logo} alt='header-logo' /></Link>
-              <li className='header-ul-li' onClick={(e) => handleLocationClick(e, 'about')}><a href='/'>О проекте</a></li>
+              <Link to='/' className='header-ul-li'><img className='header-logo' src={Logo} alt='header-logo' /></Link>
+              <li className='header-ul-li' onClick={(e) => handleLocationClick(e, 'about')}><Link to='/'>О проекте</Link></li>
               <Link to='/apartments' className='header-ul-li'>Поиск квартир</Link>
-              <li className='header-ul-li' onClick={(e) => handleLocationClick(e, 'location')}><a href='/'>Расположение</a></li>
-              <li className='header-ul-li' onClick={(e) => handleLocationClick(e, 'contacts')}><a href='/'>Контакты</a></li>
+              <li className='header-ul-li' onClick={(e) => handleLocationClick(e, 'location')}><Link to='/'>Расположение</Link></li>
+              <li className='header-ul-li' onClick={(e) => handleLocationClick(e, 'contacts')}><Link to='/'>Контакты</Link></li>
             </ul>
           </nav>
           <div className='header-callback'>
