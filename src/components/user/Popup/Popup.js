@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import InputMask from 'react-input-mask';
 import './Popup.css'
 
 const Popup = ({ onClose, onSubmit }) => {
@@ -54,12 +55,18 @@ const Popup = ({ onClose, onSubmit }) => {
           <p>Ваше имя:</p>
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
           <p>Номер телефона:</p>
-          <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          <InputMask
+            mask="+7 (999) 99-99-999"
+            maskChar="_"
+            placeholder="+7 (__) __-__-___"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
           {error && <p className="error-message">{error}</p>}
           <p>
-          <input type="checkbox" checked={isAgreed} onChange={() => setIsAgreed(!isAgreed)} />
-          {' '}
-          Согласен с <a href="/">политикой конфиденциальности</a>
+            <input type="checkbox" checked={isAgreed} onChange={() => setIsAgreed(!isAgreed)} />
+            {' '}
+            Согласен с <a href="/">политикой конфиденциальности</a>
           </p>
           <button className='callback-tel-pop' type="button" onClick={handleSubmit}>
             Отправить заявку

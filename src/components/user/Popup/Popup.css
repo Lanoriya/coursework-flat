@@ -1,3 +1,7 @@
+.popup-container * {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
 .popup-container {
   display: flex;
   justify-content: center;
@@ -45,6 +49,9 @@
 
 .popup-content form input {
   margin-bottom: 16px;
+  font-size: 16px;
+  outline: none;
+  padding: 8px 4px;
 }
 
 .popup-content .callback-tel-pop {

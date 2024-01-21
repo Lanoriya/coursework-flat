@@ -26,14 +26,13 @@
   gap: 24px;
 }
 
-.about-flat-text li, p {
+.about-flat-text li + p {
   font-size: 20px;
-  max-width: 90%;
   color: rgba(0, 0, 0, 0.7);
 }
 
-.about-flat-text h5 {
-  font-size: 24px;
+.about-flat-text h4 {
+  font-size: 28px;
 }
 
 .about-flat-ul {

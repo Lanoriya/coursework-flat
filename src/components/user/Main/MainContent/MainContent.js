@@ -1,12 +1,11 @@
+import React from 'react';
+import Slider from "react-slick";
 import '../MainContent/MainContent.css';
 import '../Infrastructure/Infrastructure.css';
 import '../AboutFlat/AboutFlat.css';
 import '../AboutSolo/AboutSolo.css';
 import '../Location/Location.css';
 import '../Location/map.css'
-import { Routes, Route, Outlet } from 'react-router-dom';
-import React from 'react';
-import Slider from "react-slick";
 
 function MainContent() {
   var settings = {
@@ -20,7 +19,7 @@ function MainContent() {
   return (
     <section className='main-content'>
       <div className='container main-container'>
-        <h4 className='about-title-h4'>О проекте</h4>
+        <h4 className='about-title-h4' id='about'>О проекте</h4>
         <div className='about-text'>
           <div className='about-text--left'>
             <p className='about-text--big'>Lanoriya - район на Мельникайте, создаваемый для комфортного и уютного проживания. 14 очередей строительства спроектированы таким образом, чтобы продумать каждую деталь для личного комфорта, сохранив при этом семейную атмосферу.</p>
@@ -124,13 +123,9 @@ function MainContent() {
           </div>
         </div>
       </div>
-      <Routes>
-        <Route path='*' element={<Outlet />} />
-        {/* <Route path='apartments' element={<Apartments />} /> */}
-      </Routes>
       <div className='container infrastructure-container'>
         <div className='infrastructure-text'>
-          <h5>Инфраструктура комплекса</h5>
+          <h4>Инфраструктура комплекса</h4>
           <p>В пешей доступности крупные торговые и торгово-развлекательные центры: «Кристалл», «Ашан», «Лента», «Метро». Рядом медицинские центры, парки и лес. Внутри района - рестораны, кафе, магазины, салоны красоты, фитнес-центры, спортивные кластеры.</p>
           <ul className='infrastructure-ul'>
             <li className='infrastructure-li'>
@@ -216,7 +211,7 @@ function MainContent() {
                 </svg>
               </div>
               <div className='about-flat-text'>
-                <h5>Эксплуатируемая крыша</h5>
+                <h4>Эксплуатируемая крыша</h4>
                 <p>Внутренний двор — это комплексное решение, являющееся и мини-парком, и местом для отдыха, и игровой зоной. Двор — то место, где каждый житель найдёт свой кусочек комфорта.</p>
                 <ul className='about-flat-ul'>
                   <li className='about-flat-li'>Восхитительные виды</li>
@@ -247,7 +242,7 @@ function MainContent() {
                 </svg>
               </div>
               <div className='about-flat-text'>
-                <h5>Террасы</h5>
+                <h4>Террасы</h4>
                 <p>Террасы на первых и вторых этажах - это дополнительное личное пространство. Террасы естественным образом изолированы от постороннего проникновения, не нарушая при этом атмосферы добрососедства.</p>
               </div>
             </div>
@@ -256,14 +251,14 @@ function MainContent() {
             <img src={require('../AboutFlat/terra.jpg')} alt='terra'/>
           </div>
         </div>
-        <div className='about-item about-flat' style={{alignItems: 'flex-start'}}>
+        <div className='about-item about-flat'>
           <div className='about-item--img'>
             <img src={require('../AboutFlat/childs.jpg')} alt='childs'/>
           </div>
           <div className='about-item--text'>
-            <div className='about-textBlock' style={{margin: '0'}}>
-              <div className='about-flat-text'>
-                <h5>Хотите квартиру мечты?</h5>
+            <div className='about-textBlock'>
+              <div className='about-flat-text' style={{marginBottom: '200px'}}>
+                <h4>Хотите квартиру мечты?</h4>
                 <p>Все возможно в Микрорайоне «Lanoriya».</p>
                 <div className='header-callback about-callback'>
                   <a href='/' className='callback-tel-pop'>Заказать звонок</a>
@@ -285,7 +280,7 @@ function MainContent() {
           </div>
         </div>
       </div>
-      <div className='container container-location'>
+      <div className='container container-location' id='location'>
         <div className='location-block'>
           <h2 name='Расположение'>Расположение</h2>
           <div className='location-text-block'>
@@ -336,6 +331,27 @@ function MainContent() {
         <div className='location-map'>
           <div id="map">
             <div style={{ position: 'relative', overflow:'hidden'}}><a href="https://yandex.ru/maps/55/tyumen/?utm_medium=mapframe&utm_source=maps" style={{color: '#eee', fontSize: '12px', position: 'absolute', top: '0px'}}>Тюмень</a><a href="https://yandex.ru/maps/55/tyumen/?ll=65.540896%2C57.108443&utm_medium=mapframe&utm_source=maps&z=15" style={{color: '#eee', fontSize: '12px', position: 'absolute', top: '14px'}}>Яндекс Карты</a><iframe title="map" src="https://yandex.ru/map-widget/v1/?ll=65.540896%2C57.108443&z=15" width="860" height="600" frameBorder="1" style={{position: 'relative', marginLeft: 'auto', marginRight: 'auto'}}></iframe></div>
+          </div>
+        </div>
+      </div>
+      <div className='useless-block'>
+          <div className='useless-block--bg'></div>
+          <div className='useless-block-text'>
+            <h3>Хотите квартиру мечты?</h3>
+            <p>Все возможно в Микрорайоне «Lanoriya»</p>
+            <a href="#" className="callback-tel-pop">Заказать звонок</a>
+          </div>
+        </div>
+      <div className='container container-contacts' id='contacts'>
+        <h2 className='contacts-h2' id='contacts'>Контакты</h2>
+        <div className='contacts-info'>
+          <div className='contacts-text'>
+            <p className='contacts-img'>Офис продаж</p>
+            <p>г. Тюмень, ул. Федюнинского, 99, к. 1</p>
+            <p>+7 (345) 888-55-12</p>
+            <p>+7 (345) 888-55-13</p>
+            <p>пн-пт с 9 до 19,сб с 10 до 17,</p>
+            <p>вс с 10 до 16</p>
           </div>
         </div>
       </div>

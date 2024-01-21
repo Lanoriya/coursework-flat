@@ -7,6 +7,7 @@ import '../Apartments/Apartments.css'
 import '../Main/Footer/Footer.css';
 import Apartments from '../Apartments/Apartments';
 import ApartmentPage from '../ApartmentPage/ApartmentPage'
+import Policy from '../Policy/Policy';
 
 function Main() {
 
@@ -17,10 +18,10 @@ function Main() {
       <Routes>
         <Route path="/apartments" element={<Apartments />} />
         <Route path="/apartments/flat/:id" element={<ApartmentPage />} />
+        <Route path="/policy" element={<Policy />} />
         <Route path="*" element={<MainContent />} />
       </Routes>
 
-      {/* <MainContent /> */}
       <MainFooter />
     </div>
   );
