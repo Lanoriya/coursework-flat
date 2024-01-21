@@ -26,7 +26,7 @@
   gap: 24px;
 }
 
-.about-flat-text li + p {
+.about-flat-text li, p {
   font-size: 20px;
   color: rgba(0, 0, 0, 0.7);
 }

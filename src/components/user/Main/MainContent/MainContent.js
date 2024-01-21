@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Slider from "react-slick";
+import Popup from '../Popup/Popup';
 import '../MainContent/MainContent.css';
 import '../Infrastructure/Infrastructure.css';
 import '../AboutFlat/AboutFlat.css';
@@ -8,12 +9,25 @@ import '../Location/Location.css';
 import '../Location/map.css'
 
 function MainContent() {
+  const [isPopupOpen, setPopupOpen] = useState(false);
   var settings = {
     dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1
+  };
+
+  const openPopup = () => {
+    setPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setPopupOpen(false);
+  };
+
+  const submitForm = (data) => {
+    console.log('Отправка данных:', data);
   };
 
   return (
@@ -261,7 +275,7 @@ function MainContent() {
                 <h4>Хотите квартиру мечты?</h4>
                 <p>Все возможно в Микрорайоне «Lanoriya».</p>
                 <div className='header-callback about-callback'>
-                  <a href='/' className='callback-tel-pop'>Заказать звонок</a>
+                  <a href='#' className='callback-tel-pop' onClick={openPopup}>Заказать звонок</a>
                 </div>
               </div>
             </div>
@@ -291,7 +305,7 @@ function MainContent() {
                   <path d="M8.76782 18.0038C8.76782 9.5953 15.5223 2.70251 24.0692 2.70251C16.3027 4.84365 5.42966 16.3602 24.0692 45.2974C23.5178 45.2974 8.76782 26.4124 8.76782 18.0038Z" fill="#008CC8" stroke="#2B2E32" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"></path>
                 </svg>
               </div>
-              <div className='location-item'>Южнее пересечения улицы Федюнинского и Мельникайте</div>
+              <div className='location-item'><p>Южнее пересечения улицы Федюнинского и Мельникайте</p></div>
             </div>
             <div className='location-text'>
               <div className='location-item'>
@@ -307,7 +321,7 @@ function MainContent() {
                   <path d="M15.5625 25.1111L10.4386 24.5083M13.875 20.0486L12.2501 19.9009M10.4386 24.5083L7.26766 24.1352C6.62291 24.0594 6.22023 23.3988 6.44818 22.7909L7.41983 20.1999C7.57793 19.7783 7.99828 19.5143 8.44669 19.5551L12.2501 19.9009M10.4386 24.5083L12.2501 19.9009M35.8125 25.9548L37.5552 28.7867C37.838 29.2463 38.4344 29.3985 38.903 29.1308L41.1593 27.8415C41.6279 27.5737 41.7995 26.9824 41.547 26.5053L40.2132 23.9861L35.8125 25.9548Z" stroke="#2B2E32" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"></path>
                 </svg>
               </div>
-              <div className='location-item'>10 минут на автомобиле до улицы Республики</div>
+              <div className='location-item'><p>10 минут на автомобиле до улицы Республики</p></div>
             </div>
             <div className='location-text'>
               <div className='location-item'>
@@ -324,7 +338,7 @@ function MainContent() {
                   <rect x="18.762" y="27.1428" width="10.4762" height="5.2381" rx="1" fill="#DD6E25" stroke="#2B2E32" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"></rect>
                 </svg>
               </div>
-              <div className='location-item'>3 минуты до Окружной дороги</div>
+              <div className='location-item'><p>3 минуты до Окружной дороги</p></div>
             </div>
           </div>
         </div>
@@ -339,7 +353,7 @@ function MainContent() {
           <div className='useless-block-text'>
             <h3>Хотите квартиру мечты?</h3>
             <p>Все возможно в Микрорайоне «Lanoriya»</p>
-            <a href="#" className="callback-tel-pop">Заказать звонок</a>
+            <a href="#" className="callback-tel-pop" onClick={openPopup}>Заказать звонок</a>
           </div>
         </div>
       <div className='container container-contacts' id='contacts'>
@@ -355,6 +369,7 @@ function MainContent() {
           </div>
         </div>
       </div>
+      {isPopupOpen && <Popup onClose={closePopup} onSubmit={submitForm} />}
     </section>
   );
 }

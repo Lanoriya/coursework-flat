@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, Link, Routes, Route } from 'react-router-dom';
 import Logo from '../Main/imgs/logo-white.png';
 import About from '../AboutHeader/About-header';
-import Popup from '../Popup/Popup';
+import Popup from '../Main/Popup/Popup';
 
 function MainHeader() {
   const [isPopupOpen, setPopupOpen] = useState(false);
@@ -19,26 +19,19 @@ function MainHeader() {
     console.log('Отправка данных:', data);
   };
 
-  const handleLocationClick = (e) => {
+  const handleLocationClick = (e, section) => {
     e.preventDefault();
-    const locationContainer = document.getElementById('location');
-    const aboutContainer = document.getElementById('about');
-    const contactsContainer = document.getElementById('contacts');
-    if (locationContainer) {
+  
+    const sectionContainers = {
+      location: document.getElementById('location'),
+      about: document.getElementById('about'),
+      contacts: document.getElementById('contacts'),
+    };
+    const targetContainer = sectionContainers[section];
+  
+    if (targetContainer) {
       window.scrollTo({
-        top: locationContainer.offsetTop - 150,
-        behavior: 'smooth',
-      });
-    }
-    else if (aboutContainer) {
-      window.scrollTo({
-        top: aboutContainer.offsetTop - 150,
-        behavior: 'smooth',
-      });
-    }
-    else if (contactsContainer) {
-      window.scrollTo({
-        top: contactsContainer.offsetTop - 150,
+        top: targetContainer.offsetTop - 150,
         behavior: 'smooth',
       });
     }
@@ -55,11 +48,11 @@ function MainHeader() {
         <div className='container header-block'>
           <nav className='main-header-nav'>
             <ul className='header-ul'>
-              <Link to='/' className='header-ul-li'><img className='header-logo' src={Logo} alt='header-logo' /></Link>
-              <li className='header-ul-li' onClick={handleLocationClick}><a href='/'>О проекте</a></li>
+              <Link to='/' className='header-ul-li' onClick={() => {location.reload()}}><img className='header-logo' src={Logo} alt='header-logo' /></Link>
+              <li className='header-ul-li' onClick={(e) => handleLocationClick(e, 'about')}><a href='/'>О проекте</a></li>
               <Link to='/apartments' className='header-ul-li'>Поиск квартир</Link>
-              <li className='header-ul-li' onClick={handleLocationClick}><a href='/'>Расположение</a></li>
-              <li className='header-ul-li' onClick={handleLocationClick}><a href='/'>Контакты</a></li>
+              <li className='header-ul-li' onClick={(e) => handleLocationClick(e, 'location')}><a href='/'>Расположение</a></li>
+              <li className='header-ul-li' onClick={(e) => handleLocationClick(e, 'contacts')}><a href='/'>Контакты</a></li>
             </ul>
           </nav>
           <div className='header-callback'>
