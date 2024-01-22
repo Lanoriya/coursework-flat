@@ -243,9 +243,23 @@ app.delete('/api/admin/apartments/:id', checkAdminToken, async (req, res) => {
 
 app.get('/api/apartments', async (req, res) => {
   try {
-    const { sortField, sortOrder } = req.query;
+    const { sortField, sortOrder, minArea, maxArea, minFloor, maxFloor } = req.query;
     const defaultSortField = 'apartment_id';
-    const query = `SELECT * FROM apartments ORDER BY ${sortField || defaultSortField} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}`;
+    
+    // Добавляем условия фильтрации
+    let filterConditions = '';
+    if (minArea && maxArea) {
+      filterConditions += ` AND area BETWEEN ${minArea} AND ${maxArea}`;
+    }
+    if (minFloor && maxFloor) {
+      filterConditions += ` AND floor BETWEEN ${minFloor} AND ${maxFloor}`;
+    }
+
+    const query = `
+      SELECT * FROM apartments 
+      WHERE 1=1 ${filterConditions} 
+      ORDER BY ${sortField || defaultSortField} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}`;
+      
     console.log('SQL Query:', query);
 
     const result = await pool.query(query);
@@ -253,9 +267,10 @@ app.get('/api/apartments', async (req, res) => {
     return res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error fetching apartments:', error);
-    res.statСus(500).json({ error: 'Error retrieving apartments' });
+    res.status(500).json({ error: 'Error retrieving apartments' });
   }
 });
+
 
 app.get('/api/apartments/:id', async (req, res) => {
   const apartmentId = req.params.id;

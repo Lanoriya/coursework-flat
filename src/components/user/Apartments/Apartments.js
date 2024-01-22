@@ -5,11 +5,22 @@ import './Apartments.css';
 
 function Apartments() {
   const [apartments, setApartments] = useState([]);
+  const [minArea, setMinArea] = useState(32);
+  const [maxArea, setMaxArea] = useState(77);
+  const [minFloor, setMinFloor] = useState(1);
+  const [maxFloor, setMaxFloor] = useState(20);
+  const [filterChanged, setFilterChanged] = useState(false);
   const navigate = useNavigate();
 
   const fetchApartments = useCallback(() => {
     axios.get(`http://localhost:3001/api/apartments`, {
       withCredentials: true,
+      params: {
+        minArea,
+        maxArea,
+        minFloor,
+        maxFloor,
+      },
     })
       .then((response) => {
         console.log('Apartments Response:', response.data);
@@ -18,38 +29,83 @@ function Apartments() {
       .catch(error => {
         console.error('Error fetching apartments:', error);
       });
-  }, []); // Пустой массив зависимостей, так как нет зависимостей
+  }, [minArea, maxArea, minFloor, maxFloor]);
 
   useEffect(() => {
+    // Fetch apartments once on component mount
     fetchApartments();
-  }, [fetchApartments]);
+  }, []);
+
+  useEffect(() => {
+    if (filterChanged) {
+      fetchApartments();
+      setFilterChanged(false); // Сброс флага изменения фильтрации
+    }
+  }, [fetchApartments, filterChanged]);
 
   const handleApartmentClick = (apartmentId) => {
     navigate(`/apartments/flat/${apartmentId}`);
   };
 
+  const handleFilterReset = () => {
+    setMinArea(32);
+    setMaxArea(77);
+    setMinFloor(1);
+    setMaxFloor(20);
+    setFilterChanged(true);
+  };
+
   return (
     <div className='container apartments-container'>
       <aside className='apartments-filter'>
-        <div className='filter-flat'>
-          <div className='flat-item'></div>
-          <div className='flat-item'></div>
-          <div className='flat-item'></div>
-        </div>
         <div className='filter-area'>
           <h4>Площадь м²</h4>
           <div className='fitler-area-numbers'>
-            <div className='area-numbers-score'><span>от</span> 27</div>
-            <div className='area-numbers-score'><span>до</span> 80</div>
+            <div className='area-numbers-score'><span>от</span> {minArea}</div>
+            <input
+              type='range'
+              min='32'
+              max='77'
+              step='1'
+              value={minArea}
+              onMouseUp={() => setFilterChanged(true)}
+              onChange={(e) => setMinArea(e.target.value)}
+            />
+            <div className='area-numbers-score'><span>до</span> {maxArea}</div>
+            <input
+              type='range'
+              min='32'
+              max='77'
+              step='1'
+              value={maxArea}
+              onMouseUp={() => setFilterChanged(true)}
+              onChange={(e) => setMaxArea(e.target.value)}
+            />
           </div>
         </div>
         <div className='filter-floor'>
           <h4>Этаж</h4>
-          <div className='filter-floor-numbers'><span>от</span> 1</div>
-          <div className='filter-floor-numbers'><span>до</span> 20</div>
+          <div className='filter-floor-numbers'><span>от</span> {minFloor}</div>
+          <input
+            type='range'
+            min='1'
+            max='20'
+            value={minFloor}
+            onMouseUp={() => fetchApartments()}
+            onChange={(e) => setMinFloor(e.target.value)}
+          />
+          <div className='filter-floor-numbers'><span>до</span> {maxFloor}</div>
+          <input
+            type='range'
+            min='1'
+            max='20'
+            value={maxFloor}
+            onMouseUp={() => fetchApartments()}
+            onChange={(e) => setMaxFloor(e.target.value)}
+          />
         </div>
         <div className='filter-reset'>
-          <a href='/apartments'>Сбросить параметры
+          <a href='/apartments' onClick={handleFilterReset}>Сбросить параметры
             <svg width="8" height="8" viewBox="0 0 8 8" fill="000" xmlns="http://www.w3.org/2000/svg">
               <path fillRule="evenodd" clipRule="evenodd" d="M3.99996 5.22229L1.37727 7.84498C1.12213
                 8.10013 0.641687 8.03336 0.304183 7.69586C-0.0333213 7.35836 -0.100086 6.87792
@@ -102,7 +158,7 @@ function Apartments() {
         </table>
       </div>
     </div>
-  )
+  );
 }
 
 export default Apartments;
