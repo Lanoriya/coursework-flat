@@ -41,23 +41,62 @@
   background: rgba(0, 238, 255, 0.05);
 }
 
+.filter-box {
+  width: 100%;
+  height: 100%;
+}
+
+.filter-box input {
+  width: 100%;
+}
+
 .apartments-filter {
-  padding: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20%;
+  padding: 32px 56px;
   margin-right: 64px;
   font-weight: 100;
   height: 340px;
-  background: #32323271;
+  background: #44b2b44d;
   border-radius: 8px;
   color: #000;
 }
 
 .filter-reset {
   white-space:nowrap;
+  text-align: center;
+}
+
+.filter-reset a {
+  text-decoration: none;
+  color: #000;
+  transition: all 0.2s;
+}
+
+.filter-reset a:hover {
+  color: #29879f;
+}
+
+.filter-reset svg {
+  margin-left: 8px;
 }
 
 .apartments-filter h4 {
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: rgba(0, 0, 0, 0.5);
   font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.area-number {
+  color: #000;
+  font-size: 24px;
+}
+
+.filter-floor {
+  margin-bottom: 24px;
 }
 
 .apartment-item-user {
