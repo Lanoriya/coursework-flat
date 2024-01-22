@@ -6,7 +6,7 @@ function AddItem({ endpoint, fields, successMessage }) {
   const [formData, setFormData] = useState({});
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [selectedImage, setSelectedImage] = useState('');
+  const [selectedImage, setSelectedImage] = useState('1');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -106,13 +106,14 @@ function AddItem({ endpoint, fields, successMessage }) {
                     name={field.name}
                     value={selectedImage}
                     onChange={handleImageChange}
+                    required
                   >
-                    <option value="1">Студия-32-1</option>
-                    <option value="2">Студия-32-3</option>
-                    <option value="3">Однокомнатная-45-2</option>
-                    <option value="4">Однокомнатная-45-6</option>
-                    <option value="5">Двухкомнатная-73-2</option>
-                    <option value="6">Двухкомнатная-76-3</option>
+                    <option value='1'>Студия-32-1</option>
+                    <option value='2'>Студия-32-3</option>
+                    <option value='3'>Однокомнатная-45-2</option>
+                    <option value='4'>Однокомнатная-45-6</option>
+                    <option value='5'>Двухкомнатная-73-2</option>
+                    <option value='6'>Двухкомнатная-76-3</option>
                   </select>
                 </div>
               ) : (
@@ -122,6 +123,7 @@ function AddItem({ endpoint, fields, successMessage }) {
                   name={field.name}
                   value={formData[field.name] || ''}
                   onChange={handleChange}
+                  required
                 />
               )}
             </div>
