@@ -56,7 +56,7 @@ function MainHeader() {
           </nav>
           <div className='header-callback'>
             <a href='tel:79504925990' className='callback-tel'>+79504925990</a>
-            <a href='#' className='callback-tel-pop' onClick={openPopup}>Заказать звонок</a>
+            <button className='callback-tel-pop' onClick={openPopup}>Заказать звонок</button>
           </div>
         </div>
       </div>

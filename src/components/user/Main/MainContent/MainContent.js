@@ -275,7 +275,7 @@ function MainContent() {
                 <h4>Хотите квартиру мечты?</h4>
                 <p>Все возможно в Микрорайоне «Lanoriya».</p>
                 <div className='header-callback about-callback'>
-                  <a href='#' className='callback-tel-pop' onClick={openPopup}>Заказать звонок</a>
+                  <button className='callback-tel-pop' onClick={openPopup}>Заказать звонок</button>
                 </div>
               </div>
             </div>
@@ -353,7 +353,7 @@ function MainContent() {
           <div className='useless-block-text'>
             <h3>Хотите квартиру мечты?</h3>
             <p>Все возможно в Микрорайоне «Lanoriya»</p>
-            <a href="#" className="callback-tel-pop" onClick={openPopup}>Заказать звонок</a>
+            <button className="callback-tel-pop" onClick={openPopup}>Заказать звонок</button>
           </div>
         </div>
       <div className='container container-contacts' id='contacts'>

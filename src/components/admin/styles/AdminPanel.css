@@ -100,3 +100,23 @@
 .aside-nav-btn:hover {
   color: #44b3b4;
 }
+
+.admin-page select {
+  color: #fff;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  padding: 0px 8px 4px;
+  margin-top: 8px;
+  width: 100%;
+  color: #fff;
+  background: none;
+}
+
+.admin-page option {
+  background: #000;
+}
+
+.admin-page option:hover {
+  background: rgba(255, 255, 255, 0.5);
+}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './ApartmentPage.css';
-import Popup from '../Popup/Popup';
+import Popup from '../Main/Popup/Popup';
 import axios from 'axios';
 
 function ApartmentPage() {
@@ -50,7 +50,7 @@ function ApartmentPage() {
             <p>Площадь: {apartment.area}м²</p>
             <p>Этаж: {apartment.floor}</p>
             <p>Цена: {apartment.price}</p>
-            <a href="#" className="callback-tel-pop" onClick={openPopup}>Оставить заявку</a>
+            <button className="callback-tel-pop" onClick={openPopup}>Оставить заявку</button>
           </div>
         </div>
       </div>

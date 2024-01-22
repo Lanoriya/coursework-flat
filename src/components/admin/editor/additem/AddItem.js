@@ -6,10 +6,15 @@ function AddItem({ endpoint, fields, successMessage }) {
   const [formData, setFormData] = useState({});
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleImageChange = (e) => {
+    setSelectedImage(e.target.value);
   };
 
   const handleSubmit = (e) => {
@@ -30,7 +35,7 @@ function AddItem({ endpoint, fields, successMessage }) {
     // Устанавливаем состояние isAnimating в true перед началом анимации
     setIsAnimating(true);
 
-    axios.post(`http://localhost:3001/api/admin/${endpoint}`, formData, {
+    axios.post(`http://localhost:3001/api/admin/${endpoint}`, { ...formData, image_id: selectedImage }, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -94,13 +99,31 @@ function AddItem({ endpoint, fields, successMessage }) {
           {fields.map((field) => (
             <div key={field.name}>
               <label htmlFor={field.name}>{field.label}: </label>
-              <input
-                type="text"
-                id={field.name}
-                name={field.name}
-                value={formData[field.name] || ''}
-                onChange={handleChange}
-              />
+              {field.name === 'image_id' ? (
+                <div className='add-item-select'>
+                  <select
+                    id={field.name}
+                    name={field.name}
+                    value={selectedImage}
+                    onChange={handleImageChange}
+                  >
+                    <option value="1">Студия-32-1</option>
+                    <option value="2">Студия-32-3</option>
+                    <option value="3">Однокомнатная-45-2</option>
+                    <option value="4">Однокомнатная-45-6</option>
+                    <option value="5">Двухкомнатная-73-2</option>
+                    <option value="6">Двухкомнатная-76-3</option>
+                  </select>
+                </div>
+              ) : (
+                <input
+                  type="text"
+                  id={field.name}
+                  name={field.name}
+                  value={formData[field.name] || ''}
+                  onChange={handleChange}
+                />
+              )}
             </div>
           ))}
         </div>

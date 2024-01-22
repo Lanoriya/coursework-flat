@@ -40,26 +40,6 @@
   width: 20%;
 }
 
-.orders-item-value select {
-  color: #fff;
-  box-sizing: border-box;
-  border: none;
-  outline: none;
-  padding: 0px 8px 4px;
-  margin-top: 8px;
-  width: 100%;
-  color: #fff;
-  background: none;
-}
-
-.orders-item-value option {
-  background: #000;
-}
-
-.orders-item-value option:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
-
 .orders-item-value:nth-child(4) {
   min-width: 10%;
   max-width: 80% !important;

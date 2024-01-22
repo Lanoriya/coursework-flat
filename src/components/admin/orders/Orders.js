@@ -21,7 +21,7 @@ function Orders() {
       console.log('Orders Response:', response.data);
       setOrders(response.data);
     }).catch(error => {
-      console.error('Error fetching orders:', error); // Добавим вывод в консоль для отладки
+      console.error('Error fetching orders:', error);
     });
   }, [sortField, sortOrder]);
 
@@ -43,7 +43,6 @@ function Orders() {
     if (saveButton) {
       saveButton.disabled = true;
     }
-  
     setIsAnimationActive(true);
 
     axios
@@ -75,7 +74,6 @@ function Orders() {
       })
       .catch((error) => {
         console.log(error);
-        // Re-enable the button in case of an error
         if (saveButton) {
           saveButton.disabled = false;
         }
@@ -138,7 +136,7 @@ function Orders() {
             <div className='orders-item-value apartment-item-value'>
               <input
                 type='text'
-                value={order.about}
+                value={order.about || ''}
                 onChange={(event) => handleChange(event, order.order_id, "about")}
               />
             </div>
