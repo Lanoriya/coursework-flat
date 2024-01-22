@@ -5,8 +5,8 @@ import Cookies from 'js-cookie';
 function AddItem({ endpoint, fields, successMessage }) {
   const [formData, setFormData] = useState({});
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
   const [selectedImage, setSelectedImage] = useState('1');
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
