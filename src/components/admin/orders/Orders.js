@@ -7,15 +7,9 @@ function Orders() {
   const [orders, setOrders] = useState([]);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [isAnimationActive, setIsAnimationActive] = useState(false);
-  const [sortField, setSortField] = useState("order_id");
-  const [sortOrder, setSortOrder] = useState("asc");
 
   const fetchOrders = useCallback(() => {
     axios.get(`http://localhost:3001/api/admin/orders`, {
-      params: {
-        sortField,
-        sortOrder,
-      },
       withCredentials: true,
     }).then((response) => {
       console.log('Orders Response:', response.data);
@@ -23,7 +17,7 @@ function Orders() {
     }).catch(error => {
       console.error('Error fetching orders:', error);
     });
-  }, [sortField, sortOrder]);
+  }, []);
 
   useEffect(() => {
     fetchOrders();

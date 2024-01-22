@@ -11,7 +11,6 @@ function Review() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [apartmentToDelete, setApartmentToDelete] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isAnimationActive, setIsAnimationActive] = useState(false);
 
   // Define fetchApartments using useCallback
   const fetchApartments = useCallback(() => {
@@ -58,10 +57,9 @@ function Review() {
   const handleDeleteConfirm = () => {
     if (apartmentToDelete && !isAnimating) {
       const token = Cookies.get('adminToken');
-    
+
       setIsAnimating(true);
-      setIsAnimationActive(true); // Устанавливаем состояние активности анимации в true
-    
+     
       axios
         .delete(`http://localhost:3001/api/admin/apartments/${apartmentToDelete}`, {
           headers: {
@@ -73,6 +71,7 @@ function Review() {
           console.log(response);
           fetchApartments();
           setShowSuccessNotification(true);
+
           setTimeout(() => {
             const successNotification = document.querySelector('.success-notification');
             if (successNotification) {
@@ -81,7 +80,6 @@ function Review() {
               setTimeout(() => {
                 setShowSuccessNotification(false);
                 setIsAnimating(false);
-                setIsAnimationActive(false); // Устанавливаем состояние активности анимации в false
               }, 500);
             }
           }, 3000);
@@ -89,7 +87,6 @@ function Review() {
         .catch((error) => {
           console.log(error);
           setIsAnimating(false);
-          setIsAnimationActive(false); // Обработка ошибок при удалении
         })
         .finally(() => {
           setApartmentToDelete(null);
@@ -106,12 +103,8 @@ function Review() {
     const token = Cookies.get('adminToken');
     const saveButton = document.querySelector('.review-btn');
   
-    // Disable the button to prevent multiple clicks
-    if (saveButton) {
-      saveButton.disabled = true;
-    }
-  
-    setIsAnimationActive(true);
+    if (!isAnimating) {
+      setIsAnimating(true);
 
     axios
       .put('http://localhost:3001/api/admin/apartments', apartments, {
@@ -135,8 +128,8 @@ function Review() {
               setShowSuccessNotification(false);
               if (saveButton) {
                 saveButton.disabled = false;
+                setIsAnimating(false);
               }
-              setIsAnimationActive(false);
             }, 500);
           }
         }, 3000);
@@ -145,11 +138,13 @@ function Review() {
       })
       .catch((error) => {
         console.log(error);
+        setIsAnimating(false);
         // Re-enable the button in case of an error
         if (saveButton) {
           saveButton.disabled = false;
         }
       });
+    }
   };
 
   useEffect(() => {
@@ -246,7 +241,7 @@ function Review() {
             <div className='delete-container'>
               <h3>Вы уверены, что хотите удалить эту квартиру?</h3>
               <div className='delete-buttons'>
-                <button disabled={isAnimating} onClick={handleDeleteConfirm}>Да</button>
+                <button onClick={handleDeleteConfirm}>Да</button>
                 <button onClick={() => setShowDeleteModal(false)}>Нет</button>
               </div>
             </div>
@@ -259,7 +254,6 @@ function Review() {
           <progress id='progress' value='1'></progress>
         </div>
       )}
-      {isAnimationActive && <div className="overlay"></div>}
     </div>
   );
 }
