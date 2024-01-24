@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import Notification from '../notification/Notification';
 import './styles/Orders.css';
 
 function Orders() {
 
   const [orders, setOrders] = useState([]);
-  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
-  const [isAnimationActive, setIsAnimationActive] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const showNotification = (message) => {
+    setNotifications([...notifications, message]);
+  };
 
   const fetchOrders = useCallback(() => {
     axios.get(`http://localhost:3001/api/admin/orders`, {
@@ -31,65 +36,29 @@ function Orders() {
   };
 
   const handleSave = () => {
-    const saveButton = document.querySelector('.review-btn');
-  
-    // Disable the button to prevent multiple clicks
-    if (saveButton) {
-      saveButton.disabled = true;
+    if (isSaving) {
+      return;
     }
-    setIsAnimationActive(true);
-
-    axios
+    setIsSaving(true);
+    
+      axios
       .put('http://localhost:3001/api/admin/orders', orders, {
         withCredentials: true,
       })
       .then((response) => {
         console.log(response);
-  
-        setShowSuccessNotification(true);
-  
-        setTimeout(() => {
-          const successNotification = document.querySelector('.success-notification');
-  
-          if (successNotification) {
-            successNotification.classList.add('end-notification');
-            successNotification.classList.remove('success-notification');
-            setTimeout(() => {
-              setShowSuccessNotification(false);
-              if (saveButton) {
-                saveButton.disabled = false;
-              }
-              setIsAnimationActive(false);
-            }, 500);
-          }
-        }, 3000);
-  
+        showNotification('Сохранено успешно');
         fetchOrders();
       })
       .catch((error) => {
         console.log(error);
-        if (saveButton) {
-          saveButton.disabled = false;
-        }
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setIsSaving(false);
+        }, 1000); // Задержка в одну секунду перед следующим кликом
       });
-    }
-
-    useEffect(() => {
-      const progress = document.getElementById('progress');
-  
-      if (progress) {
-        let interval = setInterval(() => {
-          progress.value -= 0.01;
-          if (progress.value <= 0) {
-            clearInterval(interval);
-          }
-        }, 30);
-        return () => clearInterval(interval);
-      }
-    });
-
-
-
+  };
 
   return (
     <div className='orders-container'>
@@ -137,13 +106,9 @@ function Orders() {
           </div>
         ))}
       </div>
-      {showSuccessNotification && (
-          <div className={`success-notification`}>
-            {`Сохранено успешно`}
-            <progress id='progress' value='1'></progress>
-          </div>
-        )}
-        {isAnimationActive && <div className="overlay"></div>}
+      {notifications.map((message, index) => (
+        <Notification key={index} message={message} />
+      ))}
     </div>
   );
 }

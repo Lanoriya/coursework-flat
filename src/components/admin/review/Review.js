@@ -1,16 +1,20 @@
 import axios from 'axios';
 import React, { useState, useEffect, useCallback } from 'react';
-import Cookies from 'js-cookie';
+import Notification from '../notification/Notification';
 import './styles/Review.css';
 
 function Review() {
   const [apartments, setApartments] = useState([]);
   const [sortField, setSortField] = useState("apartment_number");
   const [sortOrder, setSortOrder] = useState("asc");
-  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [apartmentToDelete, setApartmentToDelete] = useState(null);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const showNotification = (message) => {
+    setNotifications([...notifications, message]);
+  };
 
   // Define fetchApartments using useCallback
   const fetchApartments = useCallback(() => {
@@ -55,44 +59,30 @@ function Review() {
   };
 
   const handleDeleteConfirm = () => {
-    if (apartmentToDelete && !isAnimating) {
-      const token = Cookies.get('adminToken');
-
-      setIsAnimating(true);
-     
-      axios
-        .delete(`http://localhost:3001/api/admin/apartments/${apartmentToDelete}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        })
-        .then((response) => {
-          console.log(response);
-          fetchApartments();
-          setShowSuccessNotification(true);
-
-          setTimeout(() => {
-            const successNotification = document.querySelector('.success-notification');
-            if (successNotification) {
-              successNotification.classList.add('end-notification');
-              successNotification.classList.remove('success-notification');
-              setTimeout(() => {
-                setShowSuccessNotification(false);
-                setIsAnimating(false);
-              }, 500);
-            }
-          }, 3000);
-        })
-        .catch((error) => {
-          console.log(error);
-          setIsAnimating(false);
-        })
-        .finally(() => {
-          setApartmentToDelete(null);
-          setShowDeleteModal(false);
-        });
+    if (isSaving) {
+      return;
     }
+    setIsSaving(true);
+
+    axios
+      .delete(`http://localhost:3001/api/admin/apartments/${apartmentToDelete}`, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response);
+        showNotification('Сохранено успешно');
+        fetchApartments();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setApartmentToDelete(null);
+        setShowDeleteModal(false);
+        setTimeout(() => {
+          setIsSaving(false);
+        }, 1000); // Задержка в одну секунду перед следующим кликом
+      });
   };
 
   const handleDeleteButtonClick = (apartmentId) => {
@@ -100,66 +90,29 @@ function Review() {
   };
 
   const handleSave = () => {
-    const token = Cookies.get('adminToken');
-    const saveButton = document.querySelector('.review-btn');
-  
-    if (!isAnimating) {
-      setIsAnimating(true);
+    if (isSaving) {
+      return;
+    }
+    setIsSaving(true);
 
     axios
       .put('http://localhost:3001/api/admin/apartments', apartments, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
         withCredentials: true,
       })
       .then((response) => {
         console.log(response);
-  
-        setShowSuccessNotification(true);
-  
-        setTimeout(() => {
-          const successNotification = document.querySelector('.success-notification');
-  
-          if (successNotification) {
-            successNotification.classList.add('end-notification');
-            successNotification.classList.remove('success-notification');
-            setTimeout(() => {
-              setShowSuccessNotification(false);
-              if (saveButton) {
-                saveButton.disabled = false;
-                setIsAnimating(false);
-              }
-            }, 500);
-          }
-        }, 3000);
-  
+        showNotification('Сохранено успешно');
         fetchApartments();
       })
       .catch((error) => {
         console.log(error);
-        setIsAnimating(false);
-        // Re-enable the button in case of an error
-        if (saveButton) {
-          saveButton.disabled = false;
-        }
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setIsSaving(false);
+        }, 1000); // Задержка в одну секунду перед следующим кликом
       });
-    }
-  };
-
-  useEffect(() => {
-    const progress = document.getElementById('progress');
-
-    if (progress) {
-      let interval = setInterval(() => {
-        progress.value -= 0.01;
-        if (progress.value <= 0) {
-          clearInterval(interval);
-        }
-      }, 30);
-      return () => clearInterval(interval);
-    }
-  });
+    };
 
   return (
     <div className='review-content'>
@@ -248,12 +201,9 @@ function Review() {
           </div>
         )}
       </div>
-      {showSuccessNotification && (
-        <div className={`success-notification`}>
-          {`Сохранено успешно`}
-          <progress id='progress' value='1'></progress>
-        </div>
-      )}
+      {notifications.map((message, index) => (
+        <Notification key={index} message={message}/>
+      ))}
     </div>
   );
 }

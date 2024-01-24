@@ -312,13 +312,16 @@ app.get('/api/image/:image_id', async (req, res) => {
 
 app.get('/api/admin/orders', checkAdminToken, async (req, res) => {
   try {
-    // Здесь вы можете выполнять SQL-запрос для получения заказов из базы данных
-    const result = await pool.query('SELECT * FROM orders');
-
-    return res.status(200).json(result.rows);
+    const query = `
+      SELECT * FROM orders
+      ORDER BY order_id;  -- Вы можете изменить поле сортировки на необходимое
+    `;
+    const result = await pool.query(query);
+    const orders = result.rows;
+    res.status(200).json(orders);
   } catch (error) {
-    console.error('Error fetching orders:', error);
-    res.status(500).json({ error: 'Error retrieving orders' });
+    console.error('Ошибка при получении данных о квартирах:', error);
+    res.status(500).json({ error: 'Ошибка при получении данных о квартирах' });
   }
 });
 
