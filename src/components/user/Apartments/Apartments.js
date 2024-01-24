@@ -120,7 +120,7 @@ function Apartments() {
             />
           </div>
           <div className='filter-reset'>
-            <a href='/apartments' onClick={handleFilterReset}>Сбросить параметры
+            <button onClick={handleFilterReset}>Сбросить параметры
               <svg width="8" height="8" viewBox="0 0 8 8" fill="000" xmlns="http://www.w3.org/2000/svg">
                 <path fillRule="evenodd" clipRule="evenodd" d="M3.99996 5.22229L1.37727 7.84498C1.12213
                   8.10013 0.641687 8.03336 0.304183 7.69586C-0.0333213 7.35836 -0.100086 6.87792
@@ -132,7 +132,7 @@ function Apartments() {
                   7.69598C7.35836 8.03348 6.87792 8.10025 6.62277 7.8451L3.99996 5.22229Z">
                 </path>
               </svg>
-            </a>
+            </button>
           </div>
         </div>
       </aside>

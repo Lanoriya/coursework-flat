@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 function AddItem({ endpoint, fields, successMessage }) {
   const [formData, setFormData] = useState({});
@@ -24,8 +23,6 @@ function AddItem({ endpoint, fields, successMessage }) {
     if (isAnimating) {
       return;
     }
-
-    const token = Cookies.get('adminToken');
     const addButton = document.querySelector('.admin-btn');
 
     if (addButton) {
@@ -36,9 +33,6 @@ function AddItem({ endpoint, fields, successMessage }) {
     setIsAnimating(true);
 
     axios.post(`http://localhost:3001/api/admin/${endpoint}`, { ...formData, image_id: selectedImage }, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       withCredentials: true,
     })
       .then((response) => {
