@@ -32,8 +32,8 @@ function Apartments() {
   }, [minArea, maxArea, minFloor, maxFloor]);
 
   useEffect(() => {
-    // Fetch apartments once on component mount
     fetchApartments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -67,20 +67,26 @@ function Apartments() {
                 type='range'
                 min='32'
                 max='77'
-                step='1'
+                step={(maxArea - minArea) / 100}
                 value={minArea}
                 onMouseUp={() => setFilterChanged(true)}
-                onChange={(e) => setMinArea(e.target.value)}
+                onInput={(e) => {
+                  const value = Math.min(e.target.value, maxArea);
+                  setMinArea(Math.round(value));
+                }}
               />
               <div className='area-numbers-score'><span>до</span> <span className='area-number'>{maxArea}</span></div>
               <input
                 type='range'
                 min='32'
                 max='77'
-                step='1'
+                step={(maxArea - minArea) / 100}
                 value={maxArea}
                 onMouseUp={() => setFilterChanged(true)}
-                onChange={(e) => setMaxArea(e.target.value)}
+                onInput={(e) => {
+                  const value = Math.max(e.target.value, minArea);
+                  setMaxArea(Math.round(value));
+                }}
               />
             </div>
           </div>
@@ -91,18 +97,26 @@ function Apartments() {
               type='range'
               min='1'
               max='20'
+              step='1'
               value={minFloor}
-              onMouseUp={() => fetchApartments()}
-              onChange={(e) => setMinFloor(e.target.value)}
+              onMouseUp={() => setFilterChanged(true)}
+              onInput={(e) => {
+                const value = Math.min(e.target.value, maxFloor);
+                setMinFloor(Math.round(value));
+              }}
             />
             <div className='filter-floor-numbers'><span>до</span> <span className='area-number'>{maxFloor}</span></div>
             <input
               type='range'
               min='1'
               max='20'
+              step='1'
               value={maxFloor}
-              onMouseUp={() => fetchApartments()}
-              onChange={(e) => setMaxFloor(e.target.value)}
+              onMouseUp={() => setFilterChanged(true)}
+              onInput={(e) => {
+                const value = Math.max(e.target.value, minFloor);
+                setMaxFloor(Math.round(value));
+              }}
             />
           </div>
           <div className='filter-reset'>

@@ -8,6 +8,12 @@ const Popup = ({ onClose, onSubmit }) => {
   const [isAgreed, setIsAgreed] = useState(false);
   const [error, setError] = useState('');
 
+  const handleNameChange = (e) => {
+    // Разрешаем только буквы и пробелы в имени
+    const value = e.target.value.replace(/[^A-Za-zА-Яа-я\s]/g, '');
+    setName(value);
+  };
+
   const handleSubmit = async () => {
     // Валидация данных
     if (!isAgreed) {
@@ -53,7 +59,7 @@ const Popup = ({ onClose, onSubmit }) => {
         <h3>Менеджер перезвонит вам и ответит на вопросы</h3>
         <form>
           <p>Ваше имя:</p>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+          <input type="text" value={name} onChange={handleNameChange} />
           <p>Номер телефона:</p>
           <InputMask
             mask="+7 (999) 99-99-999"
@@ -66,7 +72,7 @@ const Popup = ({ onClose, onSubmit }) => {
           <p>
             <input type="checkbox" checked={isAgreed} onChange={() => setIsAgreed(!isAgreed)} />
             {' '}
-            Согласен с <a href="/">политикой конфиденциальности</a>
+            Согласен с <a href="/policy">политикой конфиденциальности</a>
           </p>
           <button className='callback-tel-pop' type="button" onClick={handleSubmit}>
             Отправить заявку

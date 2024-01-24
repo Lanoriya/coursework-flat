@@ -11,6 +11,7 @@
 .apartments-container {
   display: flex;
   margin-top: 120px;
+  margin-bottom: 40px;
 }
 
 .apartments-main {
@@ -48,6 +49,39 @@
 
 .filter-box input {
   width: 100%;
+}
+
+.filter-box input[type='range'] {
+  -webkit-appearance: none;
+  width: 100%;
+  border-radius: 5px;
+  background: #ffffffe2; /* Цвет фона шкалы */
+  outline: none; /* Убирает контур вокруг ползунка */
+  opacity: 0.7; /* Прозрачность фона шкалы */
+  -webkit-transition: .2s; /* Плавное изменение стилей при наведении */
+  transition: opacity .2s;
+}
+
+.filter-box input[type='range']::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 5px;
+  background: linear-gradient(to right, #5adeff 0%, #0088ff 100%); /* Градиентная шкала цвета */
+}
+
+.filter-box input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Убирает стандартный стиль ползунка в WebKit/Blink */
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #160053; /* Цвет ползунка */
+  cursor: pointer; /* Курсор при наведении на ползунок */
+  -webkit-transition: .2s; /* Плавное изменение стилей при наведении */
+  transition: .2s;
+  margin-top: -6px;
+}
+
+.filter-area {
+  margin-bottom: 16px;
 }
 
 .apartments-filter {
