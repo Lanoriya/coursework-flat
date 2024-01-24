@@ -14,7 +14,7 @@ function AdminPanel() {
       </header>
 
       <aside className='admin-aside'>
-        <button className='admin-aside-btn'>
+        <button className='admin-aside-btn' style={{opacity: '0'}}>
           <img className='admin-aside-img' src={burger} alt='burger'/>
         </button>
         <nav className='admin-aside-nav'>

@@ -324,6 +324,11 @@ app.get('/api/admin/orders', checkAdminToken, async (req, res) => {
 
     const result = await pool.query(query, status && status !== 'Все' ? [status] : []);
     const orders = result.rows;
+
+    if (orders.length === 0) {
+      return res.status(404).json({ error: 'Заказы не найдены' });
+    }
+    
     res.status(200).json(orders);
   } catch (error) {
     console.error('Ошибка при получении данных о заказах:', error);
@@ -354,6 +359,29 @@ app.put('/api/admin/orders', checkAdminToken, async (req, res) => {
   } catch (error) {
     console.error('Ошибка при обновлении данных о заказах:', error);
     res.status(500).json({ error: 'Ошибка при обновлении данных о заказах' });
+  }
+});
+
+app.delete('/api/admin/orders/:id', checkAdminToken, async (req, res) => {
+  const orderId = req.params.id;
+
+  try {
+    // Проверяем, существует ли заказ с указанным id
+    const checkQuery = 'SELECT * FROM orders WHERE order_id = $1';
+    const checkResult = await pool.query(checkQuery, [orderId]);
+
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Заказ не найден' });
+    }
+
+    // Выполняем запрос к базе данных для удаления заказа
+    const deleteQuery = 'DELETE FROM orders WHERE order_id = $1';
+    await pool.query(deleteQuery, [orderId]);
+
+    res.status(204).send();
+  } catch (error) {
+    console.error('Ошибка при удалении заказа:', error);
+    res.status(500).json({ error: 'Ошибка при удалении заказа' });
   }
 });
 

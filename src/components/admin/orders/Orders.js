@@ -9,6 +9,9 @@ function Orders() {
   const [notifications, setNotifications] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("Все");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [orderToDelete, setOrderToDelete] = useState(null);
+  
 
   const showNotification = (message) => {
     setNotifications([...notifications, message]);
@@ -72,7 +75,48 @@ function Orders() {
     fetchOrders(); // При изменении статуса делаем новый запрос
   };
 
+  const handleDeleteButtonClick = (orderId) => {
+    handleDeleteBlock(orderId);
+  };
+
+  const handleDeleteBlock = (orderId) => {
+    setOrderToDelete(orderId)
+    setShowDeleteModal(true);
+  }
+
+  const handleDeleteConfirm = () => {
+    if (isSaving) {
+      return;
+    }
+    setIsSaving(true);
+    
+    axios
+      .delete(`http://localhost:3001/api/admin/orders/${orderToDelete}`, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response);
+        showNotification('Заказ успешно удален');
+        fetchOrders(); // Refresh orders after deletion
+      })
+      .catch((error) => {
+        console.error('Error deleting order:', error);
+      })
+      .finally(() => {
+        setOrderToDelete(null);
+        setShowDeleteModal(false);
+        setTimeout(() => {
+          setIsSaving(false);
+        }, 1000); // Задержка в одну секунду перед следующим кликом
+      });
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+  };  
+
   return (
+    <div className='order-content'>
     <div className='orders-container'>
       <div className='apartment-name orders-name'>
         <p className='orders-p'>Имя</p>
@@ -91,7 +135,7 @@ function Orders() {
       </div>
       <div className='orders-items'>
         {orders.map(order => (
-          <div className='orders-item apartment-items' key={order.order_id}>
+          <div key={order.order_id} className='orders-item apartment-items'>
             <div className='orders-item-value apartment-item-value'>
               <input
                 type='text'
@@ -122,9 +166,22 @@ function Orders() {
                 value={order.about || ''}
                 onChange={(event) => handleChange(event, order.order_id, "about")}
               />
+              <div className='delete-btn-overlay' onClick={() => handleDeleteButtonClick(order.order_id)}></div>
             </div>
           </div>
         ))}
+      </div>
+      {showDeleteModal && (
+          <div className='delete-modal'>
+            <div className='delete-container'>
+              <h3>Вы уверены, что хотите удалить этот заказ?</h3>
+              <div className='delete-buttons'>
+                <button onClick={handleDeleteConfirm}>Да</button>
+                <button onClick={handleDeleteCancel}>Нет</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       {notifications.map((message, index) => (
         <Notification key={index} message={message} />
