@@ -3,7 +3,7 @@
   flex-direction: column;
   text-align: center;
   overflow: auto;
-  max-height: 92vh;
+  max-height: 90vh;
 }
 
 .orders-name {
@@ -32,12 +32,12 @@
   font-size: 14px;
 }
 
-.orders-p:nth-child(2), .orders-item-value:nth-child(2) {
+.orders-p:nth-child(1), .orders-item-value:nth-child(1) {
   width: 15%;
 }
 
 .orders-p:nth-child(3), .orders-item-value:nth-child(3) {
-  width: 20%;
+  width: 15%;
 }
 
 .orders-item-value:nth-child(4) {

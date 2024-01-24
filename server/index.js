@@ -312,16 +312,22 @@ app.get('/api/image/:image_id', async (req, res) => {
 
 app.get('/api/admin/orders', checkAdminToken, async (req, res) => {
   try {
-    const query = `
-      SELECT * FROM orders
-      ORDER BY order_id;  -- Вы можете изменить поле сортировки на необходимое
-    `;
-    const result = await pool.query(query);
+    const { status } = req.query;
+
+    let query = 'SELECT * FROM orders';
+    
+    if (status && status !== 'Все') {
+      query += ' WHERE status = $1';
+    }
+
+    query += ' ORDER BY order_id';
+
+    const result = await pool.query(query, status && status !== 'Все' ? [status] : []);
     const orders = result.rows;
     res.status(200).json(orders);
   } catch (error) {
-    console.error('Ошибка при получении данных о квартирах:', error);
-    res.status(500).json({ error: 'Ошибка при получении данных о квартирах' });
+    console.error('Ошибка при получении данных о заказах:', error);
+    res.status(500).json({ error: 'Ошибка при получении данных о заказах' });
   }
 });
 
@@ -344,10 +350,10 @@ app.put('/api/admin/orders', checkAdminToken, async (req, res) => {
       ]);
     }
 
-    res.status(200).json({ message: 'Данные о квартирах успешно обновлены' });
+    res.status(200).json({ message: 'Данные о заказах успешно обновлены' });
   } catch (error) {
-    console.error('Ошибка при обновлении данных о квартирах:', error);
-    res.status(500).json({ error: 'Ошибка при обновлении данных о квартирах' });
+    console.error('Ошибка при обновлении данных о заказах:', error);
+    res.status(500).json({ error: 'Ошибка при обновлении данных о заказах' });
   }
 });
 

@@ -8,13 +8,20 @@ function Orders() {
   const [orders, setOrders] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState("Все");
 
   const showNotification = (message) => {
     setNotifications([...notifications, message]);
   };
 
   const fetchOrders = useCallback(() => {
-    axios.get(`http://localhost:3001/api/admin/orders`, {
+    let url = `http://localhost:3001/api/admin/orders`;
+
+  if (selectedStatus && selectedStatus !== "Все") {
+    url += `?status=${selectedStatus}`;
+  }
+
+    axios.get(url, {
       withCredentials: true,
     }).then((response) => {
       console.log('Orders Response:', response.data);
@@ -22,7 +29,7 @@ function Orders() {
     }).catch(error => {
       console.error('Error fetching orders:', error);
     });
-  }, []);
+  }, [selectedStatus]);
 
   useEffect(() => {
     fetchOrders();
@@ -60,12 +67,25 @@ function Orders() {
       });
   };
 
+  const handleStatusChange = (event) => {
+    setSelectedStatus(event.target.value);
+    fetchOrders(); // При изменении статуса делаем новый запрос
+  };
+
   return (
     <div className='orders-container'>
       <div className='apartment-name orders-name'>
         <p className='orders-p'>Имя</p>
         <p className='orders-p'>Номер</p>
-        <p className='orders-p'>Статус</p>
+        <p className='orders-p'>
+        <span>Статус</span>
+        <select value={selectedStatus} onChange={handleStatusChange}>
+            <option value="Все">Все</option>
+            <option value="Не просмотрено">Не просмотрено</option>
+            <option value="Выполнено">Выполнено</option>
+            <option value="На выполнении">На выполнении</option>
+          </select>
+        </p>
         <p className='orders-p'>Комментарий</p>
         <button className='admin-btn review-btn' onClick={handleSave}>Сохранить</button>
       </div>

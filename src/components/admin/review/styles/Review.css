@@ -21,14 +21,14 @@
   flex-direction: column;
   text-align: center;
   overflow: auto;
-  max-height: 92vh;
+  max-height: 90vh;
 }
 
-.apartment-container::-webkit-scrollbar {
+.admin-main *::-webkit-scrollbar {
   width: 4px;
 }
 
-.apartment-container::-webkit-scrollbar-thumb {
+.admin-main *::-webkit-scrollbar-thumb {
   border-radius: 16px;
   background-color: #d1d1d1;
 }
