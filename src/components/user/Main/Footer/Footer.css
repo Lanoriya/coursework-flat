@@ -5,6 +5,19 @@
   width: 100%;
 }
 
+.main-footer::after {
+  content: "";
+  position: absolute;
+  right: 30vw;
+  bottom: 100%;
+  background-image: url(../imgs/me.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 1;
+  height: 180px;
+  width: 180px;
+}
+
 .main-footer::before {
   content: "";
   position: absolute;
