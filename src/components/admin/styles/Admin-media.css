@@ -1,0 +1,132 @@
+@media (max-width: 768px) {
+
+  .admin-main {
+    overflow: auto;
+  }
+
+  .admin-page {
+    grid-template-columns: auto;
+    grid-gap: 0;
+  }
+
+  .admin-header {
+    grid-column-end: auto;
+    justify-content: start;
+  }
+
+  .admin-header--p {
+    font-size: 14px;
+    margin-right: 0;
+    margin-left: 40px;
+  }
+
+  .admin-aside {
+    transition: transform 0.3s ease;
+  }
+
+  .admin-aside {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Adjust the initial position off-screen */
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    transition: left 0.3s ease;
+    z-index: 5;
+  }
+
+  .menu-open {
+    position: fixed;
+    top: 0;
+    left: 0px; /* Adjust the initial position off-screen */
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    transition: left 0.3s ease;
+  }
+
+  .menu-open .admin-aside-btn {
+    right: 15px;
+    left: auto;
+  }
+
+  .menu-open .admin-aside {
+    left: 0;
+  }
+
+  .admin-aside-btn {
+    position: absolute;
+    top: 10px;
+    left: 250px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .admin-aside-nav {
+    padding: 20px;
+  }
+
+  .aside-nav-btn {
+    display: block;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 10px;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+
+  .aside-nav-btn:hover {
+    color: #61dafb;
+  }
+
+  .editor-content {
+    flex-direction: column;
+  }
+
+  .item-container {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .orders-name p{
+    display: none;
+  }
+  
+  .orders-item {
+    flex-direction: column;
+    width: 99%;
+    margin-bottom: 48px;
+  }
+
+  .orders-item-value:nth-child(n) {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .delete-btn-overlay {
+    right: -16px;
+    width: 8px;
+    height: 8px;
+    border-radius: 0;
+  }
+
+  .review-btn {
+    right: 4vw;
+    width: 30%;
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .apartment-container {
+    margin-top: 16px;
+  }
+
+  .apartment-name p {
+    min-width: 30%;
+  }
+
+  .apartment-item-value {
+    min-width: 30%;
+  }
+}

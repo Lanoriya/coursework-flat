@@ -55,7 +55,7 @@
   background-image: url(../Infrastructure/cat.png);
   background-size: contain;
   background-repeat: no-repeat;
-  z-index: 1;
+  z-index: 0;
   height: 300px;
   width: 300px;
 }

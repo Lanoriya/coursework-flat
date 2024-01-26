@@ -337,7 +337,7 @@ app.get('/api/admin/orders', checkAdminToken, async (req, res) => {
 });
 
 app.put('/api/admin/orders', checkAdminToken, async (req, res) => {
-  const updatedOrders = req.body; // Получите обновленные данные квартир из тела запроса
+  const updatedOrders = req.body; // Получите обновленные данные заказов из тела запроса
   try {
     for (const order of updatedOrders) {
       const query = `

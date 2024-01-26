@@ -101,7 +101,8 @@
   position: absolute;
   display: block;
   cursor: pointer;
-  background-image: url(../cross.svg);
+  background-image: url(../imgs/cross.svg);
+  background-repeat: no-repeat;
   right: -30px;
   top: 40%;
   width: 8px;

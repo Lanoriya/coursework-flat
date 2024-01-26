@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect, useCallback } from 'react';
 import Notification from '../notification/Notification';
-import './styles/Review.css';
 
 function Review() {
   const [apartments, setApartments] = useState([]);

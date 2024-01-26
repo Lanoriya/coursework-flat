@@ -1,4 +1,3 @@
-import './styles/Editor.css';
 import AddItem from './additem/AddItem';
 
 function Editor() {

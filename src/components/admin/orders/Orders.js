@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Notification from '../notification/Notification';
-import './styles/Orders.css';
 
 function Orders() {
 
