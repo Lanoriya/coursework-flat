@@ -63,6 +63,7 @@
   border: 1px solid white;
   font-size: 14px;
   white-space: normal;
+  overflow-wrap: break-word;
   padding: 5px 6px;
   color: #fff;
 }

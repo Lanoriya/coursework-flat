@@ -1,9 +1,4 @@
 @media (max-width: 768px) {
-
-  .admin-main {
-    overflow: auto;
-  }
-
   .admin-page {
     grid-template-columns: auto;
     grid-gap: 0;
@@ -123,10 +118,72 @@
   }
 
   .apartment-name p {
-    min-width: 30%;
+    min-width: 20%;
   }
 
   .apartment-item-value {
-    min-width: 30%;
+    min-width: 20%;
+  }
+}
+
+@media (min-width: 769px) {
+  .admin-aside {
+    flex-direction: row;
+  }
+
+  .admin-aside-btn {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .editor-content {
+    justify-content: flex-start;
+  }
+
+  .item-container {
+    width: 40%;
+  }
+
+  .review-btn {
+    width: 15%;
+  }
+
+  .apartment-name p {
+    width: 25%;
+  }
+
+  .orders-item-value {
+    width: 25%;
+  }
+
+  .apartment-container > .apartment-name p {
+    width: 9%;
+  }
+
+  .apartment-container > .apartment-items > .apartment-item-value {
+    width: 9%;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1400px) {
+  .item-container {
+    width: 40%;
+  }
+
+  .orders-name {
+    justify-content: center;
+  }
+
+  .orders-item {
+    justify-content: center;
+  }
+
+  .orders-container > .apartment-name p {
+    width: 20%;
+  }
+
+  .orders-item-value {
+    width: 20% !important;
   }
 }

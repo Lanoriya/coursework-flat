@@ -6,15 +6,6 @@
   max-height: 90vh;
 }
 
-.orders-name {
-  display: flex;
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  gap: 4px;
-  z-index: 2;
-}
-
 .orders-ul {
   color: #fff;
 }
