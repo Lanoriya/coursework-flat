@@ -1,5 +1,3 @@
-import './Policy.css'
-
 function Policy() {
 
   return (

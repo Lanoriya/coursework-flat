@@ -52,7 +52,7 @@
   position: absolute;
   left: -160px;
   bottom: 0;
-  background-image: url(../Infrastructure/cat.png);
+  background-image: url(../imgs/cat.png);
   background-size: contain;
   background-repeat: no-repeat;
   z-index: 0;

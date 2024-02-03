@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './Apartments.css';
 
 function Apartments() {
   const [apartments, setApartments] = useState([]);

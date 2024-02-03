@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Slider from "react-slick";
 import Popup from '../Popup/Popup';
-import '../MainContent/MainContent.css';
-import '../Infrastructure/Infrastructure.css';
-import '../AboutFlat/AboutFlat.css';
-import '../AboutSolo/AboutSolo.css';
-import '../Location/Location.css';
-import '../Location/map.css'
+import '../styles/MainContent.css';
+import '../styles/Infrastructure.css';
+import '../styles/AboutFlat.css';
+import '../styles/AboutSolo.css';
+import '../styles/Location.css';
+import '../styles/map.css'
 
 function MainContent() {
   const [isPopupOpen, setPopupOpen] = useState(false);
@@ -95,13 +95,13 @@ function MainContent() {
               <div className='about-item--carousel'>
                 <Slider {...settings}>
                   <div>
-                    <img src={require('../MainContent/MainImgs/1.jpg')} alt='Mainphoto1'/>
+                    <img src={require('../imgs/mainPhoto/1.jpg')} alt='Mainphoto1'/>
                   </div>
                   <div>
-                    <img src={require('../MainContent/MainImgs/2.jpg')} alt='Mainphoto2'/>
+                    <img src={require('../imgs/mainPhoto/2.jpg')} alt='Mainphoto2'/>
                   </div>
                   <div>
-                    <img src={require('../MainContent/MainImgs/3.jpg')} alt='Mainphoto3'/>
+                    <img src={require('../imgs/mainPhoto/3.jpg')} alt='Mainphoto3'/>
                   </div>
                 </Slider>
               </div>
@@ -112,13 +112,13 @@ function MainContent() {
               <div className='about-item--carousel'>
                 <Slider {...settings} style={{ marginLeft: 0 }}>
                   <div>
-                    <img src={require('../MainContent/MainImgs/4.jpg')} alt='Mainphoto4'/>
+                    <img src={require('../imgs/mainPhoto/4.jpg')} alt='Mainphoto4'/>
                   </div>
                   <div>
-                    <img src={require('../MainContent/MainImgs/5.jpg')} alt='Mainphoto5'/>
+                    <img src={require('../imgs/mainPhoto/5.jpg')} alt='Mainphoto5'/>
                   </div>
                   <div>
-                    <img src={require('../MainContent/MainImgs/6.jpg')} alt='Mainphoto6'/>
+                    <img src={require('../imgs/mainPhoto/6.jpg')} alt='Mainphoto6'/>
                   </div>
                 </Slider>
               </div>
@@ -195,13 +195,13 @@ function MainContent() {
           </ul>
         </div>
         <div className='infrastructure-img'>
-          <img src={require('../Infrastructure/infrastructure.png')} alt='infraPhoto'/>
+          <img src={require('../imgs/infrastructure.png')} alt='infraPhoto'/>
         </div>
       </div>
       <div className='container about-flat-container'>
         <div className='about-item about-flat'>
           <div className='about-item--img'>
-            <img src={require('../AboutFlat/houses.jpg')} alt='houses'/>
+            <img src={require('../imgs/mainPhoto/houses.jpg')} alt='houses'/>
           </div>
           <div className='about-item--text'>
             <div className='about-textBlock'>
@@ -262,12 +262,12 @@ function MainContent() {
             </div>
           </div>
           <div className='about-item--img'>
-            <img src={require('../AboutFlat/terra.jpg')} alt='terra'/>
+            <img src={require('../imgs/about/terra.jpg')} alt='terra'/>
           </div>
         </div>
         <div className='about-item about-flat'>
           <div className='about-item--img'>
-            <img src={require('../AboutFlat/childs.jpg')} alt='childs'/>
+            <img src={require('../imgs/about/childs.jpg')} alt='childs'/>
           </div>
           <div className='about-item--text'>
             <div className='about-textBlock'>
@@ -290,7 +290,7 @@ function MainContent() {
             <p>Установлена горизонтальная разводка отопления. Нет стояков около окон. В каждой квартире балкон или лоджия не менее 3 м<span className='span-nofont'>²</span>. Квартиры сдаются с предчистовой отделкой.</p>
           </div>
           <div className='about-solo-img'>
-            <img src={require('../AboutSolo/flat.png')} alt='flat'/>
+            <img src={require('../imgs/about/flat.png')} alt='flat'/>
           </div>
         </div>
       </div>

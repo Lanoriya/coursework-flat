@@ -3,8 +3,11 @@ import { Routes, Route, } from 'react-router-dom';
 import MainHeader from './MainHeader';
 import MainFooter from './MainFooter';
 import MainContent from './MainContent/MainContent';
-import '../Apartments/Apartments.css'
-import '../Main/Footer/Footer.css';
+import './styles/Footer.css';
+import '../styles/About-header.css';
+import '../styles/ApartmentPage.css';
+import '../styles/Apartments.css';
+import '../styles/Policy.css';
 import Apartments from '../Apartments/Apartments';
 import ApartmentPage from '../ApartmentPage/ApartmentPage'
 import Policy from '../Policy/Policy';

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, Link, Routes, Route } from 'react-router-dom';
 import Logo from '../Main/imgs/logo-white.png';
-import About from '../AboutHeader/About-header';
 import Popup from '../Main/Popup/Popup';
 
 function MainHeader() {
@@ -10,6 +9,7 @@ function MainHeader() {
   const isApartmentsPage = /^\/apartments/.test(location.pathname);
   const isPolicyPage = location.pathname === '/policy';
   const isPageValid = isApartmentsPage || isPolicyPage;
+  const isHomePage = location.pathname === '/';
 
   const openPopup = () => {
     setPopupOpen(true);
@@ -43,6 +43,11 @@ function MainHeader() {
 
   return (
     <header className={`main-header ${isPageValid ? 'apartments-header' : ''}`}>
+      {isHomePage && (
+        <div className='about-header'>
+          <h4 className='about-title'>Lanoriya. Место для души</h4>
+        </div>
+      )}
       <div className={`header-container ${isPageValid ? 'apartments-header' : ''}`}>
         <div className='container header-block'>
           <nav className='main-header-nav'>
@@ -61,9 +66,6 @@ function MainHeader() {
         </div>
       </div>
       {isPopupOpen && <Popup onClose={closePopup} onSubmit={submitForm} />}
-      <Routes>
-        <Route path="/" element={<About />} />
-      </Routes>
     </header>
   )
 }

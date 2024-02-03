@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import InputMask from 'react-input-mask';
-import './Popup.css'
+import '../styles/Popup.css'
 
 const Popup = ({ onClose, onSubmit }) => {
   const [name, setName] = useState('');
