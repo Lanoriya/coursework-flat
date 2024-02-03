@@ -6,7 +6,8 @@ import '../styles/Infrastructure.css';
 import '../styles/AboutFlat.css';
 import '../styles/AboutSolo.css';
 import '../styles/Location.css';
-import '../styles/map.css'
+import '../styles/map.css';
+import '../styles/Main-mobile.css';
 
 function MainContent() {
   const [isPopupOpen, setPopupOpen] = useState(false);
