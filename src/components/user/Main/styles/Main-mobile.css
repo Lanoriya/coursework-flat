@@ -40,17 +40,44 @@
     margin-bottom: 16px;
   }
 
+  .main-content {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .main-container {
+    margin-top: 32px;
+  }
+
+  .about-title-h4 {
+    font-size: 28px;
+  }
+
+  .about-text {
+    display: none;
+  }
+
+  .about-text-mobile {
+    display: block;
+  }
+
+  .about-text-mobile p {
+    margin-top: 32px;
+  }
+
   .user-aside-btn img{
     width: 40px;
   }
 
   .user-aside-btn {
     position: absolute;
+    display: block;
     top: 10px;
     left: 250px;
     background: none;
     border: none;
     cursor: pointer;
+    outline: none;
   }
 
   .about-item {
@@ -62,7 +89,64 @@
   }
 
   .slider-box {
-    width: 90vw;
+    margin-top: 32px;
+  }
+
+  .slick-slider {
+    width: 100%;
+  }
+
+  .slick-slider button {
+    z-index: 1;
+  }
+
+  .slick-slider .slick-next {
+    right: 4px;
+  }
+
+  .slick-slider .slick-prev {
+    left: 4px;
+  }
+
+  .slick-list img {
+    width: 630px;
+    height: 440px;
+    object-fit: cover;
+    object-position: right;
+  }
+
+  .slider-box::before {
+    left: -16px;
+    bottom: -40px;
+    height: 125px;
+    width: 100px;
+  }
+
+  .about-textBlock {
+    margin: 0;
+  }
+
+  .item-info {
+    font-size: 28px;
+  }
+
+  .item-paragraph {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+
+  .about-items {
+    margin-top: 80px;
+    gap: 60px;
+  }
+
+  .about-item--slider {
+    width: 100%;
+    order: 2;
+  }
+
+  .about-item--text {
+    order: 1;
   }
 
   .location-text-block {
@@ -70,7 +154,22 @@
   }
 
   .infrastructure-container {
+    margin-top: 60px;
     flex-direction: column;
+  }
+
+  .infrastructure-text h4 {
+    font-size: 28px;
+  }
+
+  .infrastructure-img {
+    margin-top: 32px;
+  }
+
+  .infrastructure-img::before {
+    left: -40px;
+    width: 120px;
+    height: 120px;
   }
 
   .infrastructure-img img {

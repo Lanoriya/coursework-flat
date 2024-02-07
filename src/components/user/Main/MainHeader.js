@@ -3,6 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import burger from '../Main/imgs/burger.svg';
 import Logo from '../Main/imgs/logo-white.png';
 import Popup from '../Main/Popup/Popup';
+import Mobile from '../Main/imgs/mobile.png'
 
 function MainHeader() {
   const [isPopupOpen, setPopupOpen] = useState(false);
@@ -76,11 +77,16 @@ function MainHeader() {
         </div>
       </div>
       {isHomePage && (
-        <div className='about-header'>
-          <h4 className='about-title'>Lanoriya. Место для души</h4>
+        <div className='about-content'>
+          <div className='about-header'>
+            <h4 className='about-title'>Lanoriya. Место для души</h4>
+          </div>
         </div>
       )}
       {isPopupOpen && <Popup onClose={closePopup} onSubmit={submitForm} />}
+      <button className='callback-tel-pop callback-tel-mobile' onClick={openPopup}>
+        <img className='mobile-img' src={Mobile} alt='mobile-icon'/>
+      </button>
     </header>
   )
 }
