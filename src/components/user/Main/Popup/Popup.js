@@ -21,7 +21,7 @@ const Popup = ({ onClose, onSubmit }) => {
       return;
     }
 
-    if (!name || !phone) {
+    if (!name || !phone || phone.includes('_')) {
       setError('Пожалуйста, заполните все поля');
       return;
     }
@@ -64,7 +64,7 @@ const Popup = ({ onClose, onSubmit }) => {
           <InputMask
             mask="+7 (999) 99-99-999"
             maskChar="_"
-            placeholder="+7 (__) __-__-___"
+            placeholder="+7 (___) __-__-___"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />

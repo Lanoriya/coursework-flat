@@ -6,7 +6,6 @@ const port = 3001;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-const crypto = require('crypto');
 
 const Pool = require('pg').Pool;
 const pool = new Pool({
@@ -296,7 +295,7 @@ app.get('/api/image/:image_id', async (req, res) => {
   const imageId = req.params.image_id;
 
   try {
-    const result = await pool.query('SELECT image_url FROM apartment_images WHERE image_id = $1', [imageId]);
+    const result = await pool.query('SELECT image_url FROM images WHERE image_id = $1', [imageId]);
 
     if (result.rows.length > 0) {
       const imageUrl = result.rows[0].image_url;

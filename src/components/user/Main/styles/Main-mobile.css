@@ -80,6 +80,10 @@
     outline: none;
   }
 
+  .callback-tel-mobile {
+    display: block;
+  }
+
   .about-item {
     flex-direction: column;
   }
@@ -176,8 +180,23 @@
     width: 90vw;
   }
 
+  .about-flat-container {
+    gap: 60px;
+  }
+
   .about-item--img img {
     width: 90vw;
+    object-fit:cover;
+    object-position: center;
+  }
+
+  .about-item--text {
+    order: 1;
+    margin-bottom: 32px;
+  }
+
+  .about-item--img {
+    order: 2;
   }
 
   .useless-block-text {

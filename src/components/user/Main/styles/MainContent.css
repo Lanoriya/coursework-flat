@@ -106,7 +106,7 @@
   font-size: 20px;
   border-radius: 32px;
   background: #44b3b4;
-  border: 2px solid black;
+  border: none;
   text-decoration: none;
   color: #fff;
   transition: all 0.3s;
@@ -115,6 +115,10 @@
 .callback-tel-pop:hover {
   background: rgb(184, 237, 255);
   color: #000 !important;
+}
+
+.callback-tel-mobile {
+  display: none;
 }
 
 .about-title-h4 {
@@ -267,40 +271,102 @@
   width: 100%;
 }
 
-.useless-block--bg {
-  position: absolute;
-  box-sizing: border-box;
-  width: 100%;
-  border: 1px solid black;
-  height: 250px;
-  background: #44b2b4;
-}
-
 .useless-block {
   display: flex;
-  height: 250px;
+  position: relative;
+  height: 380px;
   justify-content: center;
   align-items: center;
+  background: none;
+}
+
+.useless-block::before {
+  content: '';
+  position: absolute;
+  background-image: url(../imgs/background-gradient.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
 }
 
 .useless-block-text {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 128px;
-  text-align: center;
-  border: 1px solid black;
+  width: 100%;
   border-radius: 16px;
-  background: #fff;
+  margin-bottom: 32px;
   z-index: 1;
 }
 
+.useless-block-ready h3{
+  text-align: center;
+}
+
+.useless-block-text::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background-image: url(../imgs/me.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 1;
+  height: 160px;
+  width: 160px;
+}
+
+.useless-block-text > * {
+  width: 100%;
+}
+
+.useless-block-text form {
+  z-index: 1;
+}
+
+.form-block {
+  display: flex;
+  gap: 32px;
+}
+
+.useless-block-text form p {
+  margin-top: 32px;
+  font-size: 14px;
+}
+
+.useless-block-text form a {
+  color: #44b3b4;
+}
+
+.useless-block-text .error-message {
+  position: absolute;
+  font-size: 20px;
+}
+
+.useless-block-text input {
+  border-radius: 32px;
+  width: 30%;
+  outline: none;
+  border: none;
+}
+
+.useless-block-text button {
+  width: 30%;
+}
+
+.useless-block-text input {
+  padding: 0px 16px;
+}
+
 .useless-block-text h3 {
-  font-size: 32px;
+  font-size: 44px;
 }
 
 .useless-block-text p {
   width: 100%;
+  font-size: 24px;
+  margin-bottom: 16px;
 }
 
 .useless-block-text a {

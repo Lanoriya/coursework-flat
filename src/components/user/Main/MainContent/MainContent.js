@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Slider from "react-slick";
 import Popup from '../Popup/Popup';
+import InputMask from 'react-input-mask';
 import '../styles/MainContent.css';
 import '../styles/Infrastructure.css';
 import '../styles/AboutFlat.css';
@@ -11,6 +12,53 @@ import '../styles/Main-mobile.css';
 
 function MainContent() {
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [error, setError] = useState('');
+  const [isRequestSent, setIsRequestSent] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!name || !phone || phone.includes('_')) {
+      setError('Пожалуйста, заполните все поля');
+      return;
+    }
+
+    // Отправка данных на сервер
+    try {
+      const response = await fetch('http://localhost:3001/submitOrder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, phone }),
+      });
+
+      if (response.ok) {
+        // Данные успешно отправлены
+        setError('');
+        setIsRequestSent(true);
+        setTimeout(() => {
+          setIsRequestSent(false);
+        }, 3000);
+      } else {
+        // Обработка ошибки при отправке на сервер
+        setError('Ошибка при отправке данных');
+      }
+    } catch (error) {
+      console.error('Ошибка при отправке данных:', error);
+      setError('Ошибка при отправке данных');
+    }
+
+    setName('');
+    setPhone('');
+  };
+
+  const handleNameChange = (e) => {
+    // Разрешаем только буквы и пробелы в имени
+    const value = e.target.value.replace(/[^A-Za-zА-Яа-я\s]/g, '');
+    setName(value);
+  };
+
   var settings = {
     dots: true,
     infinite: true,
@@ -354,13 +402,35 @@ function MainContent() {
         </div>
       </div>
       <div className='useless-block'>
-          <div className='useless-block--bg'></div>
-          <div className='useless-block-text'>
-            <h3>Хотите квартиру мечты?</h3>
-            <p>Все возможно в Микрорайоне «Lanoriya»</p>
-            <button className="callback-tel-pop" onClick={openPopup}>Заказать звонок</button>
+      {isRequestSent ? (
+          <div className='useless-block-text useless-block-ready'>
+            <h3>Заявка успешно отправлена</h3>
           </div>
+        ) : (
+        <div className='container useless-block-text'>
+          <h3>Хотите квартиру мечты?</h3>
+          <p>Все возможно в Микрорайоне «Lanoriya»</p>
+          <form>
+            <div className='form-block'>
+              <input type="text" placeholder='Имя' value={name} onChange={handleNameChange} />
+              <InputMask
+                mask="+7 (999) 99-99-999"
+                maskChar="_"
+                placeholder="Телефон"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+              <button className='callback-tel-pop' type="button" onClick={handleSubmit}>Отправить заявку</button>
+            </div>
+            <p>
+              Нажимая на кнопку, вы принимаете
+              <a className="footer-text--a" href="/policy"> политику конфиденциальности</a>
+            </p>
+            {error && <p className="error-message">{error}</p>}
+          </form>
         </div>
+        )}
+      </div>
       <div className='container container-contacts' id='contacts'>
         <h2 className='contacts-h2' id='contacts'>Контакты</h2>
         <div className='contacts-info'>
