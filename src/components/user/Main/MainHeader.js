@@ -10,7 +10,8 @@ function MainHeader() {
   const location = useLocation();
   const isApartmentsPage = /^\/apartments/.test(location.pathname);
   const isPolicyPage = location.pathname === '/policy';
-  const isPageValid = isApartmentsPage || isPolicyPage;
+  const isProfile = location.pathname === '/profile';
+  const isPageValid = isApartmentsPage || isPolicyPage || isProfile;
   const isHomePage = location.pathname === '/';
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -54,6 +55,10 @@ function MainHeader() {
     }
   };
 
+  if (isProfile) {
+    return null;
+  }
+
   return (
     <header className={`main-header ${isPageValid ? 'apartments-header' : ''}`}>
       <div className={`header-container ${isPageValid ? 'apartments-header' : ''}`}>
@@ -68,6 +73,7 @@ function MainHeader() {
               <Link to='/apartments' className='header-ul-li' onClick={() => {handleLinkClick()}}>Поиск квартир</Link>
               <li className='header-ul-li' onClick={(e) => {handleLinkClick(); handleLocationClick(e, 'location')}}><Link to='/'>Расположение</Link></li>
               <li className='header-ul-li' onClick={(e) => {handleLinkClick(); handleLocationClick(e, 'contacts')}}><Link to='/'>Контакты</Link></li>
+              <Link to='/profile' className='header-ul-li' onClick={() => {handleLinkClick()}}>Личный кабинет</Link>
             </ul>
           </nav>
           <div className='header-callback'>

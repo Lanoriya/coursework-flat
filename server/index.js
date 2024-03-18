@@ -3,7 +3,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3001;
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
@@ -11,7 +11,7 @@ const Pool = require('pg').Pool;
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'FlatDB',
+  database: 'flatDB',
   password: 'artas',
   port: 5432,
 });
@@ -117,6 +117,60 @@ app.post('/api/admin/login', async (req, res) => {
   } catch (error) {
     console.error('Error during admin login:', error);
     return res.status(500).json({ error: 'Admin login failed' });
+  }
+});
+
+// Регистрация пользователя
+app.post('/api/user/register', async (req, res) => {
+  const { username, password } = req.body;
+
+  // Хешируйте пароль перед сохранением его в базе данных
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  try {
+    const user = await pool.query(
+      'INSERT INTO Users (username, password, role) VALUES ($1, $2, $3) RETURNING *',
+      [username, hashedPassword, 'user'] // Установите роль 'user'
+    );
+
+    // Создайте JWT токен и отправьте его пользователю, если это необходимо
+    const token = jwt.sign({ username, role: 'user' }, secretKey);
+
+    res.status(201).json({ message: 'Пользователь зарегистрирован', token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Ошибка регистрации пользователя' });
+  }
+});
+
+// Вход пользователя
+app.post('/api/user/login', async (req, res) => {
+  console.log('Received user login request');
+  const { username, password } = req.body;
+  try {
+    const user = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+    if (user.rows.length === 0) {
+      // Пользователь не существует
+      return res.status(401).send('Пользователь с таким именем не найден');
+    }
+
+    const hashedPassword = user.rows[0].password;
+    const passwordMatch = await bcrypt.compare(password, hashedPassword);
+
+    if (passwordMatch) {
+      // Верный логин и пароль
+      const token = jwt.sign({ userId: user.rows[0].id, username, role: 'user' }, secretKey, {
+        expiresIn: '12h',
+      });
+      res.cookie('userToken', token, { httpOnly: true, maxAge: 3600000, sameSite: 'None', secure: true, path: '/' });
+      return res.status(200).json({ message: 'Успешный вход пользователя', userId: user.rows[0].id, token });
+    } else {
+      // Верный логин, но неверный пароль
+      return res.status(401).send('Неверный пароль');
+    }
+  } catch (error) {
+    console.error('Error during user login:', error);
+    return res.status(500).json({ error: 'Ошибка входа пользователя' });
   }
 });
 

@@ -304,6 +304,14 @@
   text-align: center;
 }
 
+.useless-block-text {
+  transition: opacity 0.5s ease-in-out; /* добавляем плавный переход */
+}
+
+.useless-block-text.visible {
+  opacity: 1;
+}
+
 .useless-block-text::before {
   content: "";
   position: absolute;

@@ -397,40 +397,41 @@ function MainContent() {
         </div>
         <div className='location-map'>
           <div id="map">
-            <div style={{ position: 'relative', overflow:'hidden'}}><a href="https://yandex.ru/maps/55/tyumen/?utm_medium=mapframe&utm_source=maps" style={{color: '#eee', fontSize: '12px', position: 'absolute', top: '0px'}}>Тюмень</a><a href="https://yandex.ru/maps/55/tyumen/?ll=65.540896%2C57.108443&utm_medium=mapframe&utm_source=maps&z=15" style={{color: '#eee', fontSize: '12px', position: 'absolute', top: '14px'}}>Яндекс Карты</a><iframe title="map" src="https://yandex.ru/map-widget/v1/?ll=65.540896%2C57.108443&z=15" width="860" height="600" frameBorder="1" style={{position: 'relative', marginLeft: 'auto', marginRight: 'auto'}}></iframe></div>
+            <div style={{ position: 'relative', overflow: 'hidden' }}><a href="https://yandex.ru/maps/55/tyumen/?utm_medium=mapframe&utm_source=maps" style={{ color: '#eee', fontSize: '12px', position: 'absolute', top: '0px' }}>Тюмень</a><a href="https://yandex.ru/maps/55/tyumen/?ll=65.540896%2C57.108443&utm_medium=mapframe&utm_source=maps&z=15" style={{ color: '#eee', fontSize: '12px', position: 'absolute', top: '14px' }}>Яндекс Карты</a><iframe title="map" src="https://yandex.ru/map-widget/v1/?ll=65.540896%2C57.108443&z=15" width="860" height="600" frameBorder="1" style={{ position: 'relative', marginLeft: 'auto', marginRight: 'auto' }}></iframe></div>
           </div>
         </div>
       </div>
-      <div className='useless-block'>
-      {isRequestSent ? (
+      <div className={`useless-block ${isRequestSent ? 'visible' : ''}`}>
+        {isRequestSent ? (
           <div className='useless-block-text useless-block-ready'>
             <h3>Заявка успешно отправлена</h3>
           </div>
         ) : (
-        <div className='container useless-block-text'>
-          <h3>Хотите квартиру мечты?</h3>
-          <p>Все возможно в Микрорайоне «Lanoriya»</p>
-          <form>
-            <div className='form-block'>
-              <input type="text" placeholder='Имя' value={name} onChange={handleNameChange} />
-              <InputMask
-                mask="+7 (999) 99-99-999"
-                maskChar="_"
-                placeholder="Телефон"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-              <button className='callback-tel-pop' type="button" onClick={handleSubmit}>Отправить заявку</button>
-            </div>
-            <p>
-              Нажимая на кнопку, вы принимаете
-              <a className="footer-text--a" href="/policy"> политику конфиденциальности</a>
-            </p>
-            {error && <p className="error-message">{error}</p>}
-          </form>
-        </div>
+          <div className='container useless-block-text'>
+            <h3>Хотите квартиру мечты?</h3>
+            <p>Все возможно в Микрорайоне «Lanoriya»</p>
+            <form>
+              <div className='form-block'>
+                <input type="text" placeholder='Имя' value={name} onChange={handleNameChange} />
+                <InputMask
+                  mask="+7 (999) 99-99-999"
+                  maskChar="_"
+                  placeholder="Телефон"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+                <button className='callback-tel-pop' type="button" onClick={handleSubmit}>Отправить заявку</button>
+              </div>
+              <p>
+                Нажимая на кнопку, вы принимаете
+                <a className="footer-text--a" href="/policy"> политику конфиденциальности</a>
+              </p>
+              {error && <p className="error-message">{error}</p>}
+            </form>
+          </div>
         )}
       </div>
+
       <div className='container container-contacts' id='contacts'>
         <h2 className='contacts-h2' id='contacts'>Контакты</h2>
         <div className='contacts-info'>

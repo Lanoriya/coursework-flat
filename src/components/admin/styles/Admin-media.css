@@ -26,18 +26,18 @@
     width: 250px;
     height: 100%;
     background-color: #333;
-    transition: left 0.3s ease;
+    transition: left 0.6s ease;
     z-index: 5;
   }
 
   .menu-open {
     position: fixed;
     top: 0;
-    left: 0px; /* Adjust the initial position off-screen */
+    left: 0; /* Adjust the initial position off-screen */
     width: 100%;
     height: 100%;
     background-color: #333;
-    transition: left 0.3s ease;
+    transition: left 0.6s ease;
   }
 
   .menu-open .admin-aside-btn {
