@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-// import './styles/UserLogin.css';
 
 function UserLogin() {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
+    role: 'user',
   });
+
+  const [isRegistering, setIsRegistering] = useState(false); // Состояние для отслеживания режима регистрации
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,12 +44,42 @@ function UserLogin() {
     }
   };
 
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    // Отправка данных о регистрации на сервер
+    try {
+      const response = await fetch('http://localhost:3001/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        // Редирект или отображение сообщения об успешной регистрации
+        console.log('Регистрация прошла успешно');
+      } else {
+        // Ошибка регистрации
+        console.error('Ошибка регистрации пользователя');
+      }
+    } catch (error) {
+      console.error('Ошибка при отправке запроса:', error);
+    }
+  };
+
+  const handleToggleMode = () => {
+    // Переключение между режимами входа и регистрации
+    setIsRegistering(!isRegistering);
+  };
+
   return (
     <div className='user-login'>
       <div className='user-container'>
         <div className='user-form'>
-          <h2>Вход для пользователя</h2>
-          <form onSubmit={handleLogin}>
+          <h2>{isRegistering ? 'Регистрация' : 'Вход для пользователя'}</h2>
+          <form onSubmit={isRegistering ? handleRegister : handleLogin}>
             <div>
               <label htmlFor="username">Имя пользователя</label>
               <input
@@ -68,7 +100,10 @@ function UserLogin() {
                 onChange={handleChange}
               />
             </div>
-            <button type="submit">Войти</button>
+            <div className='login-btns'>
+              <button type="submit">{isRegistering ? 'Зарегистрировать' : 'Войти'}</button>
+              <button type="button" onClick={handleToggleMode}>{isRegistering ? 'Страница входа' : 'Страница регистрации'}</button>
+            </div>
           </form>
         </div>
       </div>

@@ -1,4 +1,4 @@
-.admin-login {
+.user-login {
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -6,7 +6,7 @@
   align-items: center;
 }
 
-.admin-container {
+.user-container {
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -17,14 +17,14 @@
   z-index: 1;
 }
 
-.admin-container h2 div {
+.user-container h2 div {
   color: #fff;
 }
 
-.admin-login::before {
+.user-login::before {
   content: '';
   position: absolute;
-  background-image: url(../imgs/bg.jpg);
+  background-image: url(../styles/bg.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center top;
@@ -35,7 +35,7 @@
   z-index: 0;
 }
 
-.admin-login::after {
+.user-login::after {
   content: '';
   position: absolute;
   background: #000;
@@ -47,24 +47,24 @@
   z-index: 0;
 }
 
-.admin-form form {
+.user-form form {
   margin-top: 16px;
   color: #fff;
 }
 
-.admin-form h2 {
+.user-form h2 {
   font-size: 20px;
   color: #fff;
 }
 
-.admin-form div {
+.user-form div {
   display: flex;
   flex-direction: column;
   gap: 16px;
   margin-bottom: 16px;
 }
 
-.admin-form input {
+.user-form input {
   background: rgba(255, 255, 255, 0.2);
   border: none;
   outline: none;
@@ -73,7 +73,11 @@
   font-size: 16px;
 }
 
-.admin-form button {
+.login-btns button:last-child {
+  margin-top: 0;
+}
+
+.user-form button {
   padding: 4px 32px;
   border: none;
   color: #fff;
@@ -85,6 +89,6 @@
   margin-top: 48px;
 }
 
-.admin-form button:hover {
+.user-form button:hover {
   color: rgba(255, 255, 255, 0.6);
 }

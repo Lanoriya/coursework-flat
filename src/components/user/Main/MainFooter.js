@@ -1,8 +1,12 @@
-import { Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import Logo from '../Main/imgs/logo-white.png';
 
 function MainFooter() {
-  return(
+  const location = useLocation();
+  const isProfile = location.pathname === '/profile';
+  const isPageValid = isProfile;
+
+  return !isPageValid ? (
     <footer className='main-footer'>
       <div className="container footer-container">
         <Link to='/' className='footer-logo'><img className='header-logo footer-logo' src={Logo} alt='logo' /></Link>
@@ -12,7 +16,7 @@ function MainFooter() {
         </div>
       </div>
     </footer>
-  )
+  ) : null;
 }
 
 export default MainFooter;
