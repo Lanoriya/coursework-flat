@@ -174,6 +174,35 @@ app.post('/api/user/login', async (req, res) => {
   }
 });
 
+app.get('/api/user/profile', async (req, res) => {
+  try {
+    const userToken = req.cookies.userToken;
+
+    // Проверяем, есть ли токен
+    if (!userToken) {
+      return res.status(401).json({ error: 'Токен пользователя отсутствует' });
+    }
+
+    // Расшифровываем токен, чтобы получить данные пользователя
+    const decoded = jwt.verify(userToken, secretKey);
+
+    // Предполагается, что данные о пользователе хранятся в базе данных
+    // Выполняем запрос к базе данных для получения данных о пользователе по имени пользователя
+    const userData = await pool.query('SELECT * FROM Users WHERE username = $1', [decoded.username]);
+
+    // Проверяем, найден ли пользователь в базе данных
+    if (userData.rows.length === 0) {
+      return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+
+    // Отправляем данные о пользователе клиенту
+    res.status(200).json(userData.rows[0]);
+  } catch (error) {
+    console.error('Ошибка при получении информации о пользователе:', error);
+    res.status(500).json({ error: 'Ошибка при получении информации о пользователе' });
+  }
+});
+
 // Маршрут для доступа к административным функциям
 app.get('/api/admin', checkAdminToken, (req, res) => {
   res.json({ message: 'Добро пожаловать, администратор!' });
