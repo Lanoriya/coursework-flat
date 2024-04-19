@@ -6,8 +6,8 @@ import MainContent from './MainContent/MainContent';
 import Apartments from '../Apartments/Apartments';
 import ApartmentPage from '../ApartmentPage/ApartmentPage';
 import Policy from '../Policy/Policy';
-import UserProfile from '../Profile/ProfileLogin/UserProfile';
-import UserLogin from '../Profile/ProfileLogin/UserLogin';
+import UserLogin from '../Profile/UserLogin';
+import UserProfile from '../Profile/UserProfile';
 import '../styles/userlogin.css'
 import './styles/Footer.css';
 import '../styles/AboutHeader.css';

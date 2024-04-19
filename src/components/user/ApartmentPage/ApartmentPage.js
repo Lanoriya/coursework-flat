@@ -49,7 +49,7 @@ function ApartmentPage() {
             <p>Площадь: {apartment.area}м²</p>
             <p>Этаж: {apartment.floor}</p>
             <p>Цена: {apartment.price}</p>
-            <button className="callback-tel-pop" onClick={openPopup}>Оставить заявку</button>
+            <button className="callback-tel-pop" onClick={openPopup}>Добавить в корзину</button>
           </div>
         </div>
       </div>

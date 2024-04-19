@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import './styles/AdminPanel.css';
-import './styles/Editor.css';
-import './styles/Review.css';
-import './styles/Orders.css';
-import './styles/Admin-media.css';
 import burger from './imgs/burger.svg';
 import Orders from './orders/Orders';
 import Editor from './editor/Editor';
 import Review from './review/Review';
 import AdminMain from './admin-main/AdminMain';
+import './styles/AdminPanel.css';
+import './styles/Editor.css';
+import './styles/Review.css';
+import './styles/Orders.css';
+import './styles/Admin-media.css';
 
 function AdminPanel() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
