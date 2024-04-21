@@ -30,20 +30,18 @@ function Main() {
 
   return (
     <div className='main'>
-      <MainHeader />
-
+      { !window.location.pathname.includes('userLogin') && <MainHeader />}
       <Routes>
         <Route path="/apartments" element={<Apartments />} />
         <Route path="/apartments/flat/:id" element={<ApartmentPage />} />
         <Route path="/policy" element={<Policy />} />
         <Route
-          path="/profile"
+          path="/userLogin"
           element={isAuthenticated ? <UserProfile username={username} /> : <UserLogin />}
         />
         <Route path="/" element={<MainContent />} />
       </Routes>
-
-      <MainFooter />
+      { !window.location.pathname.includes('userLogin') && <MainFooter />}
     </div>
   );
 }

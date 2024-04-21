@@ -1,0 +1,12 @@
+.favorites-container * {
+  color: #fff;
+}
+
+.favorites-ul {
+  display: flex;
+}
+
+.favorites-img {
+  margin-top: 16px;
+  width: 200px;
+}

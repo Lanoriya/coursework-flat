@@ -18,6 +18,10 @@ function ApartmentPage() {
 
   const submitForm = (data) => {
     console.log('Отправка данных:', data);
+    // Добавление квартиры в корзину (localstorage)
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    cartItems.push(apartment);
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
   };
 
   useEffect(() => {
@@ -25,7 +29,7 @@ function ApartmentPage() {
     axios.get(`http://localhost:3001/api/apartments/${id}`)
       .then((response) => {
         setApartment(response.data);
-        console.log(response.data)
+        console.log(response.data);
       })
       .catch((error) => {
         console.error('Error fetching apartment details:', error);
@@ -49,7 +53,8 @@ function ApartmentPage() {
             <p>Площадь: {apartment.area}м²</p>
             <p>Этаж: {apartment.floor}</p>
             <p>Цена: {apartment.price}</p>
-            <button className="callback-tel-pop" onClick={openPopup}>Добавить в корзину</button>
+            <button className="callback-tel-pop" onClick={submitForm}>Добавить в корзину</button>
+            <button className="callback-tel-pop add-to-cart" onClick={openPopup}>Сделать звонок</button>
           </div>
         </div>
       </div>

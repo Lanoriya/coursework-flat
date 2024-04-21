@@ -88,6 +88,7 @@ function UserLogin() {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
+                autoComplete="current-login"
               />
             </div>
             <div>
@@ -98,6 +99,7 @@ function UserLogin() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
+                autoComplete="current-password"
               />
             </div>
             <div className='login-btns'>

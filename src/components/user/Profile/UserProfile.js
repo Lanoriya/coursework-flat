@@ -6,6 +6,7 @@ import Deals from './Deals';
 import UserMain from './UserMain';
 import '../styles/UserProfile.css';
 import '../styles/UserProfile-media.css';
+import '../styles/Favorites.css';
 
 
 function UserProfile() {
@@ -59,6 +60,7 @@ function UserProfile() {
           <img className='user-aside-img' src={burger} alt='burger'/>
         </button>
         <nav className='user-aside-nav'>
+          <Link to='/' className='aside-nav-btn' onClick={handleLinkClick}>Главная</Link>
           <Link to='' className='aside-nav-btn' onClick={handleLinkClick}>Профиль</Link>
           <Link to='favorites' className='aside-nav-btn' onClick={handleLinkClick}>Избранное</Link>
           <Link to='deals' className='aside-nav-btn' onClick={handleLinkClick}>Сделки</Link>
