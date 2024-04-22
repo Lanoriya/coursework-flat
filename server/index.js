@@ -199,6 +199,24 @@ app.get('/api/user/profile', async (req, res) => {
   }
 });
 
+app.post('/api/user/updateProfile', async (req, res) => {
+  try {
+    const userToken = req.cookies.userToken;
+    const { name, phone_number } = req.body; // Получаем новые данные имени и номера телефона из тела запроса
+
+    // Расшифровываем токен, чтобы получить данные пользователя
+    const decoded = jwt.verify(userToken, secretKey);
+
+    // Выполняем запрос к базе данных для обновления данных пользователя
+    await pool.query('UPDATE UserSettings SET name = $1, phone_number = $2 WHERE user_id = $3', [name, phone_number, decoded.userId]);
+
+    res.status(200).json({ message: 'Профиль успешно обновлен' });
+  } catch (error) {
+    console.error('Ошибка при обновлении профиля:', error);
+    res.status(500).json({ error: 'Ошибка при обновлении профиля' });
+  }
+});
+
 app.post('/api/user/uploadPhoto', upload.single('photo'), async (req, res) => {
   try {
     const userToken = req.cookies.userToken;
@@ -222,6 +240,8 @@ app.post('/api/user/uploadPhoto', upload.single('photo'), async (req, res) => {
     res.status(500).json({ error: 'Ошибка при загрузке фотографии' });
   }
 });
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Маршрут для доступа к административным функциям
 app.get('/api/admin', checkAdminToken, (req, res) => {

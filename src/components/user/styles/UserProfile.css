@@ -148,3 +148,22 @@
   gap: 8px;
   margin-top: 16px;
 }
+
+.user-about-bio *{
+  color: #fff;
+}
+
+.user-about-btn {
+  margin-top: 16px;
+  color: #000;
+}
+
+.user-about-bio input {
+  color: #000;
+  margin: 8px 16px;
+}
+
+#photo-upload {
+  color: #fff;
+  margin: 0;
+}
