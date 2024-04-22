@@ -6,6 +6,10 @@ const port = 3001;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const multer  = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const fs = require('fs').promises;
+const path = require('path');
 
 const Pool = require('pg').Pool;
 const pool = new Pool({
@@ -195,6 +199,30 @@ app.get('/api/user/profile', async (req, res) => {
   }
 });
 
+app.post('/api/user/uploadPhoto', upload.single('photo'), async (req, res) => {
+  try {
+    const userToken = req.cookies.userToken;
+
+    // Расшифровываем токен, чтобы получить данные пользователя
+    const decoded = jwt.verify(userToken, secretKey);
+
+    const photoExtension = req.file.originalname.split('.').pop(); // Получаем расширение файла
+    const newFileName = `logo_${decoded.userId}.${photoExtension}`; // Формируем новое имя файла
+    const photoUrl = path.join('uploads', newFileName); // Формируем путь к новому файлу
+
+    // Сохраняем фотографию с новым именем
+    await fs.rename(req.file.path, path.join(__dirname, photoUrl));
+
+    // Сохраняем путь к фотографии в базе данных для данного пользователя
+    await pool.query('UPDATE UserSettings SET photo_url = $1 WHERE user_id = $2', [photoUrl, decoded.userId]);
+
+    res.status(200).json({ message: 'Фотография успешно загружена' });
+  } catch (error) {
+    console.error('Ошибка при загрузке фотографии:', error);
+    res.status(500).json({ error: 'Ошибка при загрузке фотографии' });
+  }
+});
+
 // Маршрут для доступа к административным функциям
 app.get('/api/admin', checkAdminToken, (req, res) => {
   res.json({ message: 'Добро пожаловать, администратор!' });
@@ -344,7 +372,6 @@ app.get('/api/apartments', async (req, res) => {
     res.status(500).json({ error: 'Error retrieving apartments' });
   }
 });
-
 
 app.get('/api/apartments/:id', async (req, res) => {
   const apartmentId = req.params.id;
