@@ -80,10 +80,16 @@ app.post('/register', async (req, res) => {
       [username, hashedPassword, role]
     );
 
+    const userId = user.rows[0].id;
+    await pool.query(
+      'INSERT INTO UserSettings (user_id) VALUES ($1)',
+      [userId]
+    );
+
     // Создайте JWT токен и отправьте его пользователю, если это необходимо
     const token = jwt.sign({ username, role }, secretKey);
 
-    res.status(201).json({ message: 'Пользователь зарегистрирован', token });
+    res.status(201).json({ message: 'Пользователь зарегистрирован', token, });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Ошибка регистрации пользователя' });
@@ -117,29 +123,6 @@ app.post('/api/admin/login', async (req, res) => {
   } catch (error) {
     console.error('Error during admin login:', error);
     return res.status(500).json({ error: 'Admin login failed' });
-  }
-});
-
-// Регистрация пользователя
-app.post('/api/user/register', async (req, res) => {
-  const { username, password } = req.body;
-
-  // Хешируйте пароль перед сохранением его в базе данных
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  try {
-    const user = await pool.query(
-      'INSERT INTO Users (username, password, role) VALUES ($1, $2, $3) RETURNING *',
-      [username, hashedPassword, 'user'] // Установите роль 'user'
-    );
-
-    // Создайте JWT токен и отправьте его пользователю, если это необходимо
-    const token = jwt.sign({ username, role: 'user' }, secretKey);
-
-    res.status(201).json({ message: 'Пользователь зарегистрирован', token });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Ошибка регистрации пользователя' });
   }
 });
 
@@ -195,8 +178,17 @@ app.get('/api/user/profile', async (req, res) => {
       return res.status(404).json({ error: 'Пользователь не найден' });
     }
 
+    // Получаем данные о пользователе из таблицы UserSettings
+    const userSettingsData = await pool.query('SELECT * FROM UserSettings WHERE user_id = $1', [userData.rows[0].id]);
+
+    // Предполагаем, что пользователь найден и имеет настройки в UserSettings
+    const userProfileData = {
+      ...userData.rows[0],
+      settings: userSettingsData.rows[0] // Добавляем информацию о настройках пользователя
+    };
+
     // Отправляем данные о пользователе клиенту
-    res.status(200).json(userData.rows[0]);
+    res.status(200).json(userProfileData);
   } catch (error) {
     console.error('Ошибка при получении информации о пользователе:', error);
     res.status(500).json({ error: 'Ошибка при получении информации о пользователе' });

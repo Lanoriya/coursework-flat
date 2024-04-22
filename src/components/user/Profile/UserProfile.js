@@ -7,6 +7,7 @@ import UserMain from './UserMain';
 import '../styles/UserProfile.css';
 import '../styles/UserProfile-media.css';
 import '../styles/Favorites.css';
+import '../styles/Deals.css';
 
 
 function UserProfile() {

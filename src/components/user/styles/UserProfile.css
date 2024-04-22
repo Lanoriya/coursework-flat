@@ -124,3 +124,12 @@
 .user-page option:hover {
   background: rgba(255, 255, 255, 0.5);
 }
+
+.user-page *::-webkit-scrollbar {
+  width: 4px;
+}
+
+.user-page *::-webkit-scrollbar-thumb {
+  border-radius: 16px;
+  background-color: #d1d1d1;
+}

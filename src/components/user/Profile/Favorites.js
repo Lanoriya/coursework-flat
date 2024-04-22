@@ -52,21 +52,17 @@ function Favorites() {
       <ul className='favorites-ul'>
         {favoriteApartments.map((apartment, index) => (
           <li className='favorites-li' key={index}>
-            <p>Квартира №{apartment.apartment_number}</p>
-            <p>Площадь: {apartment.area}м²</p>
-            <p>Этаж: {apartment.floor}</p>
-            <p>Цена: {apartment.price}</p>
-            <div 
-              className={`favorites-img-container ${hoveredIndex === index ? 'image-hovered' : ''}`}
-              onMouseEnter={() => setHoveredIndex(index)} // Устанавливаем индекс, когда курсор наведен на изображение
-              onMouseLeave={() => setHoveredIndex(null)} // Сбрасываем индекс, когда курсор покидает изображение
-            >
-              <img 
-                className='favorites-img'
-                src={`http://localhost:3001/api/image/${apartment.image_id}`} 
-                alt={`Apartment ${apartment.apartment_number}`}
-              />
+            <div className='favorites-li-p'>
+              <p>Квартира №{apartment.apartment_number}</p>
+              <p>Площадь: {apartment.area}м²</p>
+              <p>Этаж: {apartment.floor}</p>
+              <p>Цена: {apartment.price}</p>
             </div>
+            <img
+              className='favorites-img'
+              src={`http://localhost:3001/api/image/${apartment.image_id}`}
+              alt={`Apartment ${apartment.apartment_number}`}
+            />
             <button className='favorites-btn favorites-remover' onClick={() => removeFromFavorites(index)}>Удалить из избранного</button>
             <button className='favorites-btn favorites-deal' onClick={() => addToDeal(index)}>
               {deals.some(deal => deal.id === apartment.id) ? 'Очистить сделки' : 'Начать сделку'}

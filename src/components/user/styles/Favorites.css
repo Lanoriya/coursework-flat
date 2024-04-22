@@ -2,9 +2,20 @@
   color: #fff;
 }
 
-.favorites-ul {
+.favorites-ul, .deals-ul {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 20px;
+}
+
+.favorites-li, .deals-li{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  border-radius: 16px;
+  background: #00000062;
 }
 
 .favorites-img-container {
@@ -13,7 +24,8 @@
 
 .favorites-img {
   margin-top: 16px;
-  width: inherit;
+  max-height: 250px;
+  width: 100%;
 }
 
 .image-hovered {
