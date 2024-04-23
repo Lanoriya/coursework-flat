@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 function Favorites() {
   const [favoriteApartments, setFavoriteApartments] = useState([]);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
   const [deals, setDeals] = useState([]);
 
   useEffect(() => {
@@ -46,7 +45,7 @@ function Favorites() {
       localStorage.setItem('deals', JSON.stringify(updatedDeals));
     }
   };
-
+  
   return (
     <div className='favorites-container'>
       <ul className='favorites-ul'>

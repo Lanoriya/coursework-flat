@@ -243,6 +243,56 @@ app.post('/api/user/uploadPhoto', upload.single('photo'), async (req, res) => {
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+app.get('/api/user/deals', async (req, res) => {
+  try {
+    const userToken = req.cookies.userToken;
+
+    // Проверяем, есть ли токен
+    if (!userToken) {
+      return res.status(401).json({ error: 'Токен пользователя отсутствует' });
+    }
+
+    // Расшифровываем токен, чтобы получить данные пользователя
+    const decoded = jwt.verify(userToken, secretKey);
+
+    // Выполняем запрос к базе данных для получения заявок пользователя
+    const userDeals = await pool.query('SELECT apartment_id, status, created_at FROM orders WHERE user_id = $1', [decoded.userId]);
+
+    // Отправляем данные о заявках пользователя клиенту
+    res.status(200).json(userDeals.rows);
+  } catch (error) {
+    console.error('Ошибка при получении заявок пользователя:', error);
+    res.status(500).json({ error: 'Ошибка при получении заявок пользователя' });
+  }
+});
+
+app.post('/api/user/startDeal', async (req, res) => {
+  try {
+    const userToken = req.cookies.userToken;
+
+    // Проверяем, есть ли токен
+    if (!userToken) {
+      return res.status(401).json({ error: 'Токен пользователя отсутствует' });
+    }
+
+    const decoded = jwt.verify(userToken, secretKey);
+
+    // Получаем данные из тела запроса
+    const { name, phoneNumber, apartmentId, status, userId } = req.body;
+
+    // Выполняем запрос к базе данных для создания сделки
+    const newDeal = await pool.query(
+      'INSERT INTO orders (name, phone_number, apartment_id, status, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [name, phoneNumber, apartmentId, status, userId]
+    );
+
+    res.status(200).json(newDeal.rows[0]); // Отправляем созданную сделку клиенту
+  } catch (error) {
+    console.error('Ошибка при начале сделки:', error);
+    res.status(500).json({ error: 'Ошибка при начале сделки' });
+  }
+});
+
 // Маршрут для доступа к административным функциям
 app.get('/api/admin', checkAdminToken, (req, res) => {
   res.json({ message: 'Добро пожаловать, администратор!' });
@@ -463,13 +513,13 @@ app.put('/api/admin/orders', checkAdminToken, async (req, res) => {
     for (const order of updatedOrders) {
       const query = `
         UPDATE orders
-        SET name = $1, number = $2, status = $3, about = $4
+        SET name = $1, phone_number = $2, status = $3, about = $4
         WHERE order_id = $5
       `;
 
       await pool.query(query, [
         order.name,
-        order.number,
+        order.phone_number,
         order.status,
         order.about,
         order.order_id,
@@ -507,11 +557,13 @@ app.delete('/api/admin/orders/:id', checkAdminToken, async (req, res) => {
 });
 
 app.post('/submitOrder', async (req, res) => {
-  const { name, phone } = req.body;
+  const { name, phone_number, apartment_id, user_id } = req.body;
   try {
-   const result = await pool.query('INSERT INTO orders (name, number) VALUES ($1, $2) RETURNING *', [
+    const result = await pool.query('INSERT INTO orders (name, phone_number, apartment_id, user_id) VALUES ($1, $2, $3, $4) RETURNING *', [
       name,
-      phone,
+      phone_number,
+      apartment_id,
+      user_id,
     ]);
     res.status(200).json({ message: 'Данные успешно получены и обработаны' });
   } catch (error) {

@@ -11,12 +11,12 @@ import '../styles/Deals.css';
 
 
 function UserProfile() {
-  const [username, setUsername] = useState('');
+  const [userData, setUserData] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const userToken = document.cookie.split('; ').find(row => row.startsWith('userToken=')).split('=')[1];
 
   useEffect(() => {
-    const userToken = document.cookie.split('; ').find(row => row.startsWith('userToken=')).split('=')[1];
-    async function fetchUserData() {
+    const fetchUserData = async () => {
       try {
         const response = await fetch('http://localhost:3001/api/user/profile', {
           method: 'GET',
@@ -27,15 +27,14 @@ function UserProfile() {
         });
         if (response.ok) {
           const userData = await response.json();
-          console.log(userData)
-          setUsername(userData.username); // Предполагается, что имя пользователя содержится в объекте данных о пользователе
+          setUserData(userData); // Устанавливаем полученные данные о пользователе в состояние
         } else {
           console.error('Failed to fetch user data');
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
-    }
+    };
 
     fetchUserData();
   }, []); // Запрос будет выполнен только один раз после загрузки компонента
@@ -53,7 +52,7 @@ function UserProfile() {
   return (
     <div className="user-page">
       <header className='user-header'>
-        <p className='user-header--p'>Здравствуйте! {username}</p>
+        <p className='user-header--p'>Здравствуйте! {userData && userData.username}</p>
       </header>
 
       <aside className={`user-aside ${isMenuOpen ? 'menu-open' : ''}`}>
@@ -70,9 +69,9 @@ function UserProfile() {
 
       <main className='user-main'>
         <Routes>
-          <Route path='' element={<UserMain />} />
+          <Route path='' element={<UserMain userData={userData} userToken={userToken} setUserData={setUserData} />} />
           <Route path='favorites' element={<Favorites />} />
-          <Route path='deals' element={<Deals />} />
+          <Route path='deals' element={<Deals userData={userData} userToken={userToken} setUserData={setUserData} />} />
         </Routes>
       </main>
     </div>

@@ -10,7 +10,7 @@ function Orders() {
   const [selectedStatus, setSelectedStatus] = useState("Все");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [orderToDelete, setOrderToDelete] = useState(null);
-  
+
 
   const showNotification = (message) => {
     setNotifications([...notifications, message]);
@@ -19,9 +19,9 @@ function Orders() {
   const fetchOrders = useCallback(() => {
     let url = `http://localhost:3001/api/admin/orders`;
 
-  if (selectedStatus && selectedStatus !== "Все") {
-    url += `?status=${selectedStatus}`;
-  }
+    if (selectedStatus && selectedStatus !== "Все") {
+      url += `?status=${selectedStatus}`;
+    }
 
     axios.get(url, {
       withCredentials: true,
@@ -49,8 +49,8 @@ function Orders() {
       return;
     }
     setIsSaving(true);
-    
-      axios
+
+    axios
       .put('http://localhost:3001/api/admin/orders', orders, {
         withCredentials: true,
       })
@@ -71,24 +71,19 @@ function Orders() {
 
   const handleStatusChange = (event) => {
     setSelectedStatus(event.target.value);
-    fetchOrders(); // При изменении статуса делаем новый запрос
   };
 
   const handleDeleteButtonClick = (orderId) => {
-    handleDeleteBlock(orderId);
-  };
-
-  const handleDeleteBlock = (orderId) => {
-    setOrderToDelete(orderId)
+    setOrderToDelete(orderId);
     setShowDeleteModal(true);
-  }
+  };
 
   const handleDeleteConfirm = () => {
     if (isSaving) {
       return;
     }
     setIsSaving(true);
-    
+
     axios
       .delete(`http://localhost:3001/api/admin/orders/${orderToDelete}`, {
         withCredentials: true,
@@ -112,65 +107,69 @@ function Orders() {
 
   const handleDeleteCancel = () => {
     setShowDeleteModal(false);
-  };  
+  };
 
   return (
     <div className='order-content'>
-    <div className='orders-container'>
-      <div className='apartment-name orders-name'>
-        <p className='orders-p'>Имя</p>
-        <p className='orders-p'>Номер</p>
-        <p className='orders-p'>
-        <span>Статус</span>
-        <select value={selectedStatus} onChange={handleStatusChange}>
-            <option value="Все">Все</option>
-            <option value="Не просмотрено">Не просмотрено</option>
-            <option value="Выполнено">Выполнено</option>
-            <option value="На выполнении">На выполнении</option>
-          </select>
-        </p>
-        <p className='orders-p'>Комментарий</p>
-        <button className='admin-btn review-btn' onClick={handleSave}>Сохранить</button>
-      </div>
-      <div className='orders-items'>
-        {orders.map(order => (
-          <div key={order.order_id} className='orders-item apartment-items'>
-            <div className='orders-item-value apartment-item-value'>
-              <input
-                type='text'
-                value={order.name}
-                onChange={(event) => handleChange(event, order.order_id, "name")}
-              />
+      <div className='orders-container'>
+        <div className='apartment-name orders-name'>
+          <p className='orders-p'>Имя</p>
+          <p className='orders-p'>Номер</p>
+          <p className='orders-p'>
+            <span>Статус</span>
+            <select value={selectedStatus} onChange={handleStatusChange}>
+              <option value="Все">Все</option>
+              <option value="Не просмотрено">Не просмотрено</option>
+              <option value="Выполнено">Выполнено</option>
+              <option value="На выполнении">На выполнении</option>
+            </select>
+          </p>
+          <p className='orders-p'>Комментарий</p>
+          <p className='orders-p'>Дата создания</p>
+          <button className='admin-btn review-btn' onClick={handleSave}>Сохранить</button>
+        </div>
+        <div className='orders-items'>
+          {orders.map(order => (
+            <div key={order.order_id} className='orders-item apartment-items'>
+              <div className='orders-item-value apartment-item-value'>
+                <input
+                  type='text'
+                  value={order.name}
+                  onChange={(event) => handleChange(event, order.order_id, "name")}
+                />
+              </div>
+              <div className='orders-item-value apartment-item-value'>
+                <input
+                  type='text'
+                  value={order.phone_number}
+                  onChange={(event) => handleChange(event, order.order_id, "number")}
+                />
+              </div>
+              <div className='orders-item-value apartment-item-value'>
+                <select
+                  value={order.status}
+                  onChange={(event) => handleChange(event, order.order_id, "status")}
+                >
+                  <option value="Не просмотрено">Не просмотрено</option>
+                  <option value="Выполнено">Выполнено</option>
+                  <option value="На выполнении">На выполнении</option>
+                </select>
+              </div>
+              <div className='orders-item-value apartment-item-value'>
+                <input
+                  type='text'
+                  value={order.about || ''}
+                  onChange={(event) => handleChange(event, order.order_id, "about")}
+                />
+              </div>
+              <div className='orders-item-value apartment-item-value'>
+                {order.created_at} {/* Выводим дату создания заказа */}
+                <div className='delete-btn-overlay' onClick={() => handleDeleteButtonClick(order.order_id)}></div>
+              </div>
             </div>
-            <div className='orders-item-value apartment-item-value'>
-              <input
-                type='text'
-                value={order.number}
-                onChange={(event) => handleChange(event, order.order_id, "number")}
-              />
-            </div>
-            <div className='orders-item-value apartment-item-value'>
-              <select
-                value={order.status}
-                onChange={(event) => handleChange(event, order.order_id, "status")}
-              >
-                <option value="Не просмотрено">Не просмотрено</option>
-                <option value="Выполнено">Выполнено</option>
-                <option value="На выполнении">На выполнении</option>
-              </select>
-            </div>
-            <div className='orders-item-value apartment-item-value'>
-              <input
-                type='text'
-                value={order.about || ''}
-                onChange={(event) => handleChange(event, order.order_id, "about")}
-              />
-              <div className='delete-btn-overlay' onClick={() => handleDeleteButtonClick(order.order_id)}></div>
-            </div>
-          </div>
-        ))}
-      </div>
-      {showDeleteModal && (
+          ))}
+        </div>
+        {showDeleteModal && (
           <div className='delete-modal'>
             <div className='delete-container'>
               <h3>Вы уверены, что хотите удалить этот заказ?</h3>
