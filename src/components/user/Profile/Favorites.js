@@ -28,7 +28,7 @@ function Favorites() {
     const apartmentToAdd = favoriteApartments[index];
 
     // Проверяем, существует ли уже сделка на эту квартиру
-    const isAlreadyInDeals = deals.some(deal => deal.id === apartmentToAdd.id);
+    const isAlreadyInDeals = deals.some(deal => deal.apartment_id === apartmentToAdd.apartment_id);
     if (!isAlreadyInDeals) {
       // Если сделки на квартиру нет, то добавляем её в массив сделок
       const updatedDeals = [...deals, apartmentToAdd];
@@ -37,12 +37,8 @@ function Favorites() {
       // Сохраняем обновленный массив сделок в localstorage
       localStorage.setItem('deals', JSON.stringify(updatedDeals));
     } else {
-      // Если сделка уже существует, то удаляем её из сделок
-      const updatedDeals = deals.filter(deal => deal.id !== apartmentToAdd.id);
-      setDeals(updatedDeals);
-
-      // Сохраняем обновленный массив сделок в localstorage
-      localStorage.setItem('deals', JSON.stringify(updatedDeals));
+      // Если сделка уже существует, выводим сообщение об ошибке
+      alert('Эта квартира уже добавлена в сделки.');
     }
   };
   
@@ -64,7 +60,7 @@ function Favorites() {
             />
             <button className='favorites-btn favorites-remover' onClick={() => removeFromFavorites(index)}>Удалить из избранного</button>
             <button className='favorites-btn favorites-deal' onClick={() => addToDeal(index)}>
-              {deals.some(deal => deal.id === apartment.id) ? 'Очистить сделки' : 'Начать сделку'}
+              {deals.some(deal => deal.apartment_id === apartment.apartment_id) ? 'Отменить сделку' : 'Начать сделку'}
             </button>
           </li>
         ))}

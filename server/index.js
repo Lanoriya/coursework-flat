@@ -268,15 +268,6 @@ app.get('/api/user/deals', async (req, res) => {
 
 app.post('/api/user/startDeal', async (req, res) => {
   try {
-    const userToken = req.cookies.userToken;
-
-    // Проверяем, есть ли токен
-    if (!userToken) {
-      return res.status(401).json({ error: 'Токен пользователя отсутствует' });
-    }
-
-    const decoded = jwt.verify(userToken, secretKey);
-
     // Получаем данные из тела запроса
     const { name, phoneNumber, apartmentId, status, userId } = req.body;
 

@@ -37,6 +37,11 @@ function Orders() {
     fetchOrders();
   }, [fetchOrders]);
 
+  const formatDateTime = (dateTimeString) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+    return new Date(dateTimeString).toLocaleString('ru-RU', options);
+  };
+
   const handleChange = (event, orderId, field) => {
     const updatedOrders = [...orders];
     const updatedOrderIndex = updatedOrders.findIndex((order) => order.order_id === orderId);
@@ -124,8 +129,9 @@ function Orders() {
               <option value="На выполнении">На выполнении</option>
             </select>
           </p>
-          <p className='orders-p'>Комментарий</p>
+          <p className='orders-p'>Айди квартиры</p>
           <p className='orders-p'>Дата создания</p>
+          <p className='orders-p'>Комментарий</p>
           <button className='admin-btn review-btn' onClick={handleSave}>Сохранить</button>
         </div>
         <div className='orders-items'>
@@ -158,12 +164,23 @@ function Orders() {
               <div className='orders-item-value apartment-item-value'>
                 <input
                   type='text'
-                  value={order.about || ''}
-                  onChange={(event) => handleChange(event, order.order_id, "about")}
+                  value={order.apartment_id || ''}
+                  onChange={(event) => handleChange(event, order.order_id, "apartment_id")}
                 />
               </div>
               <div className='orders-item-value apartment-item-value'>
-                {order.created_at} {/* Выводим дату создания заказа */}
+                <input 
+                  type='text'
+                  value={formatDateTime(order.created_at) || ''} 
+                  onChange={() => ''}
+                />
+              </div>
+              <div className='orders-item-value apartment-item-value'>
+                <input
+                  type='text'
+                  value={order.about || ''}
+                  onChange={(event) => handleChange(event, order.order_id, "about")}
+                />
                 <div className='delete-btn-overlay' onClick={() => handleDeleteButtonClick(order.order_id)}></div>
               </div>
             </div>
