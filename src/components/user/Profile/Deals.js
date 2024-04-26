@@ -1,74 +1,23 @@
 import React, { useState, useEffect } from 'react';
 
-function Deals({ userData, userToken }) {
+function Deals({ userData, userToken, activeDeals }) {
   const [storedDeal, setStoredDeal] = useState([]);
   const [statusDeal, setStatusDeal] = useState([]);
-  const [apartmentInfo, setApartmentInfo] = useState([]);
-  const [selectedApartment, setSelectedApartment] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [selectedApartment, setSelectedApartment] = useState(null);
   const [removePopup, setRemovePopup] = useState(false);
-
-  const fetchDeals = () => {
-    fetch(`http://localhost:3001/api/user/deals?userId=${userData.id}`, {
-      headers: {
-        'Authorization': `Bearer ${userToken}`
-      },
-      credentials: 'include'
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch deals.');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setStatusDeal(data);
-        const storedDeals = JSON.parse(localStorage.getItem('deals')) || [];
-        setStoredDeal(storedDeals);
-        localStorage.setItem('activeDeals', JSON.stringify(data));
-      })
-      .catch(error => {
-        console.error('Error fetching deals:', error);
-        console.error('Произошла ошибка при загрузке сделок.');
-      });
-  };
-
-  const fetchApartmentInfo = (apartmentId) => {
-    fetch(`http://localhost:3001/api/apartments/${apartmentId}`, {
-      headers: {
-        'Authorization': `Bearer ${userToken}`
-      },
-      credentials: 'include'
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch apartment info.');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setApartmentInfo(data);
-      })
-      .catch(error => {
-        console.error('Error fetching apartment info:', error);
-      });
-  };
-
-  const formatDateTime = (dateTimeString) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-    return new Date(dateTimeString).toLocaleString('ru-RU', options);
-  };
 
   const startDeal = (apartment_id) => {
     const selectedDeal = storedDeal.find(deal => deal.apartment_id === apartment_id);
+    console.log('Selected Deal:', selectedDeal); // Добавленный console.log
     setSelectedApartment(selectedDeal);
     setShowPopup(true);
   };
 
-  const cancelDeal = (apartment_id) => {
-    const selectedDeal = storedDeal.find(deal => deal.apartment_id === apartment_id);
-    setSelectedApartment(selectedDeal);
-    setRemovePopup(true);
+  const cancelStartDeal = () => {
+    setSelectedApartment(null);
+    setShowPopup(false);
+    setRemovePopup(false);
   };
 
   const confirmStartDeal = () => {
@@ -97,20 +46,15 @@ function Deals({ userData, userToken }) {
           throw new Error('Failed to start deal.');
         }
         setShowPopup(false);
-        fetchDeals();
         setSelectedApartment(null);
+        removeFromDeals(selectedApartment.apartment_id); // Удаление из списка сделок после начала сделки
+        window.location.reload();
       })
       .catch(error => {
         console.error('Error starting deal:', error);
         alert('Произошла ошибка при начале сделки.');
       });
-  };
-
-  const cancelStartDeal = () => {
-    setSelectedApartment(null);
-    setShowPopup(false);
-    setRemovePopup(false);
-  };
+  };  
 
   const removeFromDeals = (apartment_id) => {
     const index = storedDeal.findIndex(deal => deal.apartment_id === apartment_id);
@@ -129,62 +73,31 @@ function Deals({ userData, userToken }) {
   };
 
   useEffect(() => {
-    fetchDeals();
-  }, []);
-
-  useEffect(() => {
-    const fetchApartmentInfoForDeals = async () => {
-      const apartmentIds = statusDeal.map(item => item.apartment_id);
-      const promises = apartmentIds.map(apartmentId =>
-        fetchApartmentInfo(apartmentId)
-      );
-      await Promise.all(promises);
-    };
-
-    fetchApartmentInfoForDeals();
-  }, [statusDeal]);
+    setStatusDeal(activeDeals)
+    const storedDeals = JSON.parse(localStorage.getItem('deals')) || [];
+    setStoredDeal(storedDeals);
+    localStorage.setItem('activeDeals', JSON.stringify(activeDeals));
+  }, [])
 
   return (
     <div className='deals-container'>
       <ul className='deals-ul'>
-        {[...storedDeal, ...statusDeal].map((deal, index) => (
+        {[...storedDeal].map((deal, index) => (
           <li className='deals-li' key={index}>
             <div className='deals-li-p'>
-              <p>Квартира №{deal.apartment_number}</p>
-              {statusDeal.find(status => status.apartment_id === deal.apartment_id) && (
-                <div>
-                  <p>Статус: {statusDeal.find(status => status.apartment_id === deal.apartment_id).status}</p>
-                  <p>Дата создания: {formatDateTime(statusDeal.find(status => status.apartment_id === deal.apartment_id).created_at)}</p>
-                </div>
-              )}
-              {apartmentInfo && apartmentInfo.image_id && (
-                <img
-                  className='favorites-img'
-                  src={`http://localhost:3001/api/image/${apartmentInfo.image_id}`}
-                  alt={`Apartment ${apartmentInfo.apartment_number}`}
-                />
-              )}
-
-              {!apartmentInfo.image_id && (
-                <img
-                  className='favorites-img'
-                  src={`http://localhost:3001/api/image/${deal.image_id}`}
-                  alt={`Apartment ${deal.apartment_number}`}
-                />
-              )}
-
+              <img
+                className='favorites-img'
+                src={`http://localhost:3001/api/image/${deal.image_id}`}
+                alt={`Apartment ${deal.apartment_number}`}
+              />
             </div>
             <div className='start-deal-btns'>
-              {!statusDeal.find(status => status.apartment_id === deal.apartment_id) && (
-                <button className='start-deal-btn' onClick={() => startDeal(deal.apartment_id)}>
-                  Начать сделку
-                </button>
-              )}
-              {!statusDeal.find(status => status.apartment_id === deal.apartment_id) && (
-                <button className='start-deal-btn' onClick={() => cancelDeal(deal.apartment_id)}>
-                  Удалить из сделок
-                </button>
-              )}
+              <button className='start-deal-btn' onClick={() => startDeal(deal.apartment_id)}>
+                Начать сделку
+              </button>
+              <button className='start-deal-btn' onClick={() => removeFromDeals(deal.apartment_id)}>
+                Удалить из сделок
+              </button>
             </div>
           </li>
         ))}

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-function Favorites() {
+function Favorites({ activeDeals }) {
   const [favoriteApartments, setFavoriteApartments] = useState([]);
+  const [storedDeal, setStoredDeal] = useState([])
   const [deals, setDeals] = useState([]);
-  const [activeDeals, setActiveDeals] = useState([]);
 
   useEffect(() => {
     // Получение данных избранных квартир из localStorage
@@ -11,8 +11,9 @@ function Favorites() {
     setFavoriteApartments(storedFavorites);
 
     // Получение активных сделок из localStorage
-    const storedActiveDeals = JSON.parse(localStorage.getItem('activeDeals')) || [];
-    setActiveDeals(storedActiveDeals);
+    setStoredDeal(activeDeals)
+    localStorage.setItem('activeDeals', JSON.stringify(activeDeals));
+    const storedActives = JSON.parse(localStorage.getItem('activeDeals') || [])
 
     // Получение всех сделок из localStorage
     const storedDeals = JSON.parse(localStorage.getItem('deals')) || [];
@@ -32,15 +33,15 @@ function Favorites() {
     const apartmentToAdd = favoriteApartments[index];
     const isAlreadyInActiveDeals = activeDeals.some(deal => deal.apartment_id === apartmentToAdd.apartment_id);
     const isAlreadyInDeals = deals.some(deal => deal.apartment_id === apartmentToAdd.apartment_id);
-
+  
     if (!isAlreadyInActiveDeals && !isAlreadyInDeals) {
       const updatedDeals = [...deals, apartmentToAdd];
       setDeals(updatedDeals);
       localStorage.setItem('deals', JSON.stringify(updatedDeals));
     } else {
-      alert('Вы не можете добавить квартиру, которая уже находится в активных сделках');
+      alert('Вы не можете добавить квартиру, которая уже находится в сделках');
     }
-  };
+  };  
   
   return (
     <div className='favorites-container'>
