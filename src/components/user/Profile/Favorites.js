@@ -3,13 +3,18 @@ import React, { useState, useEffect } from 'react';
 function Favorites() {
   const [favoriteApartments, setFavoriteApartments] = useState([]);
   const [deals, setDeals] = useState([]);
+  const [activeDeals, setActiveDeals] = useState([]);
 
   useEffect(() => {
-    // Получение данных избранных квартир из localstorage
+    // Получение данных избранных квартир из localStorage
     const storedFavorites = JSON.parse(localStorage.getItem('cartItems')) || [];
     setFavoriteApartments(storedFavorites);
 
-    // Получение сделок из localstorage
+    // Получение активных сделок из localStorage
+    const storedActiveDeals = JSON.parse(localStorage.getItem('activeDeals')) || [];
+    setActiveDeals(storedActiveDeals);
+
+    // Получение всех сделок из localStorage
     const storedDeals = JSON.parse(localStorage.getItem('deals')) || [];
     setDeals(storedDeals);
   }, []);
@@ -19,26 +24,21 @@ function Favorites() {
     updatedFavorites.splice(index, 1); // Удаляем элемент из массива
     setFavoriteApartments(updatedFavorites); // Обновляем состояние
 
-    // Сохраняем обновленный массив в localstorage
+    // Сохраняем обновленный массив в localStorage
     localStorage.setItem('cartItems', JSON.stringify(updatedFavorites));
   };
 
   const addToDeal = (index) => {
-    // Получаем квартиру, которую нужно добавить в сделку
     const apartmentToAdd = favoriteApartments[index];
-
-    // Проверяем, существует ли уже сделка на эту квартиру
+    const isAlreadyInActiveDeals = activeDeals.some(deal => deal.apartment_id === apartmentToAdd.apartment_id);
     const isAlreadyInDeals = deals.some(deal => deal.apartment_id === apartmentToAdd.apartment_id);
-    if (!isAlreadyInDeals) {
-      // Если сделки на квартиру нет, то добавляем её в массив сделок
+
+    if (!isAlreadyInActiveDeals && !isAlreadyInDeals) {
       const updatedDeals = [...deals, apartmentToAdd];
       setDeals(updatedDeals);
-
-      // Сохраняем обновленный массив сделок в localstorage
       localStorage.setItem('deals', JSON.stringify(updatedDeals));
     } else {
-      // Если сделка уже существует, выводим сообщение об ошибке
-      alert('Эта квартира уже добавлена в сделки.');
+      alert('Вы не можете добавить квартиру, которая уже находится в активных сделках');
     }
   };
   
@@ -59,9 +59,11 @@ function Favorites() {
               alt={`Apartment ${apartment.apartment_number}`}
             />
             <button className='favorites-btn favorites-remover' onClick={() => removeFromFavorites(index)}>Удалить из избранного</button>
-            <button className='favorites-btn favorites-deal' onClick={() => addToDeal(index)}>
-              {deals.some(deal => deal.apartment_id === apartment.apartment_id) ? 'Отменить сделку' : 'Начать сделку'}
-            </button>
+            {!deals.some(deal => deal.apartment_id === apartment.apartment_id) && (
+              <button className='favorites-btn favorites-deal' onClick={() => addToDeal(index)}>
+                Добавить в сделки
+              </button>
+            )}
           </li>
         ))}
       </ul>
