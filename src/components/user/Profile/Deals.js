@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-function Deals({ userData, userToken, activeDeals }) {
+function Deals({ userData, userToken }) {
+
   const [storedDeal, setStoredDeal] = useState([]);
-  const [statusDeal, setStatusDeal] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedApartment, setSelectedApartment] = useState(null);
   const [removePopup, setRemovePopup] = useState(false);
@@ -73,10 +73,8 @@ function Deals({ userData, userToken, activeDeals }) {
   };
 
   useEffect(() => {
-    setStatusDeal(activeDeals)
     const storedDeals = JSON.parse(localStorage.getItem('deals')) || [];
     setStoredDeal(storedDeals);
-    localStorage.setItem('activeDeals', JSON.stringify(activeDeals));
   }, [])
 
   return (

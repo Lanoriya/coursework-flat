@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 function Favorites({ activeDeals }) {
   const [favoriteApartments, setFavoriteApartments] = useState([]);
-  const [storedDeal, setStoredDeal] = useState([])
   const [deals, setDeals] = useState([]);
 
   useEffect(() => {
@@ -11,9 +10,8 @@ function Favorites({ activeDeals }) {
     setFavoriteApartments(storedFavorites);
 
     // Получение активных сделок из localStorage
-    setStoredDeal(activeDeals)
     localStorage.setItem('activeDeals', JSON.stringify(activeDeals));
-    const storedActives = JSON.parse(localStorage.getItem('activeDeals') || [])
+    // const storedActives = JSON.parse(localStorage.getItem('activeDeals') || [])
 
     // Получение всех сделок из localStorage
     const storedDeals = JSON.parse(localStorage.getItem('deals')) || [];

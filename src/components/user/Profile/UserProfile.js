@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import burger from '../Main/imgs/burger.svg';
 import Favorites from './Favorites';
@@ -15,6 +15,29 @@ function UserProfile() {
   const [activeDeals, setActiveDeals] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const userToken = document.cookie.split('; ').find(row => row.startsWith('userToken=')).split('=')[1];
+  
+  const fetchDeals = useCallback((userData) => {
+    fetch(`http://localhost:3001/api/user/deals?userId=${userData.id}`, {
+      headers: {
+        'Authorization': `Bearer ${userToken}`
+      },
+      credentials: 'include'
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch deals.');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setActiveDeals(data);
+        localStorage.setItem('activeDeals', JSON.stringify(data));
+      })
+      .catch(error => {
+        console.error('Error fetching deals:', error);
+        console.error('Произошла ошибка при загрузке сделок.');
+      });
+  }, [userToken]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -40,30 +63,8 @@ function UserProfile() {
     };
 
     fetchUserData();
-  }, []);
+  }, [fetchDeals, userToken]);
 
-  const fetchDeals = (userData) => {
-    fetch(`http://localhost:3001/api/user/deals?userId=${userData.id}`, {
-      headers: {
-        'Authorization': `Bearer ${userToken}`
-      },
-      credentials: 'include'
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch deals.');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setActiveDeals(data);
-        localStorage.setItem('activeDeals', JSON.stringify(data));
-      })
-      .catch(error => {
-        console.error('Error fetching deals:', error);
-        console.error('Произошла ошибка при загрузке сделок.');
-      });
-  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
