@@ -9,9 +9,15 @@ function Deals({ userData, userToken }) {
 
   const startDeal = (apartment_id) => {
     const selectedDeal = storedDeal.find(deal => deal.apartment_id === apartment_id);
-    console.log('Selected Deal:', selectedDeal); // Добавленный console.log
+    console.log('Selected Deal:', selectedDeal);
     setSelectedApartment(selectedDeal);
     setShowPopup(true);
+  };
+
+  const cancelDeal = (apartment_id) => {
+    const selectedDeal = storedDeal.find(deal => deal.apartment_id === apartment_id);
+    setSelectedApartment(selectedDeal);
+    setRemovePopup(true);
   };
 
   const cancelStartDeal = () => {
@@ -93,7 +99,7 @@ function Deals({ userData, userToken }) {
               <button className='start-deal-btn' onClick={() => startDeal(deal.apartment_id)}>
                 Начать сделку
               </button>
-              <button className='start-deal-btn' onClick={() => removeFromDeals(deal.apartment_id)}>
+              <button className='start-deal-btn' onClick={() => cancelDeal(deal.apartment_id)}>
                 Удалить из сделок
               </button>
             </div>
