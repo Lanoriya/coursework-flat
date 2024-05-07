@@ -563,6 +563,23 @@ app.post('/submitOrder', async (req, res) => {
   }
 });
 
+app.post('/submitOrderNotLogin', async (req, res) => {
+  const { name, phone_number, apartment_id, user_id} = req.body;
+  console.log(req.body)
+  try {
+    const result = await pool.query('INSERT INTO orders (name, phone_number, apartment_id, user_id) VALUES ($1, $2, $3, $4) RETURNING *', [
+      name,
+      phone_number,
+      apartment_id,
+      user_id,
+    ]);
+    res.status(200).json({ message: 'Данные успешно получены и обработаны' });
+  } catch (error) {
+    console.error('Ошибка при обработке данных:', error);
+    res.status(500).json({ error: 'Ошибка при обработке данных' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Сервер работает на порту ${port}.`);
 });

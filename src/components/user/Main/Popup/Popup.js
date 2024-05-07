@@ -4,9 +4,11 @@ import '../styles/Popup.css'
 
 const Popup = ({ onClose, onSubmit }) => {
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phone_number, setPhone] = useState('');
   const [isAgreed, setIsAgreed] = useState(false);
   const [error, setError] = useState('');
+  const apartment_id = 2;
+  const user_id = 1;
 
   const handleNameChange = (e) => {
     // Разрешаем только буквы и пробелы в имени
@@ -21,18 +23,18 @@ const Popup = ({ onClose, onSubmit }) => {
       return;
     }
 
-    if (!name || !phone || phone.includes('_')) {
+    if (!name || !phone_number || phone_number.includes('_')) {
       setError('Пожалуйста, заполните все поля');
       return;
     }
     // Отправка данных на сервер
     try {
-      const response = await fetch('http://localhost:3001/submitOrder', {
+      const response = await fetch('http://localhost:3001/submitOrderNotLogin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, phone }),
+        body: JSON.stringify({ name, phone_number, apartment_id, user_id }),
       });
 
       if (response.ok) {
@@ -65,7 +67,7 @@ const Popup = ({ onClose, onSubmit }) => {
             mask="+7 (999) 99-99-999"
             maskChar="_"
             placeholder="+7 (___) __-__-___"
-            value={phone}
+            value={phone_number}
             onChange={(e) => setPhone(e.target.value)}
           />
           {error && <p className="error-message">{error}</p>}
