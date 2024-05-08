@@ -416,14 +416,17 @@ app.post('/api/admin/addApartment', checkAdminToken, async (req, res) => {
 
 app.post('/api/admin/addBuilding', checkAdminToken, async (req, res) => {
   const {
+    building_name,
     total_apartments,
     total_entrances,
+    completion_date,
+    material,
   } = req.body;
 
   try {
     const newBuilding = await pool.query(
-      'INSERT INTO buildings (total_apartments, total_entrances) VALUES ($1, $2) RETURNING *',
-      [total_apartments, total_entrances]
+      'INSERT INTO buildings (building_name, total_apartments, total_entrances, completion_date, material) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [building_name, total_apartments, total_entrances, completion_date, material]
     );
 
     res.status(201).json(newBuilding.rows[0]);

@@ -20,6 +20,9 @@ function Editor() {
       <AddItem
         endpoint="addBuilding"
         fields={[
+          { name: 'building_name', label: 'Название здания' },
+          { name: 'completion_date', label: 'Дата сдачи (yyyy-mm-dd)' },
+          { name: 'material', label: 'Материал здания' },
           { name: 'total_apartments', label: 'Количество квартир' },
           { name: 'total_entrances', label: 'Количество подъездов' },
         ]}

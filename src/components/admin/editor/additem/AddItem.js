@@ -31,7 +31,6 @@ function AddItem({ endpoint, fields, successMessage }) {
 
     // Устанавливаем состояние isAnimating в true перед началом анимации
     setIsAnimating(true);
-
     axios.post(`http://localhost:3001/api/admin/${endpoint}`, { ...formData, image_id: selectedImage }, {
       withCredentials: true,
     })
