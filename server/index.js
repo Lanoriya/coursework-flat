@@ -10,6 +10,8 @@ const multer  = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const fs = require('fs').promises;
 const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+const nodemailer = require('nodemailer');
 
 const Pool = require('pg').Pool;
 const pool = new Pool({
@@ -40,6 +42,92 @@ app.use(express.json());
 const secretKey = process.env.SECRET_KEY || 'default-secret-key';
 const emailUser = process.env.EMAIL_USER;
 const emailPassword = process.env.EMAIL_PASSWORD;
+
+function generateResetToken() {
+  return uuidv4();
+}
+
+async function sendPasswordResetEmail(email, resetToken) {
+  const transporter = nodemailer.createTransport({
+    host: 'sandbox.smtp.mailtrap.io',
+    port: 25,
+    secure: false,
+    auth: {
+      user: emailUser,
+      pass: emailPassword
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  });
+
+  const mailOptions = {
+    from: 'lanoland@fuck.com',
+    to: email,
+    subject: 'Восстановление пароля',
+    text: `Для восстановления пароля перейдите по ссылке: http://localhost:3000/reset-password/${email+'/'+resetToken}`,
+    html: `<p>Для восстановления пароля перейдите по <a href="http://localhost:3000/reset-password/${email+'/'+resetToken}">ссылке</a>.</p>`
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: ' + info.response);
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+}
+
+app.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+
+  // Проверяем, существует ли пользователь с такой почтой
+  const user = await pool.query('SELECT * FROM Users WHERE email = $1', [email]);
+  if (!user.rows.length) {
+    return res.status(404).json({ error: 'Пользователь с такой почтой не найден' });
+  }
+
+  // Время жизни токена (15 минут)
+  const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+  // Генерируем уникальный токен для запроса сброса пароля
+  const resetToken = generateResetToken();
+
+  // Сохраняем токен сброса пароля в базе данных или кэше
+  await pool.query(
+    'INSERT INTO passwordresettokens (email, token, expires_at) VALUES ($1, $2, $3)',
+    [email, resetToken, expiresAt]
+  );
+
+  // Отправляем электронное письмо с ссылкой для сброса пароля
+  try {
+    await sendPasswordResetEmail(email, resetToken);
+    res.status(200).json({ message: 'На вашу почту отправлена ссылка для сброса пароля' });
+  } catch (error) {
+    console.error('Ошибка отправки электронной почты:', error);
+    res.status(500).json({ error: 'Ошибка отправки электронной почты' });
+  }
+});
+  
+app.post('/reset-password', async (req, res) => {
+  const { email, resetToken, newPassword } = req.body;
+
+  // Проверяем, действителен ли токен сброса пароля
+  const tokenResult = await pool.query('SELECT * FROM PasswordResetTokens WHERE email = $1 AND token = $2', [email, resetToken]);
+  if (!tokenResult.rows.length) {
+    return res.status(400).json({ error: 'Недействительный токен сброса пароля' });
+  }
+
+  // Хешируем новый пароль
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  // Обновляем пароль пользователя в базе данных
+  await pool.query('UPDATE Users SET password = $1 WHERE email = $2', [hashedPassword, email]);
+
+  // Удаляем токен сброса пароля из базы данных или кэша
+  await pool.query('DELETE FROM PasswordResetTokens WHERE email = $1 AND token = $2', [email, resetToken]);
+
+  res.status(200).json({ message: 'Пароль успешно сброшен' });
+});
 
 function checkAdminToken(req, res, next) {
   const authToken = req.cookies.adminToken; // Получаем токен из куки

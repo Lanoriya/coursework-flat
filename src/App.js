@@ -6,6 +6,7 @@ import AdminPanel from './components/admin/AdminPanel';
 import Main from './components/user/Main/Main';
 import UserProfile from './components/user/Profile/UserProfile';
 import UserLogin from './components/user/Profile/UserLogin';
+import ResetPasswordPage from './components/user/Profile/ResetPasswordPage';
 import './App.css';
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
       <Route path="/admin/*" element={isAuthenticatedAdmin ? <AdminPanel /> : <Navigate to="/login" />} />
       <Route path="/userLogin" element={isAuthenticatedUser ? <Navigate to="/profile" /> : <UserLogin />} />
       <Route path="/profile/*" element={isAuthenticatedUser ? <UserProfile /> : <Navigate to="/userLogin" />} />
+      <Route path='/reset-password/:email/:token' element={!isAuthenticatedUser && <ResetPasswordPage />} />
       <Route path="*" element={<Main />} />
     </Routes>
   );

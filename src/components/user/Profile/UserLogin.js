@@ -65,10 +65,21 @@ function UserLogin() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
-      // Implement your password reset logic here
-      console.log('Запрос на восстановление пароля отправлен');
+      const response = await fetch('http://localhost:3001/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: formData.resetEmail }), // Отправляем email на сервер для восстановления пароля
+      });
+  
+      if (response.ok) {
+        console.log('Запрос на восстановление пароля отправлен');
+      } else {
+        console.error('Ошибка при отправке запроса на восстановление пароля');
+      }
     } catch (error) {
-      console.error('Ошибка при отправке запроса на восстановление пароля:', error);
+      console.error('Ошибка при отправке запроса:', error);
     }
   };
 
