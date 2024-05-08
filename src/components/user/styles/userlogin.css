@@ -86,7 +86,10 @@
   cursor: pointer;
   transition: all 0.2s;
   font-size: 16px;
-  margin-top: 48px;
+}
+
+.user-form button:first-child {
+  margin-bottom: 48px;
 }
 
 .user-form button:hover {

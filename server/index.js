@@ -38,6 +38,8 @@ app.use(cookieParser());
 app.use(express.json());
 
 const secretKey = process.env.SECRET_KEY || 'default-secret-key';
+const emailUser = process.env.EMAIL_USER;
+const emailPassword = process.env.EMAIL_PASSWORD;
 
 function checkAdminToken(req, res, next) {
   const authToken = req.cookies.adminToken; // Получаем токен из куки
@@ -73,15 +75,15 @@ function checkAdminToken(req, res, next) {
 }
 
 app.post('/register', async (req, res) => {
-  const { username, password, role } = req.body;
+  const { username, password, email, role } = req.body;
 
   // Хешируйте пароль перед сохранением его в базе данных
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
     const user = await pool.query(
-      'INSERT INTO Users (username, password, role) VALUES ($1, $2, $3) RETURNING *',
-      [username, hashedPassword, role]
+      'INSERT INTO Users (username, password, email, role) VALUES ($1, $2, $3, $4) RETURNING *',
+      [username, hashedPassword, email, role]
     );
 
     const userId = user.rows[0].id;
@@ -93,7 +95,7 @@ app.post('/register', async (req, res) => {
     // Создайте JWT токен и отправьте его пользователю, если это необходимо
     const token = jwt.sign({ username, role }, secretKey);
 
-    res.status(201).json({ message: 'Пользователь зарегистрирован', token, });
+    res.status(201).json({ message: 'Пользователь зарегистрирован', token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Ошибка регистрации пользователя' });
@@ -133,12 +135,21 @@ app.post('/api/admin/login', async (req, res) => {
 // Вход пользователя
 app.post('/api/user/login', async (req, res) => {
   console.log('Received user login request');
-  const { username, password } = req.body;
+  const { usernameOrEmail, password } = req.body;
   try {
-    const user = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+    // Проверка, является ли введенное значение адресом электронной почты
+    let user;
+    if (usernameOrEmail.includes('@')) {
+      // Вход с использованием электронной почты
+      user = await pool.query('SELECT * FROM users WHERE email = $1', [usernameOrEmail]);
+    } else {
+      // Вход с использованием имени пользователя
+      user = await pool.query('SELECT * FROM users WHERE username = $1', [usernameOrEmail]);
+    }
+
     if (user.rows.length === 0) {
       // Пользователь не существует
-      return res.status(401).send('Пользователь с таким именем не найден');
+      return res.status(401).send('Пользователь с таким именем или адресом электронной почты не найден');
     }
 
     const hashedPassword = user.rows[0].password;
@@ -146,7 +157,7 @@ app.post('/api/user/login', async (req, res) => {
 
     if (passwordMatch) {
       // Верный логин и пароль
-      const token = jwt.sign({ userId: user.rows[0].id, username, role: 'user' }, secretKey, {
+      const token = jwt.sign({ userId: user.rows[0].id, username: user.rows[0].username, role: 'user' }, secretKey, {
         expiresIn: '12h',
       });
       res.cookie('userToken', token, { httpOnly: true, maxAge: 3600000, sameSite: 'None', secure: true, path: '/' });

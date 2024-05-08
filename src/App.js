@@ -5,8 +5,8 @@ import AdminLogin from './components/admin/AdminLogin';
 import AdminPanel from './components/admin/AdminPanel';
 import Main from './components/user/Main/Main';
 import UserProfile from './components/user/Profile/UserProfile';
-import './App.css';
 import UserLogin from './components/user/Profile/UserLogin';
+import './App.css';
 
 function App() {
   const [isAuthenticatedAdmin, setIsAuthenticatedAdmin] = useState(false);
