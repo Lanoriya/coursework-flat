@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 const Notification = () => {
   useEffect(() => {
+    try {
       const notifications = document.querySelectorAll('.success-notification');
       const progress = document.getElementById('progress');
 
@@ -15,6 +16,9 @@ const Notification = () => {
           clearInterval(interval);
         }
       }, 30);
+    } catch (error) {
+      console.log('error')
+    }
   }, []);
 
   return (

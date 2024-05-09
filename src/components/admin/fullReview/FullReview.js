@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import Notification from '../notification/Notification';
 
 function FullReview() {
   const [buildings, setBuildings] = useState([]);
@@ -7,6 +8,20 @@ function FullReview() {
   const [selectedBuilding, setSelectedBuilding] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [notifications, setNotifications] = useState([]);
+  const [selectedApartment, setSelectedApartment] = useState(null);
+  const [renderedNotifications, setRenderedNotifications] = useState([]);
+
+  const inputFields = [
+    { name: 'apartment_number', label: 'Номер квартиры', type: 'text' },
+    { name: 'status', label: 'Статус', type: 'text' },
+    { name: 'room_count', label: 'Количество комнат', type: 'text' },
+    { name: 'area', label: 'Площадь', type: 'text' },
+    { name: 'floor', label: 'Этаж', type: 'text' },
+    { name: 'price', label: 'Цена', type: 'text' },
+    { name: 'entrance', label: 'Подъезд', type: 'text' },
+    { name: 'booking_date', label: 'Дата брони (yyyy-mm-dd)', type: 'text' },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +37,10 @@ function FullReview() {
 
     fetchData();
   }, []);
+
+  const showNotification = (message) => {
+    setNotifications([...notifications, message]);
+  };
 
   const fetchApartments = useCallback(() => {
     const params = {
@@ -46,14 +65,37 @@ function FullReview() {
   const handleBuildingClick = (building) => {
     setSelectedBuilding(building);
     setSelectedStatus(null); // Сбрасываем выбранный статус при выборе нового здания
+    setSelectedApartment(null); // Сбрасываем выбранную квартиру при выборе нового здания
   };
 
   const handleStatusFilter = (status) => {
     setSelectedStatus(status);
+    setSelectedApartment(null); // Сбрасываем выбранную квартиру при выборе нового статуса
+  };
+
+  const handleApartmentClick = (apartment) => {
+    setSelectedApartment(apartment);
   };
 
   const isSelectedStatus = (status) => {
     return selectedStatus === status;
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setSelectedApartment({ ...selectedApartment, [name]: value });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await axios.put(`http://localhost:3001/api/admin/apartments`, [selectedApartment], {
+        withCredentials: true,
+      });
+      // Обновляем список квартир после успешного обновления
+      fetchApartments();
+    } catch (error) {
+      console.error('Error updating apartment:', error);
+    }
   };
 
   useEffect(() => {
@@ -64,47 +106,77 @@ function FullReview() {
   }, [fetchApartments, selectedStatus]);
 
   return (
-    <div className='full-review'>
-      <div className='full-review-buildings'>
-        <h2 className='full-review-title'>Список домов</h2>
-        <ul>
-          {buildings.map((building) => (
-            <li key={building.building_id}>
-              <button className={`admin-btn review-button ${selectedBuilding === building ? 'selected' : ''}`} onClick={() => handleBuildingClick(building)}>
-                {building.building_name}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className='full-review-apartments-btns'>
-        <h2 className='full-review-title'>Список квартир</h2>
-        <div className='status-buttons'>
-          <button className={`admin-btn status-button ${isSelectedStatus('Продана') ? 'selected' : ''}`} onClick={() => handleStatusFilter('Продана')}>Продана</button>
-          <button className={`admin-btn status-button ${isSelectedStatus('Готовая') ? 'selected' : ''}`} onClick={() => handleStatusFilter('Готовая')}>Готовая</button>
-          <button className={`admin-btn status-button ${isSelectedStatus('В отделке') ? 'selected' : ''}`} onClick={() => handleStatusFilter('В отделке')}>В отделке</button>
-          <button className={`admin-btn status-button ${isSelectedStatus('Строительство') ? 'selected' : ''}`} onClick={() => handleStatusFilter('Строительство')}>Строительство</button>
-          <button className={`admin-btn status-button ${isSelectedStatus('Бронь') ? 'selected' : ''}`} onClick={() => handleStatusFilter('Бронь')}>Бронь</button>
+    <div className='full-review-content'>
+      <div className='full-review'>
+        <div className='full-review-buildings'>
+          <h2 className='full-review-title'>Список домов</h2>
+          <ul>
+            {buildings.map((building) => (
+              <li key={building.building_id}>
+                <button className={`admin-btn review-button ${selectedBuilding === building ? 'selected' : ''}`} onClick={() => handleBuildingClick(building)}>
+                  {building.building_name}
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
-      {selectedStatus && (
+        <div className='full-review-apartments-btns'>
+          <h2 className='full-review-title'>Список квартир</h2>
+          <div className='status-buttons'>
+            <button className={`admin-btn status-button ${isSelectedStatus('Продана') ? 'selected' : ''}`} onClick={() => handleStatusFilter('Продана')}>Проданы</button>
+            <button className={`admin-btn status-button ${isSelectedStatus('Готовая') ? 'selected' : ''}`} onClick={() => handleStatusFilter('Готовая')}>Готовые</button>
+            <button className={`admin-btn status-button ${isSelectedStatus('В отделке') ? 'selected' : ''}`} onClick={() => handleStatusFilter('В отделке')}>В отделке</button>
+            <button className={`admin-btn status-button ${isSelectedStatus('Строительство') ? 'selected' : ''}`} onClick={() => handleStatusFilter('Строительство')}>Строительство</button>
+            <button className={`admin-btn status-button ${isSelectedStatus('Бронь') ? 'selected' : ''}`} onClick={() => handleStatusFilter('Бронь')}>Бронь</button>
+          </div>
+        </div>
         <div className='full-review-apartments'>
-          <table>
-            <thead>
-              <tr>
-                <th>Номер квартиры</th>
-              </tr>
-            </thead>
-            <tbody>
-              {apartments.map((apart) => (
-                <tr key={apart.apartment_id}>
-                  <td>{apart.apartment_number}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <h2 className='full-review-title'>Список квартир</h2>
+          <ul className='status-buttons'>
+            {apartments.map((apart) => (
+              <li key={apart.apartment_id}>
+                <button className={`admin-btn status-button ${selectedApartment === apart ? 'selected' : ''}`} onClick={() => handleApartmentClick(apart)}>{apart.apartment_number}</button>
+              </li>
+            ))}
+          </ul>
         </div>
-      )}
+        {selectedApartment && (
+          <div className='full-review-apartment-details'>
+            <h2 className='full-review-title'>Информация о квартире</h2>
+            {inputFields.map((field) => (
+              <div key={field.name}>
+                <label className='apartment-label'>{field.label}:</label>
+                {field.name === 'status' ? (
+                  <select
+                    className='apartment-item-value full-review-input'
+                    name={field.name}
+                    value={selectedApartment[field.name] || ''}
+                    onChange={handleInputChange}
+                  >
+                    <option value='Продана'>Продана</option>
+                    <option value='Готовая'>Готовая</option>
+                    <option value='В отделке'>В отделке</option>
+                    <option value='Строительство'>Строительство</option>
+                    <option value='Бронь'>Бронь</option>
+                  </select>
+                ) : (
+                  <input
+                    className='apartment-item-value full-review-input'
+                    type={field.type}
+                    name={field.name}
+                    value={selectedApartment[field.name] || ''}
+                    onChange={handleInputChange}
+                  />
+                )}
+              </div>
+            ))}
+            <button className='admin-btn status-button' onClick={(e) => { handleSubmit(); showNotification('Сохранено успешно') }}>Сохранить</button>
+          </div>
+        )}
+      </div>
+      {notifications.map((message, index) => (
+        <Notification key={index} message={message} />
+      ))}
     </div>
   );
 }

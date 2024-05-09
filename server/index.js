@@ -483,8 +483,8 @@ app.put('/api/admin/apartments', checkAdminToken, async (req, res) => {
     for (const apartment of updatedApartments) {
       const query = `
         UPDATE apartments
-        SET room_count = $1, area = $2, floor = $3, price = $4, apartment_number = $5, building_id = $6, entrance = $7
-        WHERE apartment_id = $8
+        SET room_count = $1, area = $2, floor = $3, price = $4, apartment_number = $5, building_id = $6, entrance = $7, booking_date = $8, status = $9
+        WHERE apartment_id = $10
       `;
       // Предполагается, что у квартир есть уникальный идентификатор (id) в базе данных
 
@@ -496,6 +496,8 @@ app.put('/api/admin/apartments', checkAdminToken, async (req, res) => {
         apartment.apartment_number,
         apartment.building_id,
         apartment.entrance,
+        apartment.booking_date, // Добавляем booking_date
+        apartment.status, // Добавляем status
         apartment.apartment_id, // Уникальный идентификатор квартиры
       ]);
     }
@@ -506,6 +508,7 @@ app.put('/api/admin/apartments', checkAdminToken, async (req, res) => {
     res.status(500).json({ error: 'Ошибка при обновлении данных о квартирах' });
   }
 });
+
 
 app.delete('/api/admin/apartments/:id', checkAdminToken, async (req, res) => {
   const apartmentId = req.params.id;
