@@ -436,11 +436,34 @@ app.post('/api/admin/addBuilding', checkAdminToken, async (req, res) => {
   }
 })
 
+app.get('/api/admin/buildings', checkAdminToken, async (req, res) => {
+  try {
+    const query = 'SELECT * FROM buildings';
+    console.log('SQL Query:', query);
+
+    const result = await pool.query(query);
+
+    return res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error fetching buildings:', error);
+    res.status(500).json({ error: 'Error updating buildings' });
+  }
+});
+
 app.get('/api/admin/apartments', checkAdminToken, async (req, res) => {
   try {
-    const { sortField, sortOrder } = req.query;
+    const { sortField, sortOrder, status } = req.query; // Добавили параметр status
     const defaultSortField = 'apartment_id';
-    const query = `SELECT * FROM apartments ORDER BY ${sortField || defaultSortField} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}`;
+    let query = `SELECT * FROM apartments`;
+
+    // Если задан параметр status, добавляем его в WHERE-условие
+    if (status) {
+      query += ` WHERE status = '${status}'`;
+    }
+
+    // Добавляем сортировку
+    query += ` ORDER BY ${sortField || defaultSortField} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}`;
+
     console.log('SQL Query:', query);
 
     const result = await pool.query(query);
@@ -451,6 +474,7 @@ app.get('/api/admin/apartments', checkAdminToken, async (req, res) => {
     res.status(500).json({ error: 'Error updating apartments' });
   }
 });
+
 
 app.put('/api/admin/apartments', checkAdminToken, async (req, res) => {
   const updatedApartments = req.body; // Получите обновленные данные квартир из тела запроса

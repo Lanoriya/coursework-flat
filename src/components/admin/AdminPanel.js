@@ -9,7 +9,9 @@ import './styles/AdminPanel.css';
 import './styles/Editor.css';
 import './styles/Review.css';
 import './styles/Orders.css';
+import './styles/FullReview.css';
 import './styles/Admin-media.css';
+import FullReview from './fullReview/FullReview';
 
 function AdminPanel() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,6 +40,7 @@ function AdminPanel() {
           <Link to='' className='aside-nav-btn' onClick={handleLinkClick}>Main</Link>
           <Link to='editor' className='aside-nav-btn' onClick={handleLinkClick}>Editor</Link>
           <Link to='orders' className='aside-nav-btn' onClick={handleLinkClick}>Orders</Link>
+          <Link to='fullReview' className='aside-nav-btn' onClick={handleLinkClick}>fullReview</Link>
           <Link to='review' className='aside-nav-btn' onClick={handleLinkClick}>Review</Link>
         </nav>
       </aside>
@@ -47,6 +50,7 @@ function AdminPanel() {
           <Route path='/' element={<AdminMain />} />
           <Route path='editor' element={<Editor />} />
           <Route path='orders' element={<Orders />} />
+          <Route path='fullReview' element={<FullReview />} />
           <Route path='review' element={<Review />} />
         </Routes>
       </main>
