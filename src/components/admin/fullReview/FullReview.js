@@ -7,10 +7,8 @@ function FullReview() {
   const [apartments, setApartments] = useState([]);
   const [selectedBuilding, setSelectedBuilding] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [notifications, setNotifications] = useState([]);
   const [selectedApartment, setSelectedApartment] = useState(null);
-  const [renderedNotifications, setRenderedNotifications] = useState([]);
 
   const inputFields = [
     { name: 'apartment_number', label: 'Номер квартиры', type: 'text' },
@@ -20,7 +18,7 @@ function FullReview() {
     { name: 'floor', label: 'Этаж', type: 'text' },
     { name: 'price', label: 'Цена', type: 'text' },
     { name: 'entrance', label: 'Подъезд', type: 'text' },
-    { name: 'booking_date', label: 'Дата брони (yyyy-mm-dd)', type: 'text' },
+    { name: 'booking_date', label: 'Дата брони', type: 'text' },
   ];
 
   useEffect(() => {
@@ -37,6 +35,14 @@ function FullReview() {
 
     fetchData();
   }, []);
+
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const showNotification = (message) => {
     setNotifications([...notifications, message]);
@@ -56,7 +62,6 @@ function FullReview() {
       // Фильтрация квартир по выбранному зданию
       const filteredApartments = response.data.filter(apartment => apartment.building_id === selectedBuilding?.building_id);
       setApartments(filteredApartments);
-      setLoading(false); // Устанавливаем флаг загрузки в false после получения данных
     }).catch(error => {
       console.error('Error fetching apartments:', error);
     });
@@ -66,6 +71,7 @@ function FullReview() {
     setSelectedBuilding(building);
     setSelectedStatus(null); // Сбрасываем выбранный статус при выборе нового здания
     setSelectedApartment(null); // Сбрасываем выбранную квартиру при выборе нового здания
+    setApartments([]);
   };
 
   const handleStatusFilter = (status) => {
@@ -100,7 +106,6 @@ function FullReview() {
 
   useEffect(() => {
     if (selectedStatus) {
-      setLoading(true); // Устанавливаем флаг загрузки в true перед запросом данных
       fetchApartments();
     }
   }, [fetchApartments, selectedStatus]);
@@ -130,35 +135,32 @@ function FullReview() {
             <button className={`admin-btn status-button ${isSelectedStatus('Бронь') ? 'selected' : ''}`} onClick={() => handleStatusFilter('Бронь')}>Бронь</button>
           </div>
         </div>
-        <div className='full-review-apartments'>
-          <h2 className='full-review-title'>Список квартир</h2>
-          <ul className='status-buttons'>
-            {apartments.map((apart) => (
-              <li key={apart.apartment_id}>
-                <button className={`admin-btn status-button ${selectedApartment === apart ? 'selected' : ''}`} onClick={() => handleApartmentClick(apart)}>{apart.apartment_number}</button>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {selectedBuilding && (
+          <div className='full-review-apartments'>
+            <h2 className='full-review-title'>Список квартир</h2>
+            <ul className='status-buttons'>
+              {apartments.map((apart) => (
+                <li key={apart.apartment_id}>
+                  <button className={`admin-btn status-button ${selectedApartment === apart ? 'selected' : ''}`} onClick={() => handleApartmentClick(apart)}>{apart.apartment_number}</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         {selectedApartment && (
           <div className='full-review-apartment-details'>
             <h2 className='full-review-title'>Информация о квартире</h2>
             {inputFields.map((field) => (
               <div key={field.name}>
                 <label className='apartment-label'>{field.label}:</label>
-                {field.name === 'status' ? (
-                  <select
+                {field.name === 'booking_date' ? (
+                  <input
                     className='apartment-item-value full-review-input'
+                    type='date'
                     name={field.name}
-                    value={selectedApartment[field.name] || ''}
+                    value={selectedApartment[field.name] ? formatDateTime(selectedApartment[field.name]) : ''}
                     onChange={handleInputChange}
-                  >
-                    <option value='Продана'>Продана</option>
-                    <option value='Готовая'>Готовая</option>
-                    <option value='В отделке'>В отделке</option>
-                    <option value='Строительство'>Строительство</option>
-                    <option value='Бронь'>Бронь</option>
-                  </select>
+                  />
                 ) : (
                   <input
                     className='apartment-item-value full-review-input'
@@ -170,7 +172,7 @@ function FullReview() {
                 )}
               </div>
             ))}
-            <button className='admin-btn status-button' onClick={(e) => { handleSubmit(); showNotification('Сохранено успешно') }}>Сохранить</button>
+            <button className='admin-btn status-button' onClick={() => { handleSubmit(); showNotification('Сохранено успешно') }}>Сохранить</button>
           </div>
         )}
       </div>

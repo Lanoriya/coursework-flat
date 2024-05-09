@@ -17,7 +17,7 @@ const Notification = () => {
         }
       }, 30);
     } catch (error) {
-      console.log('error')
+      console.log('error');
     }
   }, []);
 
