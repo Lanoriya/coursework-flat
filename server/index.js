@@ -395,12 +395,21 @@ app.post('/api/admin/addApartment', checkAdminToken, async (req, res) => {
     floor,
     price,
     apartment_number,
-    building_id,
+    building_name,
     entrance,
     image_id,
   } = req.body;
-
   try {
+    // Находим building_id по building_name
+    const building = await pool.query('SELECT building_id FROM buildings WHERE building_name = $1', [building_name]);
+
+    if (building.rows.length === 0) {
+      // Если здание с таким именем не найдено, возвращаем ошибку
+      return res.status(400).json({ error: 'Здание не найдено' });
+    }
+
+    const building_id = building.rows[0].building_id;
+
     // Выполнение запроса к базе данных для добавления квартиры
     const newApartment = await pool.query(
       'INSERT INTO apartments (room_count, area, floor, price, apartment_number, building_id, entrance, image_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
@@ -413,7 +422,6 @@ app.post('/api/admin/addApartment', checkAdminToken, async (req, res) => {
     res.status(500).json({ error: 'Ошибка при добавлении квартиры' });
   }
 });
-
 app.post('/api/admin/addBuilding', checkAdminToken, async (req, res) => {
   const {
     building_name,

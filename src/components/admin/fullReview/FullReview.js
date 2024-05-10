@@ -9,6 +9,7 @@ function FullReview() {
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [selectedApartment, setSelectedApartment] = useState(null);
+  const [buildingInfo, setBuildingInfo] = useState(null); // Добавляем состояние для информации о здании
 
   const inputFields = [
     { name: 'apartment_number', label: 'Номер квартиры', type: 'text' },
@@ -68,10 +69,22 @@ function FullReview() {
   }, [selectedBuilding, selectedStatus]);
 
   const handleBuildingClick = (building) => {
+    // Игнорируем левый клик
+    if (buildingInfo && buildingInfo.building_id === building.building_id) return;
     setSelectedBuilding(building);
     setSelectedStatus(null); // Сбрасываем выбранный статус при выборе нового здания
     setSelectedApartment(null); // Сбрасываем выбранную квартиру при выборе нового здания
     setApartments([]);
+  };
+
+  const handleBuildingRightClick = (building, event) => {
+    event.preventDefault(); // Предотвращаем стандартное поведение контекстного меню
+    if (buildingInfo && buildingInfo.building_id === building.building_id) {
+      setBuildingInfo(null); // Закрываем окно с информацией о здании при повторном правом клике
+    } else {
+      console.log(building)
+      setBuildingInfo(building);
+    }
   };
 
   const handleStatusFilter = (status) => {
@@ -118,7 +131,11 @@ function FullReview() {
           <ul>
             {buildings.map((building) => (
               <li key={building.building_id}>
-                <button className={`admin-btn review-button ${selectedBuilding === building ? 'selected' : ''}`} onClick={() => handleBuildingClick(building)}>
+                <button
+                  className={`admin-btn review-button ${selectedBuilding === building ? 'selected' : ''}`}
+                  onClick={(e) => handleBuildingClick(building, e)}
+                  onContextMenu={(e) => handleBuildingRightClick(building, e)}
+                >
                   {building.building_name}
                 </button>
               </li>
@@ -147,13 +164,37 @@ function FullReview() {
             </ul>
           </div>
         )}
+        {buildingInfo && (
+          <div className='building-info-popup'>
+            <h2 className='building-info-title'>{buildingInfo.building_name}</h2>
+            <p className='building-info-text'>Айди здания: {buildingInfo.building_id}</p>
+            <p className='building-info-text'>Дата сдачи: {formatDateTime(buildingInfo.completion_date)}</p>
+            <p className='building-info-text'>Материал здания: {buildingInfo.material}</p>
+            <p className='building-info-text'>Количество этажей: {Math.round(buildingInfo.total_apartments / 6)}</p>
+            <p className='building-info-text'>Количество квартир: {buildingInfo.total_apartments}</p>
+            <p className='building-info-text'>Количество подъездов: {buildingInfo.total_entrances}</p>
+          </div>
+        )}
         {selectedApartment && (
           <div className='full-review-apartment-details'>
             <h2 className='full-review-title'>Информация о квартире</h2>
             {inputFields.map((field) => (
               <div key={field.name}>
                 <label className='apartment-label'>{field.label}:</label>
-                {field.name === 'booking_date' ? (
+                {field.name === 'status' ? (
+                  <select
+                    className='apartment-item-value full-review-input'
+                    name={field.name}
+                    value={selectedApartment[field.name] || ''}
+                    onChange={handleInputChange}
+                  >
+                    <option value='Продана'>Продана</option>
+                    <option value='Готовая'>Готовая</option>
+                    <option value='В отделке'>В отделке</option>
+                    <option value='Строительство'>Строительство</option>
+                    <option value='Бронь'>Бронь</option>
+                  </select>
+                ) : field.name === 'booking_date' ? (
                   <input
                     className='apartment-item-value full-review-input'
                     type='date'

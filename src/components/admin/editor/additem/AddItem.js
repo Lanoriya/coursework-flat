@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function AddItem({ endpoint, fields, successMessage }) {
+function AddItem({ endpoint, fields, successMessage, buildings }) {
   const [formData, setFormData] = useState({});
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [selectedName, setSelectedName] = useState('buildTwo');
   const [selectedImage, setSelectedImage] = useState('1');
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -14,6 +15,10 @@ function AddItem({ endpoint, fields, successMessage }) {
 
   const handleImageChange = (e) => {
     setSelectedImage(e.target.value);
+  };
+
+  const handleNameChange = (e) => {
+    setSelectedName(e.target.value);
   };
 
   const handleSubmit = (e) => {
@@ -31,7 +36,7 @@ function AddItem({ endpoint, fields, successMessage }) {
 
     // Устанавливаем состояние isAnimating в true перед началом анимации
     setIsAnimating(true);
-    axios.post(`http://localhost:3001/api/admin/${endpoint}`, { ...formData, image_id: selectedImage }, {
+    axios.post(`http://localhost:3001/api/admin/${endpoint}`, {building_name: selectedName, ...formData, image_id: selectedImage }, {
       withCredentials: true,
     })
       .then((response) => {
@@ -46,12 +51,12 @@ function AddItem({ endpoint, fields, successMessage }) {
           if (successNotification) {
             successNotification.classList.add('end-notification');
             successNotification.classList.remove('success-notification');
-  
+
             // Re-enable the button after the notification disappears
             if (addButton) {
               addButton.disabled = false;
             }
-  
+
             setTimeout(() => {
               setShowSuccessNotification(false);
               // Устанавливаем состояние isAnimating в false после завершения анимации
@@ -92,7 +97,23 @@ function AddItem({ endpoint, fields, successMessage }) {
           {fields.map((field) => (
             <div key={field.name}>
               <label htmlFor={field.name}>{field.label}: </label>
-              {field.name === 'image_id' ? (
+              {field.name === 'building_name' && endpoint === 'addApartment' ? (
+                <div className='add-item-select'>
+                  <select
+                    id={field.name}
+                    name={field.name}
+                    value={selectedName} // Используем значение из formData для управляемого компонента
+                    onChange={handleNameChange} // Обработчик изменения значения выпадающего списка
+                    required
+                  >
+                    {buildings && buildings.map((building) => (
+                      <option key={building.building_id} value={building.building_name}>
+                        {building.building_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : field.name === 'image_id' ? (
                 <div className='add-item-select'>
                   <select
                     id={field.name}
