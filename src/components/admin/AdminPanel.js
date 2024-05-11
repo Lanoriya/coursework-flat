@@ -11,7 +11,9 @@ import './styles/Review.css';
 import './styles/Orders.css';
 import './styles/FullReview.css';
 import './styles/Admin-media.css';
+import './styles/BuildingEdit.css';
 import FullReview from './fullReview/FullReview';
+import BuildingEdit from './buildingEdit/BuildingEdit';
 
 function AdminPanel() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,6 +41,7 @@ function AdminPanel() {
         <nav className='admin-aside-nav'>
           <Link to='' className='aside-nav-btn' onClick={handleLinkClick}>Main</Link>
           <Link to='editor' className='aside-nav-btn' onClick={handleLinkClick}>Editor</Link>
+          <Link to='buildEdit' className='aside-nav-btn' onClick={handleLinkClick}>BuildEditor</Link>
           <Link to='orders' className='aside-nav-btn' onClick={handleLinkClick}>Orders</Link>
           <Link to='fullReview' className='aside-nav-btn' onClick={handleLinkClick}>fullReview</Link>
           <Link to='review' className='aside-nav-btn' onClick={handleLinkClick}>Review</Link>
@@ -51,6 +54,7 @@ function AdminPanel() {
           <Route path='editor' element={<Editor />} />
           <Route path='orders' element={<Orders />} />
           <Route path='fullReview' element={<FullReview />} />
+          <Route path='buildEdit' element={<BuildingEdit />} />
           <Route path='review' element={<Review />} />
         </Routes>
       </main>

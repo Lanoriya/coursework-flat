@@ -458,6 +458,38 @@ app.get('/api/admin/buildings', checkAdminToken, async (req, res) => {
   }
 });
 
+app.put('/api/admin/buildings', checkAdminToken, async (req, res) => {
+  const updatedBuildingData = req.body;
+  try { 
+    for (const building of updatedBuildingData) {
+      const query = `
+      UPDATE buildings
+      SET building_name = $1, total_apartments = $2, total_entrances = $3, completion_date = $4, material = $5, layout_id = $6
+      WHERE building_id = $7
+    `;
+    
+    const formatDateTime = (dateTimeString) => {
+      const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+      return new Date(dateTimeString).toLocaleString('ru-RU', options);
+    };
+
+    await pool.query(query, [
+      building.building_name,
+      building.total_apartments,
+      building.total_entrances,
+      formatDateTime(building.completion_date),
+      building.material,
+      building.layout_id,
+      building.building_id
+    ])
+    }
+    res.status(200).json({ message: 'Данные о домах успешно обновлены' });
+  } catch (error) {
+    console.error('Error updating building:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.get('/api/admin/apartments', checkAdminToken, async (req, res) => {
   try {
     const { sortField, sortOrder, status } = req.query; // Добавили параметр status
@@ -482,7 +514,6 @@ app.get('/api/admin/apartments', checkAdminToken, async (req, res) => {
     res.status(500).json({ error: 'Error updating apartments' });
   }
 });
-
 
 app.put('/api/admin/apartments', checkAdminToken, async (req, res) => {
   const updatedApartments = req.body; // Получите обновленные данные квартир из тела запроса
@@ -516,7 +547,6 @@ app.put('/api/admin/apartments', checkAdminToken, async (req, res) => {
     res.status(500).json({ error: 'Ошибка при обновлении данных о квартирах' });
   }
 });
-
 
 app.delete('/api/admin/apartments/:id', checkAdminToken, async (req, res) => {
   const apartmentId = req.params.id;
