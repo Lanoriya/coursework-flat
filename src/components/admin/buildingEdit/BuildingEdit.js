@@ -6,7 +6,7 @@ function BuildingEdit() {
   const [buildings, setBuildings] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [photo, setPhoto] = useState(null);
-  const [tempPhoto, setTempPhoto] = useState(null); 
+  const [tempPhoto, setTempPhoto] = useState(null);
 
   const fetchBuildings = useCallback(() => {
     axios.get(`http://localhost:3001/api/admin/buildings`, {
@@ -29,16 +29,16 @@ function BuildingEdit() {
   const handlePhotoUploader = async (e, buildingId) => {
     const selectedPhoto = e.target.files[0];
     setTempPhoto(selectedPhoto);
-    
+
     const formData = new FormData();
     formData.append('photo', selectedPhoto);
     formData.append('building_id', buildingId);
-  
+
     try {
       const response = await axios.post('http://localhost:3001/api/admin/uploadLayout', formData, {
         withCredentials: true,
       });
-  
+
       if (response.status === 200) {
         console.log('Фотография успешно загружена');
         setPhoto(selectedPhoto); // Обновляем фотографию в родительском компоненте
@@ -50,9 +50,31 @@ function BuildingEdit() {
     }
   }
 
+  const handleSave = () => {
+    axios
+      .put('http://localhost:3001/api/admin/buildings', buildings, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response);
+        setNotifications([...notifications]);
+        fetchBuildings();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  };
+
   const formatDateTime = (dateTimeString) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return new Date(dateTimeString).toLocaleString('ru-RU', options);
+    const date = new Date(dateTimeString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // +1, так как месяцы в JavaScript начинаются с 0
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  
+  const showNotification = (message) => {
+    setNotifications([...notifications, message]);
   };
 
   useEffect(() => {
@@ -107,9 +129,9 @@ function BuildingEdit() {
           </div>
           <div className='apartment-item-value building-edit-input'>
             <input
-              type='text'
+              type='date'
               name='completion_date'
-              value={formatDateTime(building.completion_date)}
+              value={formatDateTime(building.completion_date) || ''}
               onChange={(event) => handleChange(event, building.building_id, 'completion_date')}
             />
           </div>
@@ -117,6 +139,7 @@ function BuildingEdit() {
             <input className='building-edit-photo' type="file" id="photo-upload" accept="image/*" onChange={(e) => handlePhotoUploader(e, building.building_id)} />
             <span>Выберите фото</span>
           </div>
+          <button className='admin-btn review-btn' onClick={() => { handleSave(building.building_id); showNotification('Сохранено успешно') }}>Сохранить</button>
         </div>
       ))}
       {notifications.map((message, index) => (

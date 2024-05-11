@@ -5,7 +5,7 @@ function UserMain({ userData, userToken, setUserData }) {
   const [phoneNumber, setPhoneNumber] = useState(userData ? userData.settings.phone_number || '' : ''); 
   const [photo, setPhoto] = useState(null);
   const [showInputs, setShowInputs] = useState(false);
-  const [tempPhoto, setTempPhoto] = useState(null); 
+  const [tempPhoto, setTempPhoto] = useState(null);
   const handleUpdateProfile = async () => {
     try {
       if (tempPhoto) {

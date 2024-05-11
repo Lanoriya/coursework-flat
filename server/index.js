@@ -464,8 +464,8 @@ app.put('/api/admin/buildings', checkAdminToken, async (req, res) => {
     for (const building of updatedBuildingData) {
       const query = `
       UPDATE buildings
-      SET building_name = $1, total_apartments = $2, total_entrances = $3, completion_date = $4, material = $5, layout_id = $6
-      WHERE building_id = $7
+      SET building_name = $1, total_apartments = $2, total_entrances = $3, completion_date = $4, material = $5
+      WHERE building_id = $6
     `;
     
     const formatDateTime = (dateTimeString) => {
@@ -479,7 +479,6 @@ app.put('/api/admin/buildings', checkAdminToken, async (req, res) => {
       building.total_entrances,
       formatDateTime(building.completion_date),
       building.material,
-      building.layout_id,
       building.building_id
     ])
     }
