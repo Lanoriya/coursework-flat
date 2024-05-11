@@ -325,7 +325,7 @@ app.post('/api/user/uploadPhoto', upload.single('photo'), async (req, res) => {
 
     const photoExtension = req.file.originalname.split('.').pop(); // Получаем расширение файла
     const newFileName = `logo_${decoded.userId}.${photoExtension}`; // Формируем новое имя файла
-    const photoUrl = path.join('uploads', newFileName); // Формируем путь к новому файлу
+    const photoUrl = path.join('uploads/usersLogos', newFileName); // Формируем путь к новому файлу
 
     // Сохраняем фотографию с новым именем
     await fs.rename(req.file.path, path.join(__dirname, photoUrl));
@@ -487,6 +487,34 @@ app.put('/api/admin/buildings', checkAdminToken, async (req, res) => {
   } catch (error) {
     console.error('Error updating building:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/admin/uploadLayout', checkAdminToken, upload.single('photo'), async (req, res) => {
+  try {
+    const photo = req.file;
+    const buildingId = req.body.building_id; // Получаем building_id из тела запроса
+    const fileName = 'house_' + buildingId + '_' + photo.originalname;
+    const filePath = path.join('uploads/layouts', fileName);
+    
+    // Проверяем, существует ли уже файл с таким именем
+    const existingFile = await pool.query('SELECT * FROM building_images WHERE image_url = $1', [filePath]);
+    if (existingFile.rows.length > 0) {
+      console.log('Файл с таким именем уже существует:', fileName);
+      await fs.unlink(req.file.path); // Удаляем загруженный файл
+      res.status(400).json({ error: 'Файл с таким именем уже существует' });
+      return;
+    }
+
+    // Записываем данные изображения из буфера
+    await fs.rename(req.file.path, path.join(__dirname, filePath));
+
+    await pool.query('INSERT INTO building_images (building_id, image_url) VALUES ($1, $2)', [buildingId, filePath]);
+
+    res.status(200).json({ message: 'Image uploaded successfully' });
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    res.status(500).json({ error: 'Error uploading image' });
   }
 });
 

@@ -3,3 +3,28 @@
     width: 25%;
   }
 }
+
+.building-edit-photo {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.building-edit-input input[type="file"] {
+  position: absolute;
+  font-size: 18px;
+  opacity: 0;
+  right: 0;
+  top: 0;
+}
+
+.building-edit-input span {
+  display: inline-block;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 14px;
+  padding: 0px 8px 4px;
+}

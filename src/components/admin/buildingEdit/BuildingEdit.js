@@ -5,43 +5,50 @@ import axios from 'axios';
 function BuildingEdit() {
   const [buildings, setBuildings] = useState([]);
   const [notifications, setNotifications] = useState([]);
+  const [photo, setPhoto] = useState(null);
+  const [tempPhoto, setTempPhoto] = useState(null); 
 
   const fetchBuildings = useCallback(() => {
     axios.get(`http://localhost:3001/api/admin/buildings`, {
       withCredentials: true,
     }).then((response) => {
-      console.log('Apartments Response:', response.data);
+      console.log('Buildings Response:', response.data);
       setBuildings(response.data);
     }).catch(error => {
-      console.error('Error fetching apartments:', error); // Добавим вывод в консоль для отладки
+      console.error('Error fetching buildings:', error);
     });
   }, []);
 
   const handleChange = (event, buildingId, field) => {
     const updatedBuildings = [...buildings];
-    const updatedBuildingIndex = updatedBuildings.findIndex((apart) => apart.building_id === buildingId);
+    const updatedBuildingIndex = updatedBuildings.findIndex((building) => building.building_id === buildingId);
     updatedBuildings[updatedBuildingIndex][field] = event.target.value;
     setBuildings(updatedBuildings);
   };
 
-  const showNotification = (message) => {
-    setNotifications([...notifications, message]);
-  };
-
-  const handleSave = () => {
-    axios
-      .put('http://localhost:3001/api/admin/buildings', buildings, {
+  const handlePhotoUploader = async (e, buildingId) => {
+    const selectedPhoto = e.target.files[0];
+    setTempPhoto(selectedPhoto);
+    
+    const formData = new FormData();
+    formData.append('photo', selectedPhoto);
+    formData.append('building_id', buildingId);
+  
+    try {
+      const response = await axios.post('http://localhost:3001/api/admin/uploadLayout', formData, {
         withCredentials: true,
-      })
-      .then((response) => {
-        console.log(response);
-        showNotification('Сохранено успешно');
-        fetchBuildings();
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-  };
+      });
+  
+      if (response.status === 200) {
+        console.log('Фотография успешно загружена');
+        setPhoto(selectedPhoto); // Обновляем фотографию в родительском компоненте
+      } else {
+        console.error('Ошибка загрузки фотографии');
+      }
+    } catch (error) {
+      console.error('Ошибка загрузки фотографии:', error);
+    }
+  }
 
   const formatDateTime = (dateTimeString) => {
     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -106,7 +113,10 @@ function BuildingEdit() {
               onChange={(event) => handleChange(event, building.building_id, 'completion_date')}
             />
           </div>
-          <button className='admin-btn review-btn' onClick={() => handleSave(building.building_id)}>Сохранить</button>
+          <div className='apartment-item-value building-edit-input'>
+            <input className='building-edit-photo' type="file" id="photo-upload" accept="image/*" onChange={(e) => handlePhotoUploader(e, building.building_id)} />
+            <span>Выберите фото</span>
+          </div>
         </div>
       ))}
       {notifications.map((message, index) => (
