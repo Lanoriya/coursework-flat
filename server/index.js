@@ -501,6 +501,31 @@ app.get('/api/admin/building_images/:buildingId/photos', checkAdminToken, async 
   }
 });
 
+app.delete('/api/admin/building_images/:imageId', checkAdminToken, async (req, res) => {
+  const { imageId } = req.params;
+  try {
+    // Удаляем запись из базы данных
+    const deleteQuery = 'DELETE FROM building_images WHERE image_id = $1 RETURNING image_url';
+    const result = await pool.query(deleteQuery, [imageId]);
+    const imageUrl = result.rows[0].image_url;
+
+    // Удаляем файл изображения
+    fs.unlink(imageUrl, (err) => {
+      if (err) {
+        console.error('Error deleting image file:', err);
+        res.status(500).json({ error: 'Ошибка при удалении файла изображения' });
+        return;
+      }
+
+      res.status(200).json({ message: 'Фотография успешно удалена' });
+    });
+  } catch (error) {
+    console.error('Error deleting photo:', error);
+    res.status(500).json({ error: 'Ошибка при удалении фотографии' });
+  }
+});
+
+
 app.post('/api/admin/uploadLayout', checkAdminToken, upload.single('photo'), async (req, res) => {
   try {
     const photo = req.file;

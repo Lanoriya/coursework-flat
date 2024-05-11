@@ -52,6 +52,28 @@
   height: 200px;
 }
 
+.delete-photo-overlay {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-size: 24px;
+  text-align: center;
+  width: 200px;
+  height: 200px;
+  background: #000;
+}
+
+.delete-photo-btns {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.delete-photo-btns button {
+  width: 30%;
+  margin: 0;
+}
+
 .building-close-btn {
   content: "";
   position: absolute;
