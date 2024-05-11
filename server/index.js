@@ -466,7 +466,7 @@ app.put('/api/admin/buildings', checkAdminToken, async (req, res) => {
       UPDATE buildings
       SET building_name = $1, total_apartments = $2, total_entrances = $3, completion_date = $4, material = $5
       WHERE building_id = $6
-    `;
+    `; 
     
     const formatDateTime = (dateTimeString) => {
       const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -486,6 +486,18 @@ app.put('/api/admin/buildings', checkAdminToken, async (req, res) => {
   } catch (error) {
     console.error('Error updating building:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/admin/building_images/:buildingId/photos', checkAdminToken, async (req, res) => {
+  try {
+    const { buildingId } = req.params;
+    const query = 'SELECT * FROM building_images WHERE building_id = $1';
+    const result = await pool.query(query, [buildingId]);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error fetching building photos:', error);
+    res.status(500).json({ error: 'Error fetching building photos' });
   }
 });
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Notification from '../notification/Notification';
+import BuildingPhotosPopup from './buildingPhotosPopup/BuildingPhotosPopup';
 
 function FullReview() {
   const [buildings, setBuildings] = useState([]);
@@ -10,6 +11,8 @@ function FullReview() {
   const [notifications, setNotifications] = useState([]);
   const [selectedApartment, setSelectedApartment] = useState(null);
   const [buildingInfo, setBuildingInfo] = useState(null); // Добавляем состояние для информации о здании
+  const [buildingPhotos, setBuildingPhotos] = useState([]);
+  const [showBuildingPhotos, setShowBuildingPhotos] = useState(false);
 
   const inputFields = [
     { name: 'apartment_number', label: 'Номер квартиры', type: 'text' },
@@ -36,6 +39,17 @@ function FullReview() {
 
     fetchData();
   }, []);
+
+  const fetchBuildingPhotos = async (buildingId) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/api/admin/building_images/${buildingId}/photos`, {
+        withCredentials: true,
+      });
+      setBuildingPhotos(response.data);
+    } catch (error) {
+      console.error('Error fetching building photos:', error);
+    }
+  };
 
   const formatDateTime = (dateTimeString) => {
     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -100,6 +114,15 @@ function FullReview() {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setSelectedApartment({ ...selectedApartment, [name]: value });
+  };
+
+  const handleViewPhotosClick = () => {
+    fetchBuildingPhotos(buildingInfo.building_id);
+    setShowBuildingPhotos(true); // Устанавливаем состояние для отображения фотографий
+  };
+
+  const handleCloseBuildingPhotos = () => {
+    setShowBuildingPhotos(false); // Закрываем всплывающее окно
   };
 
   const handleSubmit = async () => {
@@ -170,7 +193,11 @@ function FullReview() {
             <p className='building-info-text'>Количество этажей: {Math.round(buildingInfo.total_apartments / 6)}</p>
             <p className='building-info-text'>Количество квартир: {buildingInfo.total_apartments}</p>
             <p className='building-info-text'>Количество подъездов: {buildingInfo.total_entrances}</p>
+            <button className='admin-btn' onClick={handleViewPhotosClick}>Посмотреть фотографии</button>
           </div>
+        )}
+        {showBuildingPhotos && (
+          <BuildingPhotosPopup buildingPhotos={buildingPhotos} onClose={handleCloseBuildingPhotos} />
         )}
         {selectedApartment && (
           <div className='full-review-apartment-details'>

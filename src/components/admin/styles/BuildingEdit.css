@@ -28,3 +28,32 @@
   font-size: 14px;
   padding: 0px 8px 4px;
 }
+
+.building-info-popup {
+  z-index: 99;
+}
+
+.building-photos-popup {
+  position: relative;
+  background: #3b3b3b71;
+  padding: 16px;
+  z-index: 1;
+}
+
+.building-photo {
+  width: 200px;
+  height: 200px;
+}
+
+.building-close-btn {
+  content: "";
+  position: absolute;
+  display: block;
+  cursor: pointer;
+  background-image: url(../imgs/cross.svg);
+  background-repeat: no-repeat;
+  right: 4px;
+  top: 4px;
+  width: 8px;
+  height: 8px;
+}
