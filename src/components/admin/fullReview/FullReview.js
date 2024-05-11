@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Notification from '../notification/Notification';
 import BuildingPhotosPopup from './buildingPhotosPopup/BuildingPhotosPopup';
+import Draggable from 'react-draggable';
 
 function FullReview() {
   const [buildings, setBuildings] = useState([]);
@@ -185,16 +186,20 @@ function FullReview() {
           </div>
         )}
         {buildingInfo && (
-          <div className='building-info-popup'>
-            <h2 className='building-info-title'>{buildingInfo.building_name}</h2>
-            <p className='building-info-text'>Айди здания: {buildingInfo.building_id}</p>
-            <p className='building-info-text'>Дата сдачи: {formatDateTime(buildingInfo.completion_date)}</p>
-            <p className='building-info-text'>Материал здания: {buildingInfo.material}</p>
-            <p className='building-info-text'>Количество этажей: {Math.round(buildingInfo.total_apartments / 6)}</p>
-            <p className='building-info-text'>Количество квартир: {buildingInfo.total_apartments}</p>
-            <p className='building-info-text'>Количество подъездов: {buildingInfo.total_entrances}</p>
-            <button className='admin-btn' onClick={handleViewPhotosClick}>Посмотреть фотографии</button>
-          </div>
+          <Draggable bounds=".admin-main" handle="strong">
+            <div className='building-info-popup'>
+              <strong className='mover'/>
+              <div className="building-close-btn" onClick={(e) => {setBuildingInfo(null)}}></div>
+              <h2 className='building-info-title'>{buildingInfo.building_name}</h2>
+              <p className='building-info-text'>Айди здания: {buildingInfo.building_id}</p>
+              <p className='building-info-text'>Дата сдачи: {formatDateTime(buildingInfo.completion_date)}</p>
+              <p className='building-info-text'>Материал здания: {buildingInfo.material}</p>
+              <p className='building-info-text'>Количество этажей: {Math.round(buildingInfo.total_apartments / 6)}</p>
+              <p className='building-info-text'>Количество квартир: {buildingInfo.total_apartments}</p>
+              <p className='building-info-text'>Количество подъездов: {buildingInfo.total_entrances}</p>
+              <button className='admin-btn building-info-button' onClick={handleViewPhotosClick}>Посмотреть фотографии</button>
+            </div>
+          </Draggable>
         )}
         {showBuildingPhotos && (
           <BuildingPhotosPopup buildingPhotos={buildingPhotos} onClose={handleCloseBuildingPhotos} />
