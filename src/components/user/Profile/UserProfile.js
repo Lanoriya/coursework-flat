@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import burger from '../Main/imgs/burger.svg';
 import Favorites from './Favorites';
 import Deals from './Deals';
@@ -14,6 +14,9 @@ function UserProfile() {
   const [userData, setUserData] = useState(null);
   const [activeDeals, setActiveDeals] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate(); // Хук для перехода между маршрутами
+
+  // Получаем userToken из кук
   const userToken = document.cookie.split('; ').find(row => row.startsWith('userToken=')).split('=')[1];
   
   const fetchDeals = useCallback((userData) => {
@@ -76,6 +79,13 @@ function UserProfile() {
     }
   };
 
+  // Функция для выхода из профиля
+  const handleLogout = () => {
+    document.cookie = 'userToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    navigate('/');
+    window.location.reload();
+  };
+
   return (
     <div className="user-page">
       <header className='user-header'>
@@ -92,6 +102,7 @@ function UserProfile() {
           <Link to='favorites' className='aside-nav-btn' onClick={handleLinkClick}>Избранное</Link>
           <Link to='deals' className='aside-nav-btn' onClick={handleLinkClick}>Сделки</Link>
           <Link to='now-deals' className='aside-nav-btn' onClick={handleLinkClick}>Активные сделки</Link>
+          <Link to='/' className='aside-nav-btn' onClick={handleLogout}>Выйти</Link>
         </nav>
       </aside>
 
@@ -100,7 +111,7 @@ function UserProfile() {
           <Route path='' element={<UserMain userData={userData} userToken={userToken} setUserData={setUserData} />} />
           <Route path='favorites' element={<Favorites activeDeals={activeDeals}/>} />
           <Route path='deals' element={<Deals activeDeals={activeDeals} userData={userData} userToken={userToken} setUserData={setUserData} />} />
-          <Route path='now-deals' element={<NowDeals activeDeals={activeDeals} userToken={userToken} />} />
+          <Route path='/' element={<NowDeals activeDeals={activeDeals} userToken={userToken} />} />
         </Routes>
       </main>
     </div>
