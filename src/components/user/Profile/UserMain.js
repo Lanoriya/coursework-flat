@@ -67,6 +67,7 @@ function UserMain({ userData, userToken, setUserData }) {
   return (
     <div className='user-about-bio'>
       {userData.settings.photo_url && <img src={'http://localhost:3001/' + userData.settings.photo_url} className='user-about-logo' alt="Фотография отсутствует" />}
+      <p>Почта: {userData.email}</p>
       <p>Никнейм: {userData.username}</p>
       <p>Имя: {userData.settings.name}</p> 
       <input type="text" value={name} onChange={(e) => setName(e.target.value)} style={{ display: showInputs ? 'block' : 'none' }} /> 
