@@ -8,6 +8,7 @@ function Apartments() {
   const [maxArea, setMaxArea] = useState(77);
   const [minFloor, setMinFloor] = useState(1);
   const [maxFloor, setMaxFloor] = useState(20);
+  const [selectedStatuses, setSelectedStatuses] = useState([]); 
   const [filterChanged, setFilterChanged] = useState(false);
   const navigate = useNavigate();
 
@@ -19,28 +20,16 @@ function Apartments() {
         maxArea,
         minFloor,
         maxFloor,
+        status: selectedStatuses // передаем выбранные статусы как строку 
       },
     })
       .then((response) => {
-        console.log('Apartments Response:', response.data);
         setApartments(response.data);
       })
       .catch(error => {
         console.error('Error fetching apartments:', error);
       });
-  }, [minArea, maxArea, minFloor, maxFloor]);
-
-  useEffect(() => {
-    fetchApartments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (filterChanged) {
-      fetchApartments();
-      setFilterChanged(false); // Сброс флага изменения фильтрации
-    }
-  }, [fetchApartments, filterChanged]);
+  }, [minArea, maxArea, minFloor, maxFloor, selectedStatuses]);
 
   const handleApartmentClick = (apartmentId) => {
     navigate(`/apartments/flat/${apartmentId}`);
@@ -51,8 +40,30 @@ function Apartments() {
     setMaxArea(77);
     setMinFloor(1);
     setMaxFloor(20);
+    setSelectedStatuses([]); // Очистить выбранные статусы
     setFilterChanged(true);
   };
+
+  const handleStatusFilterChange = (status) => {
+    if (selectedStatuses.includes(status)) {
+      setSelectedStatuses(selectedStatuses.filter(s => s !== status));
+    } else {
+      setSelectedStatuses([...selectedStatuses, status]);
+    }
+    setFilterChanged(true);
+  };
+
+  useEffect(() => {
+    fetchApartments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (filterChanged) {
+      fetchApartments();
+      setFilterChanged(false);
+    }
+  }, [fetchApartments, filterChanged]);
 
   return (
     <div className='container apartments-container'>
@@ -118,6 +129,19 @@ function Apartments() {
               }}
             />
           </div>
+          <div className='filter-status'>
+            <h4>Статус</h4>
+            {['Готовая', 'Строительство', 'Бронь', 'В отделке', 'Продана'].map(status => (
+              <label key={status}>
+                <input
+                  type='checkbox'
+                  checked={selectedStatuses.includes(status)} // Проверяем, выбран ли статус
+                  onChange={() => handleStatusFilterChange(status)}
+                />
+                {status}
+              </label>
+            ))}
+          </div>
           <div className='filter-reset'>
             <button onClick={handleFilterReset}>Сбросить параметры
               <svg width="8" height="8" viewBox="0 0 8 8" fill="000" xmlns="http://www.w3.org/2000/svg">
@@ -145,6 +169,7 @@ function Apartments() {
               <th className='apartments-main-th'>Площадь</th>
               <th className='apartments-main-th'>Этаж</th>
               <th className='apartments-main-th'>Цена</th>
+              <th className='apartments-main-th'>Статус</th>
               <th className='apartments-main-th'>Планировка</th>
             </tr>
           </thead>
@@ -160,6 +185,7 @@ function Apartments() {
                 <td className='apartments-main-td'>{apart.area}м²</td>
                 <td className='apartments-main-td'>{apart.floor}</td>
                 <td className='apartments-main-td'>{apart.price}</td>
+                <td className='apartments-main-td'>{apart.status}</td>
                 <td className='apartments-main-td'>
                   <img
                     className='apartments-main-img'

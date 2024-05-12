@@ -636,10 +636,9 @@ app.delete('/api/admin/apartments/:id', checkAdminToken, async (req, res) => {
 
 app.get('/api/apartments', async (req, res) => {
   try {
-    const { sortField, sortOrder, minArea, maxArea, minFloor, maxFloor } = req.query;
+    const { sortField, sortOrder, minArea, maxArea, minFloor, maxFloor, status } = req.query;
     const defaultSortField = 'apartment_id';
-    
-    // Добавляем условия фильтрации
+
     let filterConditions = '';
     if (minArea && maxArea) {
       filterConditions += ` AND area BETWEEN ${minArea} AND ${maxArea}`;
@@ -648,15 +647,19 @@ app.get('/api/apartments', async (req, res) => {
       filterConditions += ` AND floor BETWEEN ${minFloor} AND ${maxFloor}`;
     }
 
+    // Фильтрация по статусу (обработка массива)
+    if (status && Array.isArray(status)) { 
+      filterConditions += ` AND status IN ('${status.join("','")}')`; 
+    }
+
     const query = `
       SELECT * FROM apartments 
       WHERE 1=1 ${filterConditions} 
-      ORDER BY ${sortField || defaultSortField} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}`;
-      
+      ORDER BY ${sortField || defaultSortField} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}
+    `;
+
     console.log('SQL Query:', query);
-
     const result = await pool.query(query);
-
     return res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error fetching apartments:', error);
