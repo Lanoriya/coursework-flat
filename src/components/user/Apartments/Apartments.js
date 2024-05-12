@@ -8,9 +8,22 @@ function Apartments() {
   const [maxArea, setMaxArea] = useState(77);
   const [minFloor, setMinFloor] = useState(1);
   const [maxFloor, setMaxFloor] = useState(20);
-  const [selectedStatuses, setSelectedStatuses] = useState([]); 
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
+  const [selectedBuildings, setSelectedBuildings] = useState([]); // Новое состояние для выбранных зданий
+  const [buildings, setBuildings] = useState([]); // Для хранения списка доступных зданий
   const [filterChanged, setFilterChanged] = useState(false);
   const navigate = useNavigate();
+
+  // Загрузка зданий
+  useEffect(() => {
+    axios.get('http://localhost:3001/api/user/buildings', { withCredentials: true })
+      .then((response) => {
+        setBuildings(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching buildings:', error);
+      });
+  }, []);
 
   const fetchApartments = useCallback(() => {
     axios.get(`http://localhost:3001/api/apartments`, {
@@ -20,7 +33,8 @@ function Apartments() {
         maxArea,
         minFloor,
         maxFloor,
-        status: selectedStatuses // передаем выбранные статусы как строку 
+        status: selectedStatuses,
+        building: selectedBuildings // Добавляем выбранные здания как параметр
       },
     })
       .then((response) => {
@@ -29,7 +43,7 @@ function Apartments() {
       .catch(error => {
         console.error('Error fetching apartments:', error);
       });
-  }, [minArea, maxArea, minFloor, maxFloor, selectedStatuses]);
+  }, [minArea, maxArea, minFloor, maxFloor, selectedStatuses, selectedBuildings]);
 
   const handleApartmentClick = (apartmentId) => {
     navigate(`/apartments/flat/${apartmentId}`);
@@ -40,7 +54,8 @@ function Apartments() {
     setMaxArea(77);
     setMinFloor(1);
     setMaxFloor(20);
-    setSelectedStatuses([]); // Очистить выбранные статусы
+    setSelectedStatuses([]);
+    setSelectedBuildings([]); // Очистить выбранные здания
     setFilterChanged(true);
   };
 
@@ -53,9 +68,18 @@ function Apartments() {
     setFilterChanged(true);
   };
 
+  // Обработчик изменения фильтров по зданиям
+  const handleBuildingFilterChange = (buildingId) => {
+    if (selectedBuildings.includes(buildingId)) {
+      setSelectedBuildings(selectedBuildings.filter(id => id !== buildingId));
+    } else {
+      setSelectedBuildings([...selectedBuildings, buildingId]);
+    }
+    setFilterChanged(true);
+  };
+
   useEffect(() => {
     fetchApartments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -69,6 +93,19 @@ function Apartments() {
     <div className='container apartments-container'>
       <aside className='apartments-filter'>
         <div className='filter-box'>
+          <div className='filter-building filter-status'>
+            <h4>Здание</h4>
+            {buildings.map(building => (
+              <label key={building.building_id}>
+                <input
+                  type='checkbox'
+                  checked={selectedBuildings.includes(building.building_id)}
+                  onChange={() => handleBuildingFilterChange(building.building_id)}
+                />
+                {building.building_name}
+              </label>
+            ))}
+          </div>
           <div className='filter-area'>
             <h4>Площадь м²</h4>
             <div className='filter-area-numbers'>

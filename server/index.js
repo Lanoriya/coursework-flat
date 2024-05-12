@@ -383,6 +383,20 @@ app.post('/api/user/startDeal', async (req, res) => {
   }
 });
 
+app.get('/api/user/buildings', async (req, res) => {
+  try {
+    const query = 'SELECT * FROM buildings';
+    console.log('SQL Query:', query);
+
+    const result = await pool.query(query);
+
+    return res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error fetching buildings:', error);
+    res.status(500).json({ error: 'Error updating buildings' });
+  }
+});
+
 // Маршрут для доступа к административным функциям
 app.get('/api/admin', checkAdminToken, (req, res) => {
   res.json({ message: 'Добро пожаловать, администратор!' });
@@ -636,20 +650,23 @@ app.delete('/api/admin/apartments/:id', checkAdminToken, async (req, res) => {
 
 app.get('/api/apartments', async (req, res) => {
   try {
-    const { sortField, sortOrder, minArea, maxArea, minFloor, maxFloor, status } = req.query;
+    const { sortField, sortOrder, minArea, maxArea, minFloor, maxFloor, status, building } = req.query;
     const defaultSortField = 'apartment_id';
-
     let filterConditions = '';
+
     if (minArea && maxArea) {
       filterConditions += ` AND area BETWEEN ${minArea} AND ${maxArea}`;
     }
     if (minFloor && maxFloor) {
       filterConditions += ` AND floor BETWEEN ${minFloor} AND ${maxFloor}`;
     }
+    if (status && Array.isArray(status)) {
+      filterConditions += ` AND status IN ('${status.join("','")}')`;
+    }
 
-    // Фильтрация по статусу (обработка массива)
-    if (status && Array.isArray(status)) { 
-      filterConditions += ` AND status IN ('${status.join("','")}')`; 
+    // Фильтрация по зданию (обработка массива)
+    if (building && Array.isArray(building)) {
+      filterConditions += ` AND building_id IN (${building.join(',')})`; 
     }
 
     const query = `

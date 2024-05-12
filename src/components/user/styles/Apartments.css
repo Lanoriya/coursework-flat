@@ -80,6 +80,10 @@
   margin-top: -6px;
 }
 
+.filter-building {
+  margin-bottom: 16px;
+}
+
 .filter-area {
   margin-bottom: 16px;
 }
@@ -92,7 +96,7 @@
   padding: 32px 56px;
   margin-right: 64px;
   font-weight: 100;
-  height: 600px;
+  height: 800px;
   background: #44b2b44d;
   border-radius: 8px;
   color: #000;

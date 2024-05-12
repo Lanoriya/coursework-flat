@@ -46,3 +46,8 @@
 .flat-about .add-to-cart {
   margin-top: 0;
 }
+
+.disabled-button {
+  background: rgba(255, 0, 0, 0.35);
+  cursor: not-allowed;
+}
