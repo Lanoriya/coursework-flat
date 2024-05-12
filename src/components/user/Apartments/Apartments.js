@@ -4,14 +4,15 @@ import axios from 'axios';
 
 function Apartments() {
   const [apartments, setApartments] = useState([]);
-  const [minArea, setMinArea] = useState(32);
-  const [maxArea, setMaxArea] = useState(77);
-  const [minFloor, setMinFloor] = useState(1);
-  const [maxFloor, setMaxFloor] = useState(20);
-  const [selectedStatuses, setSelectedStatuses] = useState([]);
-  const [selectedBuildings, setSelectedBuildings] = useState([]); 
+  const [filters, setFilters] = useState({
+    minArea: 32,
+    maxArea: 77,
+    minFloor: 1,
+    maxFloor: 20,
+    selectedStatuses: [],
+    selectedBuildings: [],
+  });
   const [buildings, setBuildings] = useState([]); 
-  const [filterChanged, setFilterChanged] = useState(false);
   const navigate = useNavigate();
 
   // Загрузка зданий
@@ -29,39 +30,23 @@ function Apartments() {
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('apartmentFilters'));
     if (storedFilters) {
-      setMinArea(storedFilters.minArea || 32);
-      setMaxArea(storedFilters.maxArea || 77);
-      setMinFloor(storedFilters.minFloor || 1);
-      setMaxFloor(storedFilters.maxFloor || 20);
-      setSelectedStatuses(storedFilters.selectedStatuses || []);
-      setSelectedBuildings(storedFilters.selectedBuildings || []);
+      setFilters(storedFilters);
     }
   }, []);
 
   // Сохранение фильтров в localStorage
   useEffect(() => {
-    const filtersToStore = {
-      minArea,
-      maxArea,
-      minFloor,
-      maxFloor,
-      selectedStatuses,
-      selectedBuildings
-    };
-    localStorage.setItem('apartmentFilters', JSON.stringify(filtersToStore));
-  }, [minArea, maxArea, minFloor, maxFloor, selectedStatuses, selectedBuildings]);
+    localStorage.setItem('apartmentFilters', JSON.stringify(filters));
+  }, [filters]);
 
   const fetchApartments = useCallback(() => {
     axios.get(`http://localhost:3001/api/apartments`, {
       withCredentials: true,
       params: {
-        minArea,
-        maxArea,
-        minFloor,
-        maxFloor,
-        status: selectedStatuses,
-        building: selectedBuildings
-      },
+        ...filters, 
+        status: filters.selectedStatuses, // добавляем status в параметры
+        building: filters.selectedBuildings, // добавляем building в параметры
+      }
     })
       .then((response) => {
         setApartments(response.data);
@@ -69,51 +54,46 @@ function Apartments() {
       .catch(error => {
         console.error('Error fetching apartments:', error);
       });
-  }, [minArea, maxArea, minFloor, maxFloor, selectedStatuses, selectedBuildings]);
+  }, [filters]);
 
   const handleApartmentClick = (apartmentId) => {
     navigate(`/apartments/flat/${apartmentId}`);
   };
 
   const handleFilterReset = () => {
-    setMinArea(32);
-    setMaxArea(77);
-    setMinFloor(1);
-    setMaxFloor(20);
-    setSelectedStatuses([]);
-    setSelectedBuildings([]);
-    setFilterChanged(true);
+    setFilters({
+      minArea: 32,
+      maxArea: 77,
+      minFloor: 1,
+      maxFloor: 20,
+      selectedStatuses: [],
+      selectedBuildings: [],
+    });
   };
 
   const handleStatusFilterChange = (status) => {
-    if (selectedStatuses.includes(status)) {
-      setSelectedStatuses(selectedStatuses.filter(s => s !== status));
-    } else {
-      setSelectedStatuses([...selectedStatuses, status]);
-    }
-    setFilterChanged(true);
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      selectedStatuses: prevFilters.selectedStatuses.includes(status)
+        ? prevFilters.selectedStatuses.filter(s => s !== status)
+        : [...prevFilters.selectedStatuses, status],
+    }));
   };
 
   const handleBuildingFilterChange = (buildingId) => {
-    if (selectedBuildings.includes(buildingId)) {
-      setSelectedBuildings(selectedBuildings.filter(id => id !== buildingId));
-    } else {
-      setSelectedBuildings([...selectedBuildings, buildingId]);
-    }
-    setFilterChanged(true);
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      selectedBuildings: prevFilters.selectedBuildings.includes(buildingId)
+        ? prevFilters.selectedBuildings.filter(id => id !== buildingId)
+        : [...prevFilters.selectedBuildings, buildingId],
+    }));
   };
 
+  // Вызов fetchApartments при изменении фильтров
   useEffect(() => {
     fetchApartments();
-  }, []);
+  }, [filters]);
 
-  useEffect(() => {
-    if (filterChanged) {
-      fetchApartments();
-      setFilterChanged(false);
-    }
-  }, [fetchApartments, filterChanged]);
-  
   return (
     <div className='container apartments-container'>
       <aside className='apartments-filter'>
@@ -124,7 +104,7 @@ function Apartments() {
               <label key={building.building_id}>
                 <input
                   type='checkbox'
-                  checked={selectedBuildings.includes(building.building_id)}
+                  checked={filters.selectedBuildings.includes(building.building_id)}
                   onChange={() => handleBuildingFilterChange(building.building_id)}
                 />
                 {building.building_name}
@@ -134,60 +114,60 @@ function Apartments() {
           <div className='filter-area'>
             <h4>Площадь м²</h4>
             <div className='filter-area-numbers'>
-              <div className='area-numbers-score'><span>от</span> <span className='area-number'>{minArea}</span></div>
+              <div className='area-numbers-score'><span>от</span> <span className='area-number'>{filters.minArea}</span></div>
               <input
                 type='range'
                 min='32'
                 max='77'
-                step={(maxArea - minArea) / 100}
-                value={minArea}
-                onMouseUp={() => setFilterChanged(true)}
+                step={(filters.maxArea - filters.minArea) / 100}
+                value={filters.minArea}
+                onMouseUp={() => setFilters(prevFilters => ({ ...prevFilters, minArea: prevFilters.minArea }))} 
                 onInput={(e) => {
-                  const value = Math.min(e.target.value, maxArea);
-                  setMinArea(Math.round(value));
+                  const value = Math.min(e.target.value, filters.maxArea);
+                  setFilters(prevFilters => ({ ...prevFilters, minArea: Math.round(value) }));
                 }}
               />
-              <div className='area-numbers-score'><span>до</span> <span className='area-number'>{maxArea}</span></div>
+              <div className='area-numbers-score'><span>до</span> <span className='area-number'>{filters.maxArea}</span></div>
               <input
                 type='range'
                 min='32'
                 max='77'
-                step={(maxArea - minArea) / 100}
-                value={maxArea}
-                onMouseUp={() => setFilterChanged(true)}
+                step={(filters.maxArea - filters.minArea) / 100}
+                value={filters.maxArea}
+                onMouseUp={() => setFilters(prevFilters => ({ ...prevFilters, maxArea: prevFilters.maxArea }))} 
                 onInput={(e) => {
-                  const value = Math.max(e.target.value, minArea);
-                  setMaxArea(Math.round(value));
+                  const value = Math.max(e.target.value, filters.minArea);
+                  setFilters(prevFilters => ({ ...prevFilters, maxArea: Math.round(value) }));
                 }}
               />
             </div>
           </div>
           <div className='filter-floor'>
             <h4>Этаж</h4>
-            <div className='filter-floor-numbers'><span>от</span> <span className='area-number'>{minFloor}</span></div>
+            <div className='filter-floor-numbers'><span>от</span> <span className='area-number'>{filters.minFloor}</span></div>
             <input
               type='range'
               min='1'
               max='20'
               step='1'
-              value={minFloor}
-              onMouseUp={() => setFilterChanged(true)}
+              value={filters.minFloor}
+              onMouseUp={() => setFilters(prevFilters => ({ ...prevFilters, minFloor: prevFilters.minFloor }))}
               onInput={(e) => {
-                const value = Math.min(e.target.value, maxFloor);
-                setMinFloor(Math.round(value));
+                const value = Math.min(e.target.value, filters.maxFloor);
+                setFilters(prevFilters => ({ ...prevFilters, minFloor: Math.round(value) }));
               }}
             />
-            <div className='filter-floor-numbers'><span>до</span> <span className='area-number'>{maxFloor}</span></div>
+            <div className='filter-floor-numbers'><span>до</span> <span className='area-number'>{filters.maxFloor}</span></div>
             <input
               type='range'
               min='1'
               max='20'
               step='1'
-              value={maxFloor}
-              onMouseUp={() => setFilterChanged(true)}
+              value={filters.maxFloor}
+              onMouseUp={() => setFilters(prevFilters => ({ ...prevFilters, maxFloor: prevFilters.maxFloor }))} 
               onInput={(e) => {
-                const value = Math.max(e.target.value, minFloor);
-                setMaxFloor(Math.round(value));
+                const value = Math.max(e.target.value, filters.minFloor);
+                setFilters(prevFilters => ({ ...prevFilters, maxFloor: Math.round(value) }));
               }}
             />
           </div>
@@ -197,7 +177,7 @@ function Apartments() {
               <label key={status}>
                 <input
                   type='checkbox'
-                  checked={selectedStatuses.includes(status)} // Проверяем, выбран ли статус
+                  checked={filters.selectedStatuses.includes(status)} 
                   onChange={() => handleStatusFilterChange(status)}
                 />
                 {status}

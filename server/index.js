@@ -652,31 +652,37 @@ app.get('/api/apartments', async (req, res) => {
   try {
     const { sortField, sortOrder, minArea, maxArea, minFloor, maxFloor, status, building } = req.query;
     const defaultSortField = 'apartment_id';
-    let filterConditions = '';
+    let filterConditions = [];
+    let values = [];
 
     if (minArea && maxArea) {
-      filterConditions += ` AND area BETWEEN ${minArea} AND ${maxArea}`;
+      filterConditions.push('area BETWEEN $1 AND $2');
+      values.push(minArea, maxArea);
     }
+
     if (minFloor && maxFloor) {
-      filterConditions += ` AND floor BETWEEN ${minFloor} AND ${maxFloor}`;
-    }
-    if (status && Array.isArray(status)) {
-      filterConditions += ` AND status IN ('${status.join("','")}')`;
+      filterConditions.push('floor BETWEEN $3 AND $4');
+      values.push(minFloor, maxFloor);
     }
 
-    // Фильтрация по зданию (обработка массива)
-    if (building && Array.isArray(building)) {
-      filterConditions += ` AND building_id IN (${building.join(',')})`; 
+    if (status && Array.isArray(status) && status.length > 0) {
+      filterConditions.push(`status = ANY($${values.length + 1})`);
+      values.push(status); 
     }
 
+    if (building && Array.isArray(building) && building.length > 0) {
+      filterConditions.push(`building_id = ANY($${values.length + 1})`);
+      values.push(building); 
+    }
+
+    const whereClause = filterConditions.length ? `WHERE ${filterConditions.join(' AND ')}` : '';
     const query = `
       SELECT * FROM apartments 
-      WHERE 1=1 ${filterConditions} 
+      ${whereClause}
       ORDER BY ${sortField || defaultSortField} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}
     `;
 
-    console.log('SQL Query:', query);
-    const result = await pool.query(query);
+    const result = await pool.query(query, values);
     return res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error fetching apartments:', error);
