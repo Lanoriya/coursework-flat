@@ -48,8 +48,8 @@
 }
 
 .building-photo {
-  width: 200px;
-  height: 200px;
+  width: 10rem;
+  height: 10rem;
 }
 
 .delete-photo-overlay {
@@ -58,9 +58,13 @@
   gap: 20px;
   font-size: 24px;
   text-align: center;
-  width: 200px;
-  height: 200px;
+  width: 10rem;
+  height: 10rem;
   background: #000;
+}
+
+.delete-photo-text {
+  margin-top: 16px;
 }
 
 .delete-photo-btns {

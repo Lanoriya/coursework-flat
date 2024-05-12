@@ -525,7 +525,6 @@ app.delete('/api/admin/building_images/:imageId', checkAdminToken, async (req, r
   }
 });
 
-
 app.post('/api/admin/uploadLayout', checkAdminToken, upload.single('photo'), async (req, res) => {
   try {
     const photo = req.file;

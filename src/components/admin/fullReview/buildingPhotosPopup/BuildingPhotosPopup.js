@@ -1,21 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import axios from 'axios';
 
 function BuildingPhotosPopup({ buildingPhotos, onClose }) {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [buildingPhotosFiltered, setBuildingPhotosFiltered] = useState([]);
+
+  useEffect(() => {
+    setBuildingPhotosFiltered(buildingPhotos);
+  }, [buildingPhotos]);
 
   const deletePhoto = async () => {
     try {
+      const updatedPhotos = buildingPhotosFiltered.filter(photo => photo.image_id !== selectedPhoto.image_id);
+      setBuildingPhotosFiltered(updatedPhotos);
+      
       await axios.delete(`http://localhost:3001/api/admin/building_images/${selectedPhoto.image_id}`, {
         withCredentials: true,
       });
-      onClose(); // Закрыть всплывающее окно после удаления фотографии
     } catch (error) {
       console.error('Error deleting photo:', error);
     }
   };
-  
+
   const handlePhotoRightClick = (photo, event) => {
     event.preventDefault();
     setSelectedPhoto(photo);
@@ -24,18 +31,17 @@ function BuildingPhotosPopup({ buildingPhotos, onClose }) {
   const handleDeleteConfirmation = (confirm) => {
     if (confirm) {
       deletePhoto();
-    } else {
-      setSelectedPhoto(null);
     }
+    setSelectedPhoto(null);
   };
 
   return (
     <Draggable bounds=".admin-main" handle="strong">
       <div className="building-photos-popup">
-        <strong className='mover'/>
+        <strong className='mover' />
         <div className="building-close-btn" onClick={onClose}></div>
         <div className="building-photos-container">
-          {buildingPhotos.map((photo, index) => (
+          {buildingPhotosFiltered.map((photo, index) => (
             <div key={index} className="photo-wrapper" onContextMenu={(e) => handlePhotoRightClick(photo, e)}>
               {selectedPhoto === photo ? (
                 <div className="delete-photo-overlay">

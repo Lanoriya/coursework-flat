@@ -3,7 +3,6 @@ import axios from 'axios';
 import Notification from '../notification/Notification';
 
 function Orders() {
-
   const [orders, setOrders] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [isSaving, setIsSaving] = useState(false);

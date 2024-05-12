@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import Notification from '../notification/Notification';
 import axios from 'axios';
+import Notification from '../notification/Notification';
 
 function BuildingEdit() {
   const [buildings, setBuildings] = useState([]);
   const [notifications, setNotifications] = useState([]);
+  const [isSaving, setIsSaving] = useState(false);
   const [photo, setPhoto] = useState(null);
   const [tempPhoto, setTempPhoto] = useState(null);
+
+  const showNotification = (message) => {
+    setNotifications([...notifications, message]);
+  };
 
   const fetchBuildings = useCallback(() => {
     axios.get(`http://localhost:3001/api/admin/buildings`, {
@@ -51,18 +56,28 @@ function BuildingEdit() {
   }
 
   const handleSave = () => {
+    if (isSaving) {
+      return;
+    }
+    setIsSaving(true);
+
     axios
       .put('http://localhost:3001/api/admin/buildings', buildings, {
         withCredentials: true,
       })
       .then((response) => {
         console.log(response);
-        setNotifications([...notifications]);
+        showNotification('Сохранено успешно')
         fetchBuildings();
       })
       .catch((error) => {
         console.log(error);
       })
+      .finally(() => {
+        setTimeout(() => {
+          setIsSaving(false);
+        }, 1000); // Задержка в одну секунду перед следующим кликом
+      });
   };
 
   const formatDateTime = (dateTimeString) => {
@@ -71,10 +86,6 @@ function BuildingEdit() {
     const month = String(date.getMonth() + 1).padStart(2, '0'); // +1, так как месяцы в JavaScript начинаются с 0
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
-  };
-  
-  const showNotification = (message) => {
-    setNotifications([...notifications, message]);
   };
 
   useEffect(() => {
@@ -139,7 +150,7 @@ function BuildingEdit() {
             <input className='building-edit-photo' type="file" id="photo-upload" accept="image/*" onChange={(e) => handlePhotoUploader(e, building.building_id)} />
             <span>Выберите фото</span>
           </div>
-          <button className='admin-btn review-btn' onClick={() => { handleSave(building.building_id); showNotification('Сохранено успешно') }}>Сохранить</button>
+          <button className='admin-btn review-btn' onClick={handleSave}>Сохранить</button>
         </div>
       ))}
       {notifications.map((message, index) => (
