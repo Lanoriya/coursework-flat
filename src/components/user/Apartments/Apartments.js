@@ -9,8 +9,8 @@ function Apartments() {
   const [minFloor, setMinFloor] = useState(1);
   const [maxFloor, setMaxFloor] = useState(20);
   const [selectedStatuses, setSelectedStatuses] = useState([]);
-  const [selectedBuildings, setSelectedBuildings] = useState([]); // Новое состояние для выбранных зданий
-  const [buildings, setBuildings] = useState([]); // Для хранения списка доступных зданий
+  const [selectedBuildings, setSelectedBuildings] = useState([]); 
+  const [buildings, setBuildings] = useState([]); 
   const [filterChanged, setFilterChanged] = useState(false);
   const navigate = useNavigate();
 
@@ -25,6 +25,32 @@ function Apartments() {
       });
   }, []);
 
+  // Загрузка фильтров из localStorage
+  useEffect(() => {
+    const storedFilters = JSON.parse(localStorage.getItem('apartmentFilters'));
+    if (storedFilters) {
+      setMinArea(storedFilters.minArea || 32);
+      setMaxArea(storedFilters.maxArea || 77);
+      setMinFloor(storedFilters.minFloor || 1);
+      setMaxFloor(storedFilters.maxFloor || 20);
+      setSelectedStatuses(storedFilters.selectedStatuses || []);
+      setSelectedBuildings(storedFilters.selectedBuildings || []);
+    }
+  }, []);
+
+  // Сохранение фильтров в localStorage
+  useEffect(() => {
+    const filtersToStore = {
+      minArea,
+      maxArea,
+      minFloor,
+      maxFloor,
+      selectedStatuses,
+      selectedBuildings
+    };
+    localStorage.setItem('apartmentFilters', JSON.stringify(filtersToStore));
+  }, [minArea, maxArea, minFloor, maxFloor, selectedStatuses, selectedBuildings]);
+
   const fetchApartments = useCallback(() => {
     axios.get(`http://localhost:3001/api/apartments`, {
       withCredentials: true,
@@ -34,7 +60,7 @@ function Apartments() {
         minFloor,
         maxFloor,
         status: selectedStatuses,
-        building: selectedBuildings // Добавляем выбранные здания как параметр
+        building: selectedBuildings
       },
     })
       .then((response) => {
@@ -55,7 +81,7 @@ function Apartments() {
     setMinFloor(1);
     setMaxFloor(20);
     setSelectedStatuses([]);
-    setSelectedBuildings([]); // Очистить выбранные здания
+    setSelectedBuildings([]);
     setFilterChanged(true);
   };
 
@@ -68,7 +94,6 @@ function Apartments() {
     setFilterChanged(true);
   };
 
-  // Обработчик изменения фильтров по зданиям
   const handleBuildingFilterChange = (buildingId) => {
     if (selectedBuildings.includes(buildingId)) {
       setSelectedBuildings(selectedBuildings.filter(id => id !== buildingId));
@@ -88,7 +113,7 @@ function Apartments() {
       setFilterChanged(false);
     }
   }, [fetchApartments, filterChanged]);
-
+  
   return (
     <div className='container apartments-container'>
       <aside className='apartments-filter'>
