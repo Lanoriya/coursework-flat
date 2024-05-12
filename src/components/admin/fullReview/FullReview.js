@@ -53,8 +53,11 @@ function FullReview() {
   };
 
   const formatDateTime = (dateTimeString) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return new Date(dateTimeString).toLocaleString('ru-RU', options);
+    const date = new Date(dateTimeString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // +1, так как месяцы в JavaScript начинаются с 0
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   const showNotification = (message) => {
