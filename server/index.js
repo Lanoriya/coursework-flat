@@ -25,7 +25,7 @@ const pool = new Pool({
 dotenv.config();
 
 app.use(cors({
-  origin: 'http://localhost:3000', // Укажите домен вашего клиента
+  origin: 'http://localhost:3000', // Домен
   credentials: true,
 }));
 

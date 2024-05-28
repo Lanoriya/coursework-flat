@@ -111,7 +111,7 @@ function UserProfile() {
           <Route path='' element={<UserMain userData={userData} userToken={userToken} setUserData={setUserData} />} />
           <Route path='favorites' element={<Favorites activeDeals={activeDeals}/>} />
           <Route path='deals' element={<Deals activeDeals={activeDeals} userData={userData} userToken={userToken} setUserData={setUserData} />} />
-          <Route path='/' element={<NowDeals activeDeals={activeDeals} userToken={userToken} />} />
+          <Route path='now-deals' element={<NowDeals activeDeals={activeDeals} userToken={userToken} />} />
         </Routes>
       </main>
     </div>
