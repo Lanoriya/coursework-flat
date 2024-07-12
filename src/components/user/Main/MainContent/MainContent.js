@@ -13,12 +13,12 @@ import '../styles/Main-mobile.css';
 function MainContent() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phone_number, setphone_number] = useState('');
   const [error, setError] = useState('');
   const [isRequestSent, setIsRequestSent] = useState(false);
 
   const handleSubmit = async () => {
-    if (!name || !phone || phone.includes('_')) {
+    if (!name || !phone_number || phone_number.includes('_')) {
       setError('Пожалуйста, заполните все поля');
       return;
     }
@@ -30,7 +30,7 @@ function MainContent() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, phone }),
+        body: JSON.stringify({ name, phone_number }),
       });
 
       if (response.ok) {
@@ -50,7 +50,7 @@ function MainContent() {
     }
 
     setName('');
-    setPhone('');
+    setphone_number('');
   };
 
   const handleNameChange = (e) => {
@@ -417,8 +417,8 @@ function MainContent() {
                   mask="+7 (999) 99-99-999"
                   maskChar="_"
                   placeholder="Телефон"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  value={phone_number}
+                  onChange={(e) => setphone_number(e.target.value)}
                 />
                 <button className='callback-tel-pop' type="button" onClick={handleSubmit}>Отправить заявку</button>
               </div>

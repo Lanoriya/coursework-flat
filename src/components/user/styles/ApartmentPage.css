@@ -51,3 +51,29 @@
   background: rgba(255, 0, 0, 0.35);
   cursor: not-allowed;
 }
+
+.similar-apartments {
+  margin-bottom: 40px;
+  h2 {
+    font-size: 32px;
+    text-align: center;
+    margin: 40px;
+  }
+}
+
+.similar-apartment {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  border: 1px solid #000;
+  max-width: 25%;
+}
+
+.similar-apartments-list {
+  display: flex;
+  border: 1px solid #000;
+  img {
+    width: 80%;
+    text-align: center;
+  }
+}

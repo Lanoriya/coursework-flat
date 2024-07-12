@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Popup from '../Main/Popup/Popup';
 import axios from 'axios';
 
 function ApartmentPage() {
   const { id } = useParams();
   const [apartment, setApartment] = useState(null);
+  const [similarApartments, setSimilarApartments] = useState([]);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [isInFavorites, setIsInFavorites] = useState(false);
 
   useEffect(() => {
     axios.get(`http://localhost:3001/api/apartments/${id}`)
       .then((response) => {
-        setApartment(response.data);
+        setApartment(response.data.apartment);
+        setSimilarApartments(response.data.similarApartments);
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        const isInFavorites = cartItems.some(item => item.apartment_id === response.data.apartment_id);
+        const isInFavorites = cartItems.some(item => item.apartment_id === response.data.apartment.apartment_id);
         setIsInFavorites(isInFavorites);
       })
       .catch((error) => {
@@ -78,6 +80,18 @@ function ApartmentPage() {
             <button className={`callback-tel-pop add-to-cart ${isDisabled ? 'disabled-button' : ''}`} onClick={toggleFavorites} disabled={isDisabled}>
               {isInFavorites ? "Удалить из избранного" : "Добавить в избранное"}
             </button>
+          </div>
+        </div>
+        <div className='similar-apartments'>
+          <h2>Похожие квартиры</h2>
+          <div className='similar-apartments-list'>
+            {similarApartments.map(similarApartment => (
+              <div key={similarApartment.apartment_id} className='similar-apartment'>
+                <Link to={`/apartments/flat/${similarApartment.apartment_id}`}>
+                  <img src={`http://localhost:3001/api/image/${similarApartment.image_id}`} alt={`Apartment ${similarApartment.apartment_number}`} />
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </div>

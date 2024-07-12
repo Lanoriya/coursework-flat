@@ -10,6 +10,7 @@
   position: absolute;
   right: 5vw;
   bottom: 0;
+  pointer-events: none;
   background-image: url(../imgs/bg-without.png);
   background-size: contain;
   background-repeat: no-repeat;

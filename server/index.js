@@ -694,13 +694,26 @@ app.get('/api/apartments/:id', async (req, res) => {
   const apartmentId = req.params.id;
 
   try {
-    // Здесь выполните запрос к базе данных для получения данных о квартире по ID
+    // Запрос для получения данных о конкретной квартире по ID
     const query = 'SELECT * FROM apartments WHERE apartment_id = $1';
     const result = await pool.query(query, [apartmentId]);
 
     if (result.rows.length > 0) {
       const apartmentData = result.rows[0];
-      res.status(200).json(apartmentData);
+      const roomCount = apartmentData.room_count;
+
+      // Запрос для получения списка похожих квартир по количеству комнат (room_count)
+      const similarApartmentsQuery = `
+        SELECT * FROM apartments 
+        WHERE room_count = $1 AND apartment_id != $2
+        LIMIT 4
+      `;
+      const similarApartmentsResult = await pool.query(similarApartmentsQuery, [roomCount, apartmentId]);
+
+      res.status(200).json({
+        apartment: apartmentData,
+        similarApartments: similarApartmentsResult.rows
+      });
     } else {
       res.status(404).json({ error: 'Квартира не найдена' });
     }
@@ -820,13 +833,11 @@ app.post('/submitOrder', async (req, res) => {
 });
 
 app.post('/submitOrderNotLogin', async (req, res) => {
-  const { name, phone_number, apartment_id, user_id} = req.body;
-  console.log(req.body)
+  const { name, phone_number, user_id} = req.body;
   try {
-    const result = await pool.query('INSERT INTO orders (name, phone_number, apartment_id, user_id) VALUES ($1, $2, $3, $4) RETURNING *', [
+    const result = await pool.query('INSERT INTO orders (name, phone_number, user_id) VALUES ($1, $2, $3) RETURNING *', [
       name,
       phone_number,
-      apartment_id,
       user_id,
     ]);
     res.status(200).json({ message: 'Данные успешно получены и обработаны' });
